@@ -6,7 +6,7 @@ page 70036 "Store Return List"
     SourceTable = 70020;
     SourceTableView = SORTING ("No.")
                       ORDER(Descending)
-                      WHERE (Posted = CONST (No));
+                      WHERE (Posted = CONST (false));
 
     layout
     {
@@ -45,12 +45,12 @@ page 70036 "Store Return List"
             part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No."=FIELD("No.");
             }
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
             }
         }

@@ -46,10 +46,10 @@ page 70033 "Store Requisition List"
         }
         area(factboxes)
         {
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
             }
         }

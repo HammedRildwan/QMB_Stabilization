@@ -6,18 +6,18 @@ codeunit 50000 "Document Approval Workflow"
     end;
 
     var
-        DocWorkflowHeader: Record "70100";
-        DocWorkflowLine: Record "70101";
-        DocumentApprovalEntry: Record "70102";
+        DocWorkflowHeader: Record 70100;
+        DocWorkflowLine: Record 70101;
+        DocumentApprovalEntry: Record 70102;
         Text001: Label 'Approval request has been sent.';
         Text002: Label 'The approval cannot be cancelled because it has been treated by your approver.';
         Text003: Label 'Please hold on. This document requires a prior approval.';
-        DocumentApprovalEntry2: Record "70102";
-        UserSetup: Record "91";
+        DocumentApprovalEntry2: Record 70102;
+        UserSetup: Record 91;
         Text004: Label 'This document has been approved.';
         Text005: Label 'The document has been rejected.';
-        UserSetup2: Record "91";
-        SMTPMail: Codeunit "400";
+        UserSetup2: Record 91;
+        SMTPMail: Codeunit "Mail Management";
         Text006: Label 'Dear ';
         Text007: Label '%1 requires your approval.';
         Recipient: Text[30];
@@ -35,7 +35,6 @@ codeunit 50000 "Document Approval Workflow"
         Text014: Label 'You are not eligible to approve yet as the preceeding officer is yet to approve.';
         SeqNo: Integer;
 
-    [Scope('Internal')]
     procedure SendApprovalRequest(TableID: Integer; DocNo: Code[10]; RecID: RecordID; Limit: Decimal; DocDate: Date; DocAmount: Decimal; DocDesc: Text)
     begin
         //create approval entries
@@ -80,7 +79,6 @@ codeunit 50000 "Document Approval Workflow"
         END;
     end;
 
-    [Scope('Internal')]
     procedure CancelApprovalRequest(TableID: Integer; DocNo: Code[10])
     begin
         DocumentApprovalEntry.RESET;
@@ -93,7 +91,6 @@ codeunit 50000 "Document Approval Workflow"
             ERROR(Text002);
     end;
 
-    [Scope('Internal')]
     procedure ApproveDocument(TableID: Integer; DocNo: Code[10]; RecID: RecordID)
     var
         Seq: Integer;
@@ -131,7 +128,6 @@ codeunit 50000 "Document Approval Workflow"
         END;
     end;
 
-    [Scope('Internal')]
     procedure RejectDocument(DocNo: Code[10])
     var
         Seq: Integer;
@@ -153,27 +149,35 @@ codeunit 50000 "Document Approval Workflow"
     end;
 
     local procedure SendMailApprover(SubjectText: Text[100]; RecID: RecordID; SenderName: Text[100]; SenderAddress: Text[100]; RecepientAddress: Text[100]; RecipientName: Text[100]; BodyText: Text)
+    var
+        Recipients: List of [Text];
     begin
         Subject := STRSUBSTNO(SubjectText, RecID);
-        SMTPMail.CreateMessage(SenderName, SenderAddress, RecepientAddress, Subject, '', TRUE);
-        SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text006 + RecipientName + ',')));
-        SMTPMail.AppendBody('<br><br>');
-        SMTPMail.AppendBody(FORMAT(STRSUBSTNO(BodyText, RecID)));
-        SMTPMail.AppendBody('<br><br>');
-        SMTPMail.AppendBody(GETURL(CLIENTTYPE::Web, COMPANYNAME, OBJECTTYPE::Page, PAGE::"Document Approval Entries", DocumentApprovalEntry, TRUE));
-        SMTPMail.AppendBody('<br><br>');
-        SMTPMail.AppendBody('Regards');
-        SMTPMail.AppendBody('<br><br>');
-        SMTPMail.AppendBody(SenderName);
-        SMTPMail.AppendBody('<HR>');
-        SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text009)));
-        SMTPMail.TrySend;
+        Recipients.Add(RecepientAddress);
+        /*
+    SMTPMail.CreateMessage(SenderName, SenderAddress, Recipients, Subject, '', TRUE);
+    SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text006 + RecipientName + ',')));
+    SMTPMail.AppendBody('<br><br>');
+    SMTPMail.AppendBody(FORMAT(STRSUBSTNO(BodyText, RecID)));
+    SMTPMail.AppendBody('<br><br>');
+    SMTPMail.AppendBody(GETURL(CLIENTTYPE::Web, COMPANYNAME, OBJECTTYPE::Page, PAGE::"Document Approval Entries", DocumentApprovalEntry, TRUE));
+    SMTPMail.AppendBody('<br><br>');
+    SMTPMail.AppendBody('Regards');
+    SMTPMail.AppendBody('<br><br>');
+    SMTPMail.AppendBody(SenderName);
+    SMTPMail.AppendBody('<HR>');
+    SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text009)));
+    SMTPMail.Send; */
     end;
 
     local procedure SendMailOriginator(SubjectText: Text[100]; RecID: RecordID; SenderName: Text[100]; SenderAddress: Text[100]; RecepientAddress: Text[100]; RecipientName: Text[100]; BodyText: Text)
+    var
+        Recipients: List of [Text];
     begin
         Subject := STRSUBSTNO(SubjectText, RecID);
-        SMTPMail.CreateMessage(SenderName, SenderAddress, RecepientAddress, Subject, '', TRUE);
+        Recipients.Add(RecepientAddress);
+        /*
+        SMTPMail.CreateMessage(SenderName, SenderAddress, Recipients, Subject, '', TRUE);
         SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text006 + RecipientName + ',')));
         SMTPMail.AppendBody('<br><br>');
         SMTPMail.AppendBody(FORMAT(STRSUBSTNO(BodyText, RecID)));
@@ -183,10 +187,9 @@ codeunit 50000 "Document Approval Workflow"
         SMTPMail.AppendBody(FORMAT(STRSUBSTNO(SenderName)));
         SMTPMail.AppendBody('<HR>');
         SMTPMail.AppendBody(FORMAT(STRSUBSTNO(Text009)));
-        SMTPMail.TrySend;
+        SMTPMail.Send; */
     end;
 
-    [Scope('Internal')]
     procedure ApprovalStatusCheck(TableID: Integer; DocNo: Code[10]; RecID: RecordID): Boolean
     var
         Seq: Integer;

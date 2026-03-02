@@ -35,12 +35,6 @@ page 70122 "Expense Subform"
                 field("Asset No."; rec."Asset No.")
                 {
                     Editable = NOT ApprovedNotEditable;
-
-                    trigger OnValidate()
-                    begin
-                        IF "Expense Category" = "Expense Category"::Maintenance THEN
-                            "Asset No." := "Shortcut Dimension 4 Code";
-                    end;
                 }
                 field(Amount; rec.Amount)
                 {
@@ -57,16 +51,6 @@ page 70122 "Expense Subform"
                 field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                     Editable = NOT ApprovedNotEditable;
-                }
-                field("Shortcut Dimension 4 Code"; rec."Shortcut Dimension 4 Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-
-                    trigger OnValidate()
-                    begin
-                        IF "Expense Category" = "Expense Category"::Maintenance THEN
-                            "Asset No." := "Shortcut Dimension 4 Code";
-                    end;
                 }
                 field(Remark; rec.Remark)
                 {
@@ -96,8 +80,8 @@ page 70122 "Expense Subform"
         // ELSE
         //  AmountEditable := TRUE;
 
-        IF "Document No." <> '' THEN BEGIN
-            ExpenseRequestHeader.GET("Document No.");
+        IF rec."Document No." <> '' THEN BEGIN
+            ExpenseRequestHeader.GET(rec."Document No.");
             IF ExpenseRequestHeader.Status = ExpenseRequestHeader.Status::Approved THEN
                 ApprovedNotEditable := TRUE
             ELSE
@@ -124,10 +108,10 @@ page 70122 "Expense Subform"
     var
         EditExpAccNo: Boolean;
         EditAsset: Boolean;
-        ExpenseRequestHeader: Record "60056";
-        UserSetup: Record "91";
+        ExpenseRequestHeader: Record 60056;
+        UserSetup: Record 91;
         AmountEditable: Boolean;
-        ExpenseRequestHeader2: Record "60056";
+        ExpenseRequestHeader2: Record 60056;
         ApprovedNotEditable: Boolean;
 }
 

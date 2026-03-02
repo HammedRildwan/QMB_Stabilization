@@ -3,7 +3,7 @@ page 70121 "Expense Card"
     DeleteAllowed = false;
     PageType = Card;
     SourceTable = 60056;
-    SourceTableView = WHERE (Posted = CONST (false));
+    SourceTableView = WHERE(Posted = CONST(false));
 
     layout
     {
@@ -106,12 +106,12 @@ page 70121 "Expense Card"
             part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No." = FIELD("No.");
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
             }
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
             }
         }
@@ -131,26 +131,22 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 begin
-                    TESTFIELD(Purpose);
-                    TESTFIELD(Date);
-                    TESTFIELD(Payee);
-                    TESTFIELD("Expense Type");
-                    IF "Expense Type" = "Expense Type"::"Trip Allowance" THEN
-                        TESTFIELD("Trip No");
-                    IF "Expense Type" = "Expense Type"::"Road Work" THEN
-                        TESTFIELD("Maintenance Work Order");
-                    CALCFIELDS("Total Line Amount");
-                    IF "Total Line Amount" = 0 THEN
+                    TESTFIELD(rec.Purpose);
+                    TESTFIELD(rec.Date);
+                    TESTFIELD(rec.Payee);
+                    TESTFIELD(rec."Expense Type");
+                    CALCFIELDS(rec."Total Line Amount");
+                    IF rec."Total Line Amount" = 0 THEN
                         ERROR('Line Amount must have value!');
 
-                    IF Status = Status::Approved THEN
+                    IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
-                    CALCFIELDS("Total Line Amount");
-                    ExpenseRequestHeader.SETRANGE("No.", "No.");
+                    CALCFIELDS(rec."Total Line Amount");
+                    ExpenseRequestHeader.SETRANGE("No.", rec."No.");
                     IF ExpenseRequestHeader.FINDFIRST THEN
                         RecID := ExpenseRequestHeader.RECORDID;
-                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, "No.", RecID, "Total Line Amount", Date, "Total Line Amount", STRSUBSTNO('Expense Approval Requisition for %1', Payee));
-                    Status := Status::"Pending Approval";
+                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, rec."No.", RecID, rec."Total Line Amount", rec.Date, rec."Total Line Amount", STRSUBSTNO('Expense Approval Requisition for %1', rec.Payee));
+                    rec.Status := rec.Status::"Pending Approval";
                     MODIFY;
                 end;
             }
@@ -168,12 +164,12 @@ page 70121 "Expense Card"
                     IF Status = Status::Approved THEN
                         ERROR('The document is already approved!');
 
-                    ExpenseRequestHeader.SETRANGE("No.", "No.");
+                    ExpenseRequestHeader.SETRANGE("No.", rec."No.");
                     IF ExpenseRequestHeader.FINDFIRST THEN
                         RecID := ExpenseRequestHeader.RECORDID;
-                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TABLENO, "No.");
-                    Status := Status::" ";
-                    MODIFY;
+                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TABLENO, rec."No.");
+                    rec.Status := rec.Status::" ";
+                    rec.MODIFY;
                 end;
             }
             action(Approve)
@@ -185,23 +181,23 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 var
-                    ApprovalsMgmt: Codeunit "1535";
+                    ApprovalsMgmt: Codeunit 1535;
                 begin
-                    TESTFIELD(Purpose);
-                    TESTFIELD(Payee);
-                    TESTFIELD("Shortcut Dimension 1 Code");
-                    TESTFIELD("Shortcut Dimension 2 Code");
-                    CALCFIELDS("Total Line Amount");
-                    IF "Total Line Amount" = 0 THEN
+                    rec.TESTFIELD(Purpose);
+                    rec.TESTFIELD(Payee);
+                    rec.TESTFIELD("Shortcut Dimension 1 Code");
+                    rec.TESTFIELD("Shortcut Dimension 2 Code");
+                    rec.CALCFIELDS("Total Line Amount");
+                    IF rec."Total Line Amount" = 0 THEN
                         ERROR('Line Amount must have value!');
 
-                    IF Status = Status::Approved THEN
+                    IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
 
-                    DocumentApprovalWorkflow.ApproveDocument(RecID.TABLENO, "No.", RecID);
-                    IF DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, "No.", RecID) THEN BEGIN
-                        Status := Status::Approved;
-                        MODIFY;
+                    DocumentApprovalWorkflow.ApproveDocument(RecID.TABLENO, rec."No.", RecID);
+                    IF DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
+                        rec.Status := rec.Status::Approved;
+                        rec.MODIFY;
                     END;
                 end;
             }
@@ -216,13 +212,13 @@ page 70121 "Expense Card"
                 var
                     ApprovalsMgmt: Codeunit "1535";
                 begin
-                    IF Status = Status::Approved THEN
+                    IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
 
-                    DocumentApprovalWorkflow.RejectDocument("No.");
-                    IF NOT DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, "No.", RecID) THEN BEGIN
-                        Status := Status::Rejected;
-                        MODIFY;
+                    DocumentApprovalWorkflow.RejectDocument(rec."No.");
+                    IF NOT DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
+                        rec.Status := rec.Status::Rejected;
+                        rec.MODIFY;
                     END;
                 end;
             }
@@ -249,7 +245,7 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 var
-                    GenJnlPost: Codeunit "231";
+                    GenJnlPost: Codeunit 231;
                 begin
                     PreviewPosting;
                 end;
@@ -269,10 +265,6 @@ page 70121 "Expense Card"
                 begin
                     // IF Posted = TRUE
                     //  THEN ERROR('The document has already been posted');
-
-                    IF "Expense Type" = "Expense Type"::"Trip Allowance" THEN
-                        TESTFIELD("BU Head Approval", TRUE);
-
 
                     IF NOT CONFIRM('Do you want to Post?', TRUE) THEN
                         CurrPage.CLOSE
@@ -299,10 +291,6 @@ page 70121 "Expense Card"
                 begin
                     // IF Posted = TRUE
                     //  THEN ERROR('The document has already been posted');
-
-                    IF "Expense Type" = "Expense Type"::"Trip Allowance" THEN
-                        TESTFIELD("BU Head Approval", TRUE);
-
                     IF NOT CONFIRM('Do you want to Post?', TRUE) THEN
                         CurrPage.CLOSE
                     ELSE BEGIN
@@ -350,12 +338,12 @@ page 70121 "Expense Card"
     end;
 
     var
-        DocumentApprovalWorkflow: Codeunit "50000";
-        ExpenseRequestHeader: Record "60056";
-        ExpenseRequestLine: Record "60057";
+        DocumentApprovalWorkflow: Codeunit 50000;
+        ExpenseRequestHeader: Record 60056;
+        ExpenseRequestLine: Record 60057;
         RecRef: RecordRef;
         RecID: RecordID;
-        UserSetup: Record "91";
+        UserSetup: Record 91;
         ExpenseEditable: Boolean;
         ApprovedNotEditable: Boolean;
 }

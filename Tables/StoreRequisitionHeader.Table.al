@@ -112,8 +112,8 @@ table 70018 "Store Requisition Header"
         field(19;"Maintenance Type";Option)
         {
             DataClassification = ToBeClassified;
-            OptionCaption = ' ,Truck,Other Assets';
-            OptionMembers = " ",Truck,"Other Assets";
+            OptionCaption = ' ,Vehicle,Other Assets';
+            OptionMembers = " ",Vehicle,"Other Assets";
         }
         field(20;"Refurbishment Vendor";Code[20])
         {
