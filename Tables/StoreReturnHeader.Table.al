@@ -25,7 +25,7 @@ table 70020 "Store Return Header"
             Caption = 'Shortcut Dimension 1 Code';
             DataClassification = ToBeClassified;
             Editable = false;
-            TableRelation = "Dimension Value".Code WHERE (Global Dimension No.=CONST(1));
+            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1));
 
             trigger OnValidate()
             begin
@@ -38,7 +38,7 @@ table 70020 "Store Return Header"
             Caption = 'Shortcut Dimension 2 Code';
             DataClassification = ToBeClassified;
             Editable = false;
-            TableRelation = "Dimension Value".Code WHERE (Global Dimension No.=CONST(2));
+            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2));
 
             trigger OnValidate()
             begin
@@ -124,7 +124,7 @@ table 70020 "Store Return Header"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-            TableRelation = "Fixed Asset".No.;
+            TableRelation = "Fixed Asset"."No.";
 
             trigger OnValidate()
             begin
@@ -173,19 +173,19 @@ table 70020 "Store Return Header"
     end;
 
     var
-        UserSetup: Record "91";
-        DimMgt: Codeunit "408";
-        PurchasesPayablesSetup: Record "312";
-        StoresRequisition: Record "70018";
-        StoresRequisitionLine: Record "70019";
-        StoresReturnLine: Record "70021";
-        StoresReturnLine2: Record "70021";
-        ItemJournalLine: Record "83";
-        ItemJournalLine2: Record "83";
-        ReportPrint: Codeunit "228";
-        GLEntry: Record "17";
-        CustomSetup: Record "60005";
-        NoSeriesMgt: Codeunit "396";
+        UserSetup: Record 91;
+        DimMgt: Codeunit 408;
+        PurchasesPayablesSetup: Record 312;
+        StoresRequisition: Record 70018;
+        StoresRequisitionLine: Record 70019;
+        StoresReturnLine: Record 70021;
+        StoresReturnLine2: Record 70021;
+        ItemJournalLine: Record 83;
+        ItemJournalLine2: Record 83;
+        ReportPrint: Codeunit 228;
+        GLEntry: Record 17;
+        CustomSetup: Record 60005;
+        NoSeriesMgt: Codeunit 396;
 
     local procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
     var
@@ -197,21 +197,21 @@ table 70020 "Store Return Header"
           MODIFY;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;
     begin
         OldDimSetID := "Dimension Set ID";
         "Dimension Set ID" :=
-          DimMgt.EditDimensionSet2(
+          DimMgt.EditDimensionSet(
             "Dimension Set ID",STRSUBSTNO('%1',"No."),
             "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
         IF OldDimSetID <> "Dimension Set ID" THEN
           MODIFY;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure PostReturn()
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
@@ -245,7 +245,7 @@ table 70020 "Store Return Header"
         CheckPostedJnl;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure PostReturnPrint()
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
@@ -279,7 +279,7 @@ table 70020 "Store Return Header"
         //CheckPostedJnl;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure TestReport()
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
@@ -312,7 +312,7 @@ table 70020 "Store Return Header"
         END;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure CheckPostedJnl()
     begin
         GLEntry.SETCURRENTKEY("Document No.","Posting Date");

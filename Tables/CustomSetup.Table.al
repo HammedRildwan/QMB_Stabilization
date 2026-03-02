@@ -46,6 +46,11 @@ table 60005 "Custom Setup"
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(48; "Budget Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "G/L Budget Name".Name WHERE(Blocked = CONST(false));
+        }
     }
 
     keys

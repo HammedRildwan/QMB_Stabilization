@@ -1,8 +1,8 @@
 table 70018 "Store Requisition Header"
 {
     DataCaptionFields = "No.", Requester, "Store Location", "Request Type";
-    DrillDownPageID = 60119;
-    LookupPageID = 60119;
+    //DrillDownPageID = 60119;
+    //LookupPageID = 60119;
 
     fields
     {
@@ -25,7 +25,7 @@ table 70018 "Store Requisition Header"
             CaptionClass = '1,2,1';
             Caption = 'Shortcut Dimension 1 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE (Global Dimension No.=CONST(1));
+            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1));
 
             trigger OnValidate()
             begin
@@ -37,7 +37,7 @@ table 70018 "Store Requisition Header"
             CaptionClass = '1,2,2';
             Caption = 'Shortcut Dimension 2 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE (Global Dimension No.=CONST(2));
+            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2));
 
             trigger OnValidate()
             begin
@@ -77,10 +77,12 @@ table 70018 "Store Requisition Header"
         field(13; "Approved Work Order No."; Code[13])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header".No. WHERE (Approval Status=CONST(Approved),
-                                                                 Delivered=FILTER(No));
+            TableRelation = "Maintenance Work Header"."No." WHERE ("Approval Status"=CONST(Approved),
+                                                                 "Delivered"=FILTER(false));
 
             trigger OnValidate()
+            var
+                MaintenanceWorkHeader: Record "Maintenance Work Header";
             begin
                 IF "Request Type" = "Request Type"::Maintenance THEN BEGIN
                   MaintenanceWorkHeader.GET("Approved Work Order No.");
@@ -102,7 +104,7 @@ table 70018 "Store Requisition Header"
         field(16;"Asset No.";Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = IF (Maintenance Type=FILTER(Other Assets)) "Fixed Asset".No.;
+            TableRelation = IF ("Maintenance Type"=FILTER("Other Assets")) "Fixed Asset"."No.";
 
             trigger OnValidate()
             begin
@@ -117,7 +119,7 @@ table 70018 "Store Requisition Header"
         field(17;"Shortcut Dimension 4 Code";Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE (Global Dimension No.=CONST(4));
+            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(4));
         }
         field(18;"Not Issued";Boolean)
         {
@@ -218,26 +220,26 @@ table 70018 "Store Requisition Header"
     end;
 
     var
-        UserSetup: Record "91";
-        DimMgt: Codeunit "408";
-        PurchasesPayablesSetup: Record "312";
-        ItemJournalLine: Record "83";
-        ItemJournalLine2: Record "83";
-        ReportPrint: Codeunit "228";
-        GLEntry: Record "17";
-        ItemRec: Record "27";
-        StoreRequisitionLine: Record "70019";
-        CustomSetup: Record "60005";
-        NoSeriesMgt: Codeunit "396";
-        ItemLedgEntry: Record "32";
-        StoreReqLine: Record "70019";
-        MaintenanceLedgEntry: Record "5625";
+        UserSetup: Record 91;
+    DimMgt: Codeunit 408;
+        PurchasesPayablesSetup: Record 312;
+        ItemJournalLine: Record 83;
+        ItemJournalLine2: Record 83;
+        ReportPrint: Codeunit 228;
+        GLEntry: Record 17;
+        ItemRec: Record 27;
+        StoreRequisitionLine: Record 70019;
+        CustomSetup: Record 60005;
+        NoSeriesMgt: Codeunit 396;
+        ItemLedgEntry: Record 32;
+        StoreReqLine: Record 70019;
+        MaintenanceLedgEntry: Record 5625;
         LineNo: Integer;
-        MaintenanceWorkHeader: Record "60009";
+        MaintenanceWorkHeader: Record 60009;
         Text001: Label 'Sorry, you can not change Store Location for a Posted or Approved Store Requisition!';
         Text002: Label 'Sorry, you can not change Approved Work Order for a Posted or Approved Store Requisition!';
         Text003: Label 'Maintenance Fault Code %1 on %2';
-        Truck: Record "5600";
+        Truck: Record 5600;
 
     local procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
     var
@@ -248,20 +250,20 @@ table 70018 "Store Requisition Header"
         //IF "No." <> '' THEN MODIFY;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;
     begin
         OldDimSetID := "Dimension Set ID";
         "Dimension Set ID" :=
-          DimMgt.EditDimensionSet2(
+          DimMgt.EditDimensionSet(
             "Dimension Set ID",STRSUBSTNO('%1',"No."),
             "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
         //IF OldDimSetID <> "Dimension Set ID" THEN MODIFY;
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure PostIssue()
     begin
         ItemLedgEntry.SETCURRENTKEY("Document No.","Document Type","Document Line No.");
@@ -324,7 +326,7 @@ table 70018 "Store Requisition Header"
         END;
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure PostIssuePrint()
     begin
         IF "Request Type" = "Request Type"::" " THEN
@@ -375,7 +377,7 @@ table 70018 "Store Requisition Header"
         CheckPostedJnl;
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure TestReport()
     begin
         IF "Request Type" = "Request Type"::" " THEN
@@ -422,7 +424,7 @@ table 70018 "Store Requisition Header"
         END;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure CheckPostedJnl()
     begin
         StoreReqLine.SETFILTER("Document No.","No.");
@@ -436,21 +438,21 @@ table 70018 "Store Requisition Header"
             END;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure Navigate()
     var
-        NavigateForm: Page "344";
+        NavigateForm: Page 344;
     begin
         NavigateForm.SetDoc("Request Date","No.");
         NavigateForm.RUN;
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure InsertMaintJournal()
     var
-        ItemLedgEntry2: Record "32";
-        MaintenanceLedgEntry: Record "5625";
-        MaintenanceLedgEntry2: Record "5625";
+        ItemLedgEntry2: Record 32;
+        MaintenanceLedgEntry: Record 5625;
+        MaintenanceLedgEntry2: Record 5625;
     begin
         MaintenanceLedgEntry2.SETRANGE("Entry No.");
         MaintenanceLedgEntry2.FINDLAST;

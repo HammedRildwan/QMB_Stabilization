@@ -15,6 +15,12 @@ table 60057 "Expense Request Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(22; "Expense Type"; Option)
+        {
+            Editable = true;
+            OptionCaption = ' ,Direct Expense,Vendor Invoice,Maintenance Expenses';
+            OptionMembers = " ","Direct Expense","Vendor Invoice","Maintenance Expenses";
+        }
         field(4; "Expense Account No."; Code[10])
         {
             DataClassification = ToBeClassified;
@@ -28,7 +34,37 @@ table 60057 "Expense Request Line"
                     "Account Name" := GLAccount.Name
                 ELSE
                     "Account Name" := '';
+
+                CustomSetup.Get();
+                "Budgeted Amount" := 0;
+                "Budget Balance" := 0;
+                "G/L Balance" := 0;
+                IF CustomSetup."Budget Code" <> '' THEN begin
+                    GLBudgetEntry.SetFilter("Budget Name", CustomSetup."Budget Code");
+                    GLBudgetEntry.SetFilter("G/L Account No.", "Expense Account No.");
+                    GLBudgetEntry.SetFilter(Date, '%1..%2', CALCDATE('<-CY>', Today), CALCDATE('<CY>', Today));
+                    IF GLBudgetEntry.FINDFIRST THEN begin
+                        repeat
+                            if GLBudgetEntry.Amount <> 0 then
+                                "Budgeted Amount" += GLBudgetEntry.Amount;
+                        until GLBudgetEntry.NEXT = 0;
+                    end;
+
+                    GLEntry.SetFilter("G/L Account No.", "Expense Account No.");
+                    GLEntry.SetFilter("Posting Date", '%1..%2', CALCDATE('<-CY>', Today), CALCDATE('<CY>', Today));
+                    IF GLEntry.FINDFIRST THEN begin
+                        repeat
+                            if GLEntry.Amount <> 0 then
+                                "G/L Balance" += GLEntry.Amount;
+                        until GLEntry.NEXT = 0;
+                    end;
+
+                    "Budget Balance" := "Budgeted Amount" - "G/L Balance";
+                end;
+
+
             end;
+
         }
         field(5; "Account Name"; Text[50])
         {
@@ -41,7 +77,9 @@ table 60057 "Expense Request Line"
 
             trigger OnValidate()
             var
+                WHTRate: Decimal;
                 ExpReq: Record "Expense Request Header";
+                Currency: Record Currency;
                 CurrExchRate: Record "Currency Exchange Rate";
             begin
                 //IF "Expense Description" = '' THEN
@@ -57,6 +95,19 @@ table 60057 "Expense Request Line"
                       CurrExchRate.ExchangeAmtFCYToLCY(
                         ExpReq.Date, "Currency Code",
                         Amount, "Currency Factor" / 100));
+
+                    Amount := ROUND(Amount, Currency."Amount Rounding Precision");
+                    TESTFIELD(Amount);
+                    WHTRate := 0;
+
+                    IF "WHT Rate" = "WHT Rate"::"10%" THEN
+                        WHTRate := 0.1
+                    ELSE IF "WHT Rate" = "WHT Rate"::"5%" THEN
+                        WHTRate := 0.05
+                    ELSE
+                        WHTRate := 0;
+
+                    VALIDATE("WHT Amount", Amount * WHTRate);
                 END;
             end;
         }
@@ -215,6 +266,66 @@ table 60057 "Expense Request Line"
         {
             DataClassification = ToBeClassified;
         }
+        field(25; "WHT Rate"; Option)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+            OptionCaption = 'N/A,5%,10%,2%';
+            OptionMembers = "N/A","5%","10%","2%";
+
+            trigger OnValidate()
+            var
+                WHTRate: Decimal;
+                VATRate: Decimal;
+                StampDutyRate: Decimal;
+            begin
+                TESTFIELD(Amount);
+                WHTRate := 0;
+                VATRate := 0;
+                StampDutyRate := 0;
+
+                IF "WHT Rate" = "WHT Rate"::"10%" THEN
+                    WHTRate := 0.1
+                ELSE IF "WHT Rate" = "WHT Rate"::"5%" THEN
+                    WHTRate := 0.05
+                ELSE IF "WHT Rate" = "WHT Rate"::"2%" THEN
+                    WHTRate := 0.02
+                ELSE
+                    WHTRate := 0;
+
+                VALIDATE("WHT Amount", Amount * WHTRate);
+                // UpdateDeductionsValues;
+            end;
+        }
+        field(23; "WHT Amount"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+
+            trigger OnValidate()
+            begin
+                //  UpdateDeductionsValues;
+            end;
+        }
+        field(24; "WHT Amount (LCY)"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(26; "Budgeted Amount"; Decimal)
+        {
+            Editable = false;
+        }
+        field(27; "Budget Balance"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
+        field(28; "G/L Balance"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
         field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
@@ -267,15 +378,18 @@ table 60057 "Expense Request Line"
         DimMgt: Codeunit 408;
         ExpReq: Record 60056;
         CurrExchRate: Record 330;
+        CustomSetup: Record "Custom Setup";
         Text002: Label 'cannot be specified without %1';
         UserSetup: Record 91;
+        GLBudgetEntry: Record "G/L Budget Entry";
+        GLEntry: Record "G/L Entry";
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
         DimMgt.ValidateShortcutDimValues(FieldNumber, ShortcutDimCode, "Dimension Set ID");
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;

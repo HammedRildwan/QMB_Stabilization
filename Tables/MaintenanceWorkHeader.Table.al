@@ -15,6 +15,9 @@ table 60009 "Maintenance Work Header"
             TableRelation = "Fixed Asset";
 
             trigger OnValidate()
+            var 
+                Truck: Record 5600;
+                MaintenanceWorkHeader : Record "Maintenance Work Header";
             begin
 
                 MaintenanceWorkHeader.COPYFILTERS(Rec);
@@ -109,9 +112,11 @@ table 60009 "Maintenance Work Header"
         field(19; "Veh. Inspection Officer No."; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = Resource.No. WHERE (Type=CONST(Person));
+            TableRelation = Resource."No." WHERE (Type=CONST(Person));
 
             trigger OnValidate()
+            var
+                Resource: Record 156;
             begin
                 IF Resource.GET("Veh. Inspection Officer No.") THEN
                   "Veh. Inspection Officer Name" := Resource.Name
@@ -459,8 +464,8 @@ table 60009 "Maintenance Work Header"
         field(95;"Refrence Job";Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header" WHERE (Overall Status=FILTER(Closed),
-                                                             Truck No.=FIELD(Truck No.));
+            TableRelation = "Maintenance Work Header" WHERE ("Overall Status"=FILTER(Closed),
+                                                             "Truck No."=FIELD("Truck No."));
         }
         field(96;"Cause fo Return";Option)
         {
@@ -504,11 +509,11 @@ table 60009 "Maintenance Work Header"
     end;
 
     var
-        CustomSetup: Record "60005";
-        NoSeriesMgt: Codeunit "396";
-        FaultCode: Record "5918";
-        Resource: Record "156";
-        Truck: Record "5600";
-        MaintenanceWorkHeader: Record "60009";
+        CustomSetup: Record 60005;
+        NoSeriesMgt: Codeunit 396;
+        FaultCode: Record 5918;
+        Resource: Record 156;
+        Truck: Record 5600;
+        MaintenanceWorkHeader: Record 60009;
 }
 

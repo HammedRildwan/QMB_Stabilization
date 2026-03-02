@@ -34,12 +34,12 @@ table 60056 "Expense Request Header"
         field(9; Treated; Boolean)
         {
         }
-        field(10; "Expense Type"; Option)
+       /* field(10; "Expense Type"; Option)
         {
             Editable = true;
-            OptionCaption = ' ,Miscellaneous,Trip Allowance,Maintenance,Road Work,Fixed Asset,Trans R-Work';
-            OptionMembers = " ",Miscellaneous,"Trip Allowance",Maintenance,"Road Work","Fixed Asset","Trans R-Work";
-        }
+            OptionCaption = ' ,Direct Expense,Vendor Invoice,Maintenance Expenses';
+            OptionMembers = " ","Direct Expense","Vendor Invoice","Maintenance Expenses";
+        }*/
         field(11; "Payment Option"; Option)
         {
             DataClassification = ToBeClassified;
@@ -80,7 +80,7 @@ table 60056 "Expense Request Header"
         }
         field(17; "Total Line Amount"; Decimal)
         {
-            CalcFormula = Sum ("Expense Request Line".Amount WHERE ("Document No."=FIELD(No.)));
+            CalcFormula = Sum ("Expense Request Line".Amount WHERE ("Document No."=FIELD("No.")));
             Editable = false;
             FieldClass = FlowField;
         }
@@ -95,7 +95,7 @@ table 60056 "Expense Request Header"
         field(20;"Work Order No.";Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header".No. WHERE ("Approval Status"=CONST(Approved));
+            TableRelation = "Maintenance Work Header"."No." WHERE ("Approval Status"=CONST(Approved));
         }
         field(21;"Haulage Cash Advance No.";Code[10])
         {
@@ -306,10 +306,10 @@ table 60056 "Expense Request Header"
         field(493;"Maintenance Work Order";Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header".No. WHERE ("Job Type"=FILTER("Road Work"),
+            TableRelation = "Maintenance Work Header"."No." WHERE ("Job Type"=FILTER("Road Work"),
                                                                  "Approval Status"=FILTER(Approved),
                                                                  "Overall Status"=FILTER(<>Closed),
-                                                                 "Delivered"=FILTER(No));
+                                                                 "Delivered"=FILTER(false));
         }
     }
 
@@ -356,33 +356,33 @@ table 60056 "Expense Request Header"
     end;
 
     var
-        CustomSetup: Record "60005";
-        NoSeriesMgt: Codeunit "396";
+        CustomSetup: Record  60005;
+        NoSeriesMgt: Codeunit 396;
         Text002: Label 'cannot be specified without %1';
-        UserSetup: Record "91";
-        UserSetup2: Record "91";
-        GenJournalLine: Record "81";
-        GenJournalLine2: Record "81";
-        GLEntry: Record "17";
-        GLEntry2: Record "17";
-        GenJnlPost: Codeunit "231";
-        TestReportPrint: Codeunit "228";
-        ExpenseRequestLine: Record "60057";
-        ExpenseRequestLine2: Record "60057";
-        BankAccount: Record "270";
+        UserSetup: Record 91;
+        UserSetup2: Record 91;
+        GenJournalLine: Record 81;
+        GenJournalLine2: Record 81;
+        GLEntry: Record 17;
+        GLEntry2: Record 17;
+        GenJnlPost: Codeunit 231;
+        TestReportPrint: Codeunit 228;
+        ExpenseRequestLine: Record 60057;
+        ExpenseRequestLine2: Record 60057;
+        BankAccount: Record 270;
         ErrorOnPosting: Label 'This document needs to be approved before posting.';
-        DimMgt: Codeunit "408";
+        DimMgt: Codeunit 408;
         LineNo: Integer;
         FAMaintDocNo: Code[20];
-        FASetup: Record "5603";
+        FASetup: Record 5603;
         LineNoB: Integer;
-        GenJournalLine4: Record "81";
+        GenJournalLine4: Record 81;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure PostExpense()
     var
-        GenJournalLine: Record "81";
-        GenJournalLine2: Record "81";
+        GenJournalLine: Record 81;
+        GenJournalLine2: Record 81;
     begin
         //To confirm if the records dont exist
          IF Status <> Status::Approved THEN
@@ -471,11 +471,11 @@ table 60056 "Expense Request Header"
         CheckPostedJnl;
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure PreviewPosting()
     var
-        GenJournalLine: Record "81";
-        GenJournalLine2: Record "81";
+        GenJournalLine: Record 81;
+        GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
           ERROR(ErrorOnPosting);
@@ -550,11 +550,11 @@ table 60056 "Expense Request Header"
         GenJnlPost.Preview(GenJournalLine);
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure TestReport()
     var
-        GenJournalLine: Record "81";
-        GenJournalLine2: Record "81";
+        GenJournalLine: Record 81;
+        GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
           ERROR(ErrorOnPosting);
@@ -630,11 +630,11 @@ table 60056 "Expense Request Header"
         TestReportPrint.PrintGenJnlLine(GenJournalLine);
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure PostPrint()
     var
-        GenJournalLine: Record "81";
-        GenJournalLine2: Record "81";
+        GenJournalLine: Record 81;
+        GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
           ERROR(ErrorOnPosting);
@@ -716,7 +716,7 @@ table 60056 "Expense Request Header"
         CheckPostedJnl;
     end;
 
-    [Scope('Internal')]
+    //[Scope('Internal')]
     procedure CheckPostedJnl()
     begin
         GLEntry.SETCURRENTKEY("Document No.","Posting Date");
@@ -741,27 +741,27 @@ table 60056 "Expense Request Header"
         DimMgt.ValidateShortcutDimValues(FieldNumber,ShortcutDimCode,"Dimension Set ID");
     end;
 
-    [Scope('Internal')]
+   // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;
     begin
         OldDimSetID := "Dimension Set ID";
         "Dimension Set ID" :=
-          DimMgt.EditDimensionSet2(
+          DimMgt.EditDimensionSet(
             "Dimension Set ID",STRSUBSTNO('%1',"No."),
             "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
         IF OldDimSetID <> "Dimension Set ID" THEN
           MODIFY;
     end;
 
-    [Scope('Internal')]
+  //  [Scope('Internal')]
     procedure PostMaintenanceOnIssue()
     var
-        FAJournalLine: Record "5621";
-        FAJournalLine2: Record "5621";
-        MaintenanceLedgEntry: Record "5625";
-        MaintenanceLedgEntry2: Record "5625";
+        FAJournalLine: Record 5621;
+        FAJournalLine2: Record 5621;
+        MaintenanceLedgEntry: Record 5625;
+        MaintenanceLedgEntry2: Record 5625;
     begin
         /*
         

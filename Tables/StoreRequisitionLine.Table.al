@@ -181,48 +181,48 @@ table 70019 "Store Requisition Line"
         {
             FieldClass = FlowField;
             CalcFormula = Sum("Item Ledger Entry".Quantity WHERE("Item No." = FIELD("Item No."),
-                                                                  "Location Code"=FIELD("Location Code")));
+                                                                  "Location Code" = FIELD("Location Code")));
             Editable = false;
         }
-        field(13;"Shortcut Dimension 3 Code";Code[20])
+        field(13; "Shortcut Dimension 3 Code"; Code[20])
         {
             CaptionClass = '1,2,3';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(3),
-                                                          Blocked=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(3),
+                                                          Blocked = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(3,"Shortcut Dimension 3 Code");
+                ValidateShortcutDimCode(3, "Shortcut Dimension 3 Code");
             end;
         }
-        field(14;"Shortcut Dimension 1 Code";Code[20])
+        field(14; "Shortcut Dimension 1 Code"; Code[20])
         {
             CaptionClass = '1,2,1';
             Caption = 'Shortcut Dimension 1 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1),
-                                                          Blocked=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1),
+                                                          Blocked = CONST(false));
 
             trigger OnValidate()
             begin
                 //ValidateShortcutDimCode(1,"Shortcut Dimension 1 Code");
             end;
         }
-        field(15;"Shortcut Dimension 2 Code";Code[20])
+        field(15; "Shortcut Dimension 2 Code"; Code[20])
         {
             CaptionClass = '1,2,2';
             Caption = 'Shortcut Dimension 2 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2),
-                                                          Blocked=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2),
+                                                          Blocked = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(2,"Shortcut Dimension 2 Code");
+                ValidateShortcutDimCode(2, "Shortcut Dimension 2 Code");
             end;
         }
-        field(16;"Fixed Asset No.";Code[20])
+        field(16; "Fixed Asset No."; Code[20])
         {
             DataClassification = ToBeClassified;
             TableRelation = "Fixed Asset"."No.";
@@ -235,55 +235,55 @@ table 70019 "Store Requisition Line"
                 StoreRequisitionHeader.GET("Document No.");
                 IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
                   (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
-                  IF Truck.GET("Fixed Asset No.") THEN BEGIN
-                  //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
-                  //  VALIDATE("Shortcut Dimension 4 Code",Truck."Truck ID");  //can be replaced with Fixed assets as dimension
-                    MODIFY;
-                  END;
+                    IF Truck.GET("Fixed Asset No.") THEN BEGIN
+                        //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
+                        //  VALIDATE("Shortcut Dimension 4 Code",Truck."Truck ID");  //can be replaced with Fixed assets as dimension
+                        MODIFY;
+                    END;
                 END;
             end;
         }
-        field(17;"Maintenance Code";Code[10])
+        field(17; "Maintenance Code"; Code[10])
         {
             DataClassification = ToBeClassified;
             TableRelation = "Fault Code";
         }
-        field(18;"Posting Date";Date)
+        field(18; "Posting Date"; Date)
         {
             DataClassification = ToBeClassified;
         }
-        field(19;"Old Spare Part Returned";Boolean)
+        field(19; "Old Spare Part Returned"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
-        field(20;"Old Spare Return Location";Code[20])
+        field(20; "Old Spare Return Location"; Code[20])
         {
             DataClassification = ToBeClassified;
             TableRelation = Location.Code;
         }
-        field(21;"Quantity Issued";Decimal)
+        field(21; "Quantity Issued"; Decimal)
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(22;"Remaining Quantity";Decimal)
+        field(22; "Remaining Quantity"; Decimal)
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(23;"Shortcut Dimension 4 Code";Code[20])
+        field(23; "Shortcut Dimension 4 Code"; Code[20])
         {
             CaptionClass = '1,2,4';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(4),
-                                                          Blocked=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(4),
+                                                          Blocked = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(4,"Shortcut Dimension 4 Code");
+                ValidateShortcutDimCode(4, "Shortcut Dimension 4 Code");
             end;
         }
-        field(24;"Inventory Posting Group";Code[20])
+        field(24; "Inventory Posting Group"; Code[20])
         {
             Caption = 'Inventory Posting Group';
             DataClassification = ToBeClassified;
@@ -297,48 +297,48 @@ table 70019 "Store Requisition Line"
 
             end;
         }
-        field(25;Posted;Boolean)
+        field(25; Posted; Boolean)
         {
             DataClassification = ToBeClassified;
         }
-        field(26;"Actual Cost Amount";Decimal)
+        field(26; "Actual Cost Amount"; Decimal)
         {
             Editable = false;
             FieldClass = Normal;
         }
-        field(27;"Actual Posting Date";Date)
+        field(27; "Actual Posting Date"; Date)
         {
-            CalcFormula = Lookup("Item Ledger Entry"."Posting Date" WHERE ("Document No."=FIELD("Document No."),
-                                                                           "Item No."=FIELD("Item No.")));
+            CalcFormula = Lookup("Item Ledger Entry"."Posting Date" WHERE("Document No." = FIELD("Document No."),
+                                                                           "Item No." = FIELD("Item No.")));
             Editable = false;
             FieldClass = FlowField;
         }
-        field(28;"Assigned Technician";Code[10])
+        field(28; "Assigned Technician"; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = Resource."No." WHERE (Type=CONST(Person));
+            TableRelation = Resource."No." WHERE(Type = CONST(Person));
 
             trigger OnValidate()
             var
-                 ResourceRec: Record 156;
+                ResourceRec: Record 156;
             begin
                 IF ResourceRec.GET("Assigned Technician") THEN
-                  "Technician Name" := ResourceRec.Name
+                    "Technician Name" := ResourceRec.Name
                 ELSE
-                  "Technician Name" := '';
+                    "Technician Name" := '';
             end;
         }
-        field(29;"Technician Name";Text[80])
+        field(29; "Technician Name"; Text[80])
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(30;"Variant Code";Code[10])
+        field(30; "Variant Code"; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Item Variant".Code WHERE ("Item No."=FIELD("Item No."));
+            TableRelation = "Item Variant".Code WHERE("Item No." = FIELD("Item No."));
         }
-        field(480;"Dimension Set ID";Integer)
+        field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
             DataClassification = ToBeClassified;
@@ -355,20 +355,20 @@ table 70019 "Store Requisition Line"
                 //DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID","Shortcut Dimension 3 Code");
             end;
         }
-        field(50000;"Date-H";Date)
+        field(50000; "Date-H"; Date)
         {
-            CalcFormula = Lookup("Store Requisition Header"."Request Date" WHERE ("No."=FIELD("Document No.")));
+            CalcFormula = Lookup("Store Requisition Header"."Request Date" WHERE("No." = FIELD("Document No.")));
             FieldClass = FlowField;
         }
     }
 
     keys
     {
-        key(Key1;"Document No.","Line No.")
+        key(Key1; "Document No.", "Line No.")
         {
             Clustered = true;
         }
-        key(Key2;"Fixed Asset No.")
+        key(Key2; "Fixed Asset No.")
         {
         }
     }
@@ -381,15 +381,15 @@ table 70019 "Store Requisition Line"
     begin
         StoreRequisitionHeader.GET("Document No.");
         IF StoreRequisitionHeader."Store Location" <> '' THEN
-          "Location Code" := StoreRequisitionHeader."Store Location"
+            "Location Code" := StoreRequisitionHeader."Store Location"
         ELSE
-          ERROR(Text002);
+            ERROR(Text002);
         "Fixed Asset No." := StoreRequisitionHeader."Asset No.";
 
         IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
           (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
             Truck.GET(StoreRequisitionHeader."Asset No.");
-        //    VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
+            //    VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
         END;
     end;
 
@@ -401,7 +401,7 @@ table 70019 "Store Requisition Line"
         IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
           (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
             Truck.GET(StoreRequisitionHeader."Asset No.");
-          //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
+            //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
         END;
     end;
 
@@ -409,17 +409,17 @@ table 70019 "Store Requisition Line"
         Item: Record 27;
         ItemQty: Decimal;
         Text001: Label 'There is no sufficient quantity for this item!';
-        DimMgt: Codeunit "Dimension Management";
-        StoreRequisitionHeader: Record "70018";
+        DimMgt: Codeunit DimensionManagement;
+        StoreRequisitionHeader: Record 70018;
         Text002: Label 'Store Location should be selected on the header!';
         Text003: Label 'Sorry, you can not issue more than the requested quantity %1!';
         FARec: Record 5600;
         Truck: Record 5600;
         ResourceRec: Record 156;
 
-    procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
+    procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
-        DimMgt.ValidateShortcutDimValues(FieldNumber,ShortcutDimCode,"Dimension Set ID");
+        DimMgt.ValidateShortcutDimValues(FieldNumber, ShortcutDimCode, "Dimension Set ID");
     end;
 
     //[Scope('Internal')]
@@ -427,13 +427,13 @@ table 70019 "Store Requisition Line"
     var
         OldDimSetID: Integer;
     begin
-         OldDimSetID := "Dimension Set ID";
-         "Dimension Set ID" :=
-          DimMgt.EditDimensionSet2(
-            "Dimension Set ID",STRSUBSTNO('%1',"Document No."),
-            "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
-         IF OldDimSetID <> "Dimension Set ID" THEN
-          MODIFY;
+        OldDimSetID := "Dimension Set ID";
+        "Dimension Set ID" :=
+         DimMgt.EditDimensionSet(
+           "Dimension Set ID", STRSUBSTNO('%1', "Document No."),
+           "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
+        IF OldDimSetID <> "Dimension Set ID" THEN
+            MODIFY;
     end;
 }
 
