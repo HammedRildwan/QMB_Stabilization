@@ -6,8 +6,8 @@ page 70124 "Approved Expense List"
     SourceTable = 60056;
     SourceTableView = WHERE(Posted = CONST(false),
                             Status = FILTER(Approved),
-                            "Not Paid"=FILTER(false),
-                            "Expense Type"=FILTER('Maintenance Expense'|' '));
+                            "Not Paid" = FILTER(false),
+                            "Expense Type" = FILTER('Maintenance Expense' | ' '));
 
     layout
     {
@@ -58,15 +58,15 @@ page 70124 "Approved Expense List"
         }
         area(factboxes)
         {
-            part(Approvals;70194)
+            part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD("No.");
+                SubPageLink = "Document No." = FIELD("No.");
             }
-            systempart(Notes;Notes)
+            systempart(Notes; Notes)
             {
             }
-            systempart(Links;Links)
+            systempart(Links; Links)
             {
             }
         }
