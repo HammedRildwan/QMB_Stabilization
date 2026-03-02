@@ -56,18 +56,11 @@ page 70034 "Store Requisition Card"
                     begin
                         MaintTypeEditable := false;
                         if (Rec."Request Type" = Rec."Request Type"::Maintenance) or (Rec."Request Type" = Rec."Request Type"::"Internal Consumption")
-                          or (Rec."Request Type" = Rec."Request Type"::"Road Work") then begin
+                           then begin
                             MaintTypeEditable := true;
                         end;
 
-                        if Rec."Request Type" = Rec."Request Type"::Refurbishment then
-                            RefVendEditable := true;
                     end;
-                }
-                field("Refurbishment Vendor"; Rec."Refurbishment Vendor")
-                {
-                    ApplicationArea = All;
-                    Editable = RefVendEditable;
                 }
                 field("Maintenance Type"; Rec."Maintenance Type")
                 {

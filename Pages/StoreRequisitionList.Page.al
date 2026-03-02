@@ -5,9 +5,7 @@ page 70033 "Store Requisition List"
     PageType = List;
     SourceTable = 70018;
     SourceTableView = SORTING("No.")
-                      ORDER(Descending)
-                      WHERE(Posted = CONST(false),
-                            Status = FILTER(<> Approved));
+                      ORDER(Descending);
 
     layout
     {

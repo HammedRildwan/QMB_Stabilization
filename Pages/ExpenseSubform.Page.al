@@ -17,12 +17,17 @@ page 70122 "Expense Subform"
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
+                field("Expense type"; rec."Expense type")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
                 field("Expense Description"; rec."Expense Description")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
                 field("Expense Account No."; rec."Expense Account No.")
                 {
+                    Editable = NOT ApprovedNotEditable;
                 }
                 field("Account Name"; rec."Account Name")
                 {
@@ -39,6 +44,46 @@ page 70122 "Expense Subform"
                 field(Amount; rec.Amount)
                 {
                     Editable = NOT ApprovedNotEditable;
+                }
+                field("Amount (LCY)"; rec."Amount (LCY)")
+                {
+                    Editable = false;
+                }
+                field("Exchange Rate"; rec."Exchange Rate")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("WHT Rate"; rec."WHT Rate")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("WHT Amount"; rec."WHT Amount")
+                {
+                    Editable = false;
+                }
+                field("WHT Amount (LCY)"; rec."WHT Amount (LCY)")
+                {
+                    Editable = false;
+                }
+                field("Budgeted Amount"; rec."Budgeted Amount")
+                {
+                    Editable = false;
+                }
+                field("Budget Balance"; rec."Budget Balance")
+                {
+                    Editable = false;
+                }
+                field("G/L Balance"; rec."G/L Balance")
+                {
+                    Editable = false;
+                }
+                field("Payee Code"; rec."Payee Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Payee Name"; rec."Payee Name")
+                {
+                    Editable = false;
                 }
                 field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {

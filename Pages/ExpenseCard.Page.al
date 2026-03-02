@@ -24,9 +24,6 @@ page 70121 "Expense Card"
                 field("Expense Type"; rec."Expense Type")
                 {
                 }
-                field("Trip No"; rec."Trip No")
-                {
-                }
                 field(Status; rec.Status)
                 {
                 }
@@ -82,15 +79,6 @@ page 70121 "Expense Card"
                 field("Not Paid"; rec."Not Paid")
                 {
                 }
-                field("BU Head Approval"; rec."BU Head Approval")
-                {
-                    Editable = true;
-                    Visible = true;
-                }
-                field("JM Approval"; rec."JM Approval")
-                {
-                    Editable = false;
-                }
             }
             part(Lines; 70122)
             {
@@ -130,7 +118,6 @@ page 70121 "Expense Card"
                 begin
                     rec.TESTFIELD(Purpose);
                     rec.TESTFIELD(Date);
-                    rec.TESTFIELD(Payee);
                     rec.TESTFIELD("Expense Type");
                     rec.CALCFIELDS("Total Line Amount");
                     IF rec."Total Line Amount" = 0 THEN
