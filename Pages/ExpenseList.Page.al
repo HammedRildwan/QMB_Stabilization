@@ -5,7 +5,7 @@ page 70120 "Expense List"
     Editable = false;
     PageType = List;
     SourceTable = 60056;
-    SourceTableView = WHERE (Posted = CONST (No));
+    SourceTableView = WHERE (Posted = CONST (false));
 
     layout
     {
@@ -50,12 +50,12 @@ page 70120 "Expense List"
             part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No."=FIELD("No.");
             }
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
             }
         }
@@ -68,12 +68,12 @@ page 70120 "Expense List"
     trigger OnOpenPage()
     begin
         UserSetup.GET(USERID);
-        FILTERGROUP(10);
-        SETRANGE(Requester, UserSetup."User ID");
-        FILTERGROUP(0);
+        rec.FilterGroup(10);
+        rec.SetRange(Requester, UserSetup."User ID");
+        rec.FilterGroup(0);
     end;
 
     var
-        UserSetup: Record "91";
+        UserSetup: Record 91;
 }
 

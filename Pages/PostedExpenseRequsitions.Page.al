@@ -58,12 +58,12 @@ page 60081 "Posted Expense Requsitions"
             part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD(No.);
+                SubPageLink = "Document No."=FIELD("No.");
             }
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
             }
         }
