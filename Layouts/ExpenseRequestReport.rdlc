@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -10,67 +10,6 @@
       <rd:DataSourceID>DataSource</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="No_">
-          <DataField>No_</DataField>
-        </Field>
-        <Field Name="Date">
-          <DataField>Date</DataField>
-        </Field>
-        <Field Name="Requester">
-          <DataField>Requester</DataField>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
-        </Field>
-        <Field Name="ExpenseType">
-          <DataField>ExpenseType</DataField>
-        </Field>
-        <Field Name="PaymentOption">
-          <DataField>PaymentOption</DataField>
-        </Field>
-        <Field Name="Payee">
-          <DataField>Payee</DataField>
-        </Field>
-        <Field Name="Purpose">
-          <DataField>Purpose</DataField>
-        </Field>
-        <Field Name="TotalLineAmount">
-          <DataField>TotalLineAmount</DataField>
-        </Field>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-        <Field Name="LineNo">
-          <DataField>LineNo</DataField>
-        </Field>
-        <Field Name="ExpenseDescription">
-          <DataField>ExpenseDescription</DataField>
-        </Field>
-        <Field Name="ExpenseAccountNo">
-          <DataField>ExpenseAccountNo</DataField>
-        </Field>
-        <Field Name="AccountName">
-          <DataField>AccountName</DataField>
-        </Field>
-        <Field Name="Amount">
-          <DataField>Amount</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -117,4 +56,110 @@
   </ReportSections>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>expense-request-report</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="No_">
+          <DataField>No_</DataField>
+        </Field>
+        <Field Name="Date">
+          <DataField>Date</DataField>
+        </Field>
+        <Field Name="Requester">
+          <DataField>Requester</DataField>
+        </Field>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+        </Field>
+        <Field Name="ExpenseType">
+          <DataField>ExpenseType</DataField>
+        </Field>
+        <Field Name="PaymentOption">
+          <DataField>PaymentOption</DataField>
+        </Field>
+        <Field Name="BankName">
+          <DataField>BankName</DataField>
+        </Field>
+        <Field Name="ChequeNo">
+          <DataField>ChequeNo</DataField>
+        </Field>
+        <Field Name="Payee">
+          <DataField>Payee</DataField>
+        </Field>
+        <Field Name="Purpose">
+          <DataField>Purpose</DataField>
+        </Field>
+        <Field Name="TotalLineAmount">
+          <DataField>TotalLineAmount</DataField>
+        </Field>
+        <Field Name="TotalLineAmountFormat">
+          <DataField>TotalLineAmountFormat</DataField>
+        </Field>
+        <Field Name="Posted">
+          <DataField>Posted</DataField>
+        </Field>
+        <Field Name="ExternalDocumentNo">
+          <DataField>ExternalDocumentNo</DataField>
+        </Field>
+        <Field Name="ShortcutDimension1Code">
+          <DataField>ShortcutDimension1Code</DataField>
+        </Field>
+        <Field Name="ShortcutDimension2Code">
+          <DataField>ShortcutDimension2Code</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="LineNo">
+          <DataField>LineNo</DataField>
+        </Field>
+        <Field Name="ExpenseDescription">
+          <DataField>ExpenseDescription</DataField>
+        </Field>
+        <Field Name="ExpenseAccountNo">
+          <DataField>ExpenseAccountNo</DataField>
+        </Field>
+        <Field Name="AccountName">
+          <DataField>AccountName</DataField>
+        </Field>
+        <Field Name="Amount">
+          <DataField>Amount</DataField>
+        </Field>
+        <Field Name="AmountFormat">
+          <DataField>AmountFormat</DataField>
+        </Field>
+        <Field Name="AmountLCY">
+          <DataField>AmountLCY</DataField>
+        </Field>
+        <Field Name="AmountLCYFormat">
+          <DataField>AmountLCYFormat</DataField>
+        </Field>
+        <Field Name="CurrencyCode">
+          <DataField>CurrencyCode</DataField>
+        </Field>
+        <Field Name="BudgetedAmount">
+          <DataField>BudgetedAmount</DataField>
+        </Field>
+        <Field Name="BudgetedAmountFormat">
+          <DataField>BudgetedAmountFormat</DataField>
+        </Field>
+        <Field Name="BudgetBalance">
+          <DataField>BudgetBalance</DataField>
+        </Field>
+        <Field Name="BudgetBalanceFormat">
+          <DataField>BudgetBalanceFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>

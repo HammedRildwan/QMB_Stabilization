@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -10,58 +10,6 @@
       <rd:DataSourceID>DataSource</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="Sequence">
-          <DataField>Sequence</DataField>
-        </Field>
-        <Field Name="TableNo">
-          <DataField>TableNo</DataField>
-        </Field>
-        <Field Name="DocumentNo">
-          <DataField>DocumentNo</DataField>
-        </Field>
-        <Field Name="Sender">
-          <DataField>Sender</DataField>
-        </Field>
-        <Field Name="Approver">
-          <DataField>Approver</DataField>
-        </Field>
-        <Field Name="Status">
-          <DataField>Status</DataField>
-        </Field>
-        <Field Name="DocumentDate">
-          <DataField>DocumentDate</DataField>
-        </Field>
-        <Field Name="DocumentAmount">
-          <DataField>DocumentAmount</DataField>
-        </Field>
-        <Field Name="DocumentDescription">
-          <DataField>DocumentDescription</DataField>
-        </Field>
-        <Field Name="Open">
-          <DataField>Open</DataField>
-        </Field>
-        <Field Name="DocumentType">
-          <DataField>DocumentType</DataField>
-        </Field>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -108,4 +56,65 @@
   </ReportSections>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>approval-status-report</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Sequence">
+          <DataField>Sequence</DataField>
+        </Field>
+        <Field Name="TableNo">
+          <DataField>TableNo</DataField>
+        </Field>
+        <Field Name="DocumentNo">
+          <DataField>DocumentNo</DataField>
+        </Field>
+        <Field Name="Sender">
+          <DataField>Sender</DataField>
+        </Field>
+        <Field Name="Approver">
+          <DataField>Approver</DataField>
+        </Field>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+        </Field>
+        <Field Name="DocumentDate">
+          <DataField>DocumentDate</DataField>
+        </Field>
+        <Field Name="DocumentAmount">
+          <DataField>DocumentAmount</DataField>
+        </Field>
+        <Field Name="DocumentAmountFormat">
+          <DataField>DocumentAmountFormat</DataField>
+        </Field>
+        <Field Name="DocumentDescription">
+          <DataField>DocumentDescription</DataField>
+        </Field>
+        <Field Name="Open">
+          <DataField>Open</DataField>
+        </Field>
+        <Field Name="StatusChangeDateTime">
+          <DataField>StatusChangeDateTime</DataField>
+        </Field>
+        <Field Name="SendForApprovalDateTime">
+          <DataField>SendForApprovalDateTime</DataField>
+        </Field>
+        <Field Name="DocumentType">
+          <DataField>DocumentType</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
