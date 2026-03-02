@@ -7,6 +7,14 @@ table 60005 "Custom Setup"
         {
             DataClassification = ToBeClassified;
         }
+        field(2; "Default Approval Due Days"; Integer)
+        {
+            Caption = 'Default Approval Due Days';
+            MinValue = 1;
+            MaxValue = 7;
+            InitValue = 2;
+            DataClassification = ToBeClassified;
+        }
         field(3; "No. Series"; Code[20])
         {
             DataClassification = ToBeClassified;
@@ -45,6 +53,11 @@ table 60005 "Custom Setup"
         {
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
+        }
+        field(47; "WHT Payable Account"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "G/L Account" where(Blocked = CONST(false), "Direct Posting" = CONST(true), "Account Type" = CONST(Posting));
         }
         field(48; "Budget Code"; Code[20])
         {
