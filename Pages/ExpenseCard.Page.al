@@ -27,9 +27,6 @@ page 70121 "Expense Card"
                 field("Trip No"; rec."Trip No")
                 {
                 }
-                field("Maintenance Work Order"; rec."Maintenance Work Order")
-                {
-                }
                 field(Status; rec.Status)
                 {
                 }
@@ -131,23 +128,23 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 begin
-                    TESTFIELD(rec.Purpose);
-                    TESTFIELD(rec.Date);
-                    TESTFIELD(rec.Payee);
-                    TESTFIELD(rec."Expense Type");
-                    CALCFIELDS(rec."Total Line Amount");
+                    rec.TESTFIELD(Purpose);
+                    rec.TESTFIELD(Date);
+                    rec.TESTFIELD(Payee);
+                    rec.TESTFIELD("Expense Type");
+                    rec.CALCFIELDS("Total Line Amount");
                     IF rec."Total Line Amount" = 0 THEN
                         ERROR('Line Amount must have value!');
 
                     IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
-                    CALCFIELDS(rec."Total Line Amount");
+                    rec.CALCFIELDS("Total Line Amount");
                     ExpenseRequestHeader.SETRANGE("No.", rec."No.");
                     IF ExpenseRequestHeader.FINDFIRST THEN
                         RecID := ExpenseRequestHeader.RECORDID;
                     DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, rec."No.", RecID, rec."Total Line Amount", rec.Date, rec."Total Line Amount", STRSUBSTNO('Expense Approval Requisition for %1', rec.Payee));
                     rec.Status := rec.Status::"Pending Approval";
-                    MODIFY;
+                    rec.MODIFY;
                 end;
             }
             action(CancelApprovalRequest)
@@ -161,7 +158,7 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 begin
-                    IF Status = Status::Approved THEN
+                    IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
 
                     ExpenseRequestHeader.SETRANGE("No.", rec."No.");
@@ -210,7 +207,7 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 var
-                    ApprovalsMgmt: Codeunit "1535";
+                    ApprovalsMgmt: Codeunit 1535;
                 begin
                     IF rec.Status = rec.Status::Approved THEN
                         ERROR('The document is already approved!');
@@ -233,7 +230,7 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 begin
-                    TestReport;
+                    rec.TestReport;
                 end;
             }
             action(Preview)
@@ -247,7 +244,7 @@ page 70121 "Expense Card"
                 var
                     GenJnlPost: Codeunit 231;
                 begin
-                    PreviewPosting;
+                    rec.PreviewPosting;
                 end;
             }
             action(Post)
@@ -269,7 +266,7 @@ page 70121 "Expense Card"
                     IF NOT CONFIRM('Do you want to Post?', TRUE) THEN
                         CurrPage.CLOSE
                     ELSE BEGIN
-                        PostExpense;
+                        rec.PostExpense;
                         MESSAGE('Expense Posted');
 
 
@@ -294,7 +291,7 @@ page 70121 "Expense Card"
                     IF NOT CONFIRM('Do you want to Post?', TRUE) THEN
                         CurrPage.CLOSE
                     ELSE BEGIN
-                        PostPrint;
+                        rec.PostPrint;
                         MESSAGE('Expense Posted');
 
                     END;
@@ -307,7 +304,7 @@ page 70121 "Expense Card"
 
                 trigger OnAction()
                 begin
-                    PostMaintenanceOnIssue;
+                    rec.PostMaintenanceOnIssue;
                 end;
             }
         }
@@ -324,7 +321,7 @@ page 70121 "Expense Card"
 
     trigger OnOpenPage()
     begin
-        IF Posted THEN
+        IF rec.Posted THEN
             CurrPage.EDITABLE := FALSE
         ELSE
             CurrPage.EDITABLE := TRUE;

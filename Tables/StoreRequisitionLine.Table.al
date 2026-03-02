@@ -234,7 +234,7 @@ table 70019 "Store Requisition Line"
             begin
                 StoreRequisitionHeader.GET("Document No.");
                 IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
-                  (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
+                  (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Vehicle) THEN BEGIN
                     IF Truck.GET("Fixed Asset No.") THEN BEGIN
                         //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
                         //  VALIDATE("Shortcut Dimension 4 Code",Truck."Truck ID");  //can be replaced with Fixed assets as dimension
@@ -387,7 +387,7 @@ table 70019 "Store Requisition Line"
         "Fixed Asset No." := StoreRequisitionHeader."Asset No.";
 
         IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
-          (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
+          (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Vehicle) THEN BEGIN
             Truck.GET(StoreRequisitionHeader."Asset No.");
             //    VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
         END;
@@ -399,7 +399,7 @@ table 70019 "Store Requisition Line"
         "Fixed Asset No." := StoreRequisitionHeader."Asset No.";
 
         IF (StoreRequisitionHeader."Request Type" = StoreRequisitionHeader."Request Type"::Maintenance) AND
-          (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Truck) THEN BEGIN
+          (StoreRequisitionHeader."Maintenance Type" = StoreRequisitionHeader."Maintenance Type"::Vehicle) THEN BEGIN
             Truck.GET(StoreRequisitionHeader."Asset No.");
             //  VALIDATE("Shortcut Dimension 2 Code",Truck."Operation Code");
         END;

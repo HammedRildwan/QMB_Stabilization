@@ -77,7 +77,7 @@ page 70034 "Store Requisition Card"
                     trigger OnValidate()
                     begin
                         WorkOrderEnabled := false;
-                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then begin
+                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Vehicle then begin
                             WorkOrderEnabled := true;
                         end;
                     end;
@@ -88,7 +88,7 @@ page 70034 "Store Requisition Card"
 
                     trigger OnValidate()
                     begin
-                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then begin
+                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Vehicle then begin
                             if Rec."Asset No." <> xRec."Asset No." then begin
                                 StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
                                 if StoreRequisitionLine.FindSet() then begin
@@ -166,7 +166,7 @@ page 70034 "Store Requisition Card"
                     Rec.TestField("Request Date");
                     Rec.TestField("Request Type");
 
-                    if (Rec."Request Type" = Rec."Request Type"::Maintenance) and (Rec."Maintenance Type" = Rec."Maintenance Type"::Truck) then begin
+                    if (Rec."Request Type" = Rec."Request Type"::Maintenance) and (Rec."Maintenance Type" = Rec."Maintenance Type"::Vehicle) then begin
                         Rec.TestField("Asset No.");
                     end;
 
@@ -322,7 +322,7 @@ page 70034 "Store Requisition Card"
     trigger OnAfterGetRecord()
     begin
         WorkOrderEnabled := false;
-        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then
+        if Rec."Maintenance Type" = Rec."Maintenance Type"::Vehicle then
             WorkOrderEnabled := true;
 
         if Rec.Posted then
@@ -332,7 +332,7 @@ page 70034 "Store Requisition Card"
     trigger OnOpenPage()
     begin
         WorkOrderEnabled := false;
-        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then
+        if Rec."Maintenance Type" = Rec."Maintenance Type"::Vehicle then
             WorkOrderEnabled := true;
 
         if Rec.Posted then

@@ -6,8 +6,8 @@ page 70124 "Approved Expense List"
     SourceTable = 60056;
     SourceTableView = WHERE(Posted = CONST(false),
                             Status = FILTER(Approved),
-                            Not Paid=FILTER(No),
-                            Expense Type=FILTER(Maintenance|Trans R-Work|Miscellaneous|' '));
+                            "Not Paid"=FILTER(false),
+                            "Expense Type"=FILTER('Maintenance Expense'|' '));
 
     layout
     {
@@ -61,12 +61,12 @@ page 70124 "Approved Expense List"
             part(Approvals;70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No."=FIELD("No.");
             }
-            systempart(;Notes)
+            systempart(Notes;Notes)
             {
             }
-            systempart(;Links)
+            systempart(Links;Links)
             {
             }
         }
@@ -86,7 +86,7 @@ page 70124 "Approved Expense List"
     end;
 
     var
-        UserSetup: Record "91";
-        ExpenseRequestHeader: Record "60056";
+        UserSetup: Record 91;
+        ExpenseRequestHeader: Record 60056;
 }
 
