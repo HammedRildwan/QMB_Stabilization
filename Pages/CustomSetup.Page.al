@@ -4,7 +4,7 @@
 // ------------------------------------------------------------------------------------------------
 page 70604 "Custom Setup"
 {
-    Caption = 'QMB Setup';
+    Caption = 'QMB Stab. Setup';
     PageType = Card;
     SourceTable = "Custom Setup";
     UsageCategory = Administration;

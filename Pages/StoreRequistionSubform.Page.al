@@ -85,6 +85,6 @@ page 70035 "Store Requistion Subform"
     }
 
     var
-        ItemAvailFormsMgt: Codeunit "353";
+        ItemAvailFormsMgt: Codeunit 353;
 }
 

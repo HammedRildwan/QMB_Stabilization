@@ -1,7 +1,7 @@
 page 70034 "Store Requisition Card"
 {
     PageType = Card;
-    SourceTable = 70018;
+    SourceTable = "Store Requisition Header";
 
     layout
     {
@@ -9,120 +9,136 @@ page 70034 "Store Requisition Card"
         {
             group(General)
             {
-                field("Request Date"; rec."Request Date")
+                field("No."; Rec."No.")
                 {
+                    ApplicationArea = All;
                 }
-                field(Requester; rec.Requester)
+                field("Request Date"; Rec."Request Date")
                 {
+                    ApplicationArea = All;
                 }
-                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
+                field(Requester; Rec.Requester)
                 {
+                    ApplicationArea = All;
+                }
+                field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
+                {
+                    ApplicationArea = All;
                     Importance = Additional;
                 }
-                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
+                    ApplicationArea = All;
                     Importance = Additional;
 
                     trigger OnValidate()
                     begin
-                        IF "Shortcut Dimension 2 Code" <> xRec."Shortcut Dimension 2 Code" THEN BEGIN
-                            StoreRequisitionLine.SETFILTER("Document No.", "No.");
-                            IF StoreRequisitionLine.FINDSET THEN BEGIN
-                                REPEAT
-                                    StoreRequisitionLine.VALIDATE("Shortcut Dimension 2 Code", "Shortcut Dimension 2 Code");
-                                UNTIL StoreRequisitionLine.NEXT = 0;
-                            END;
-                        END;
+                        if Rec."Shortcut Dimension 2 Code" <> xRec."Shortcut Dimension 2 Code" then begin
+                            StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
+                            if StoreRequisitionLine.FindSet() then begin
+                                repeat
+                                    StoreRequisitionLine.Validate("Shortcut Dimension 2 Code", Rec."Shortcut Dimension 2 Code");
+                                    StoreRequisitionLine.Modify();
+                                until StoreRequisitionLine.Next() = 0;
+                            end;
+                        end;
                     end;
                 }
-                field("Store Location"; rec."Store Location")
+                field("Store Location"; Rec."Store Location")
                 {
+                    ApplicationArea = All;
                 }
-                field("Request Type"; rec."Request Type")
+                field("Request Type"; Rec."Request Type")
                 {
+                    ApplicationArea = All;
 
                     trigger OnValidate()
                     begin
-                        MaintTypeEditable := FALSE;
-                        IF (rec."Request Type" = rec."Request Type"::Maintenance) OR (rec."Request Type" = rec."Request Type"::"Internal Consumption")
-                          OR (rec."Request Type" = rec."Request Type"::"Road Work") THEN BEGIN
-                            MaintTypeEditable := TRUE;
-                        END;
+                        MaintTypeEditable := false;
+                        if (Rec."Request Type" = Rec."Request Type"::Maintenance) or (Rec."Request Type" = Rec."Request Type"::"Internal Consumption")
+                          or (Rec."Request Type" = Rec."Request Type"::"Road Work") then begin
+                            MaintTypeEditable := true;
+                        end;
 
-                        IF rec."Request Type" = rec."Request Type"::Refurbishment THEN
-                            RefVendEditable := TRUE;
+                        if Rec."Request Type" = Rec."Request Type"::Refurbishment then
+                            RefVendEditable := true;
                     end;
                 }
-                field("Refurbishment Vendor"; rec."Refurbishment Vendor")
+                field("Refurbishment Vendor"; Rec."Refurbishment Vendor")
                 {
+                    ApplicationArea = All;
                     Editable = RefVendEditable;
                 }
-                field("Maintenance Type"; rec."Maintenance Type")
+                field("Maintenance Type"; Rec."Maintenance Type")
                 {
+                    ApplicationArea = All;
                     Editable = MaintTypeEditable;
 
                     trigger OnValidate()
                     begin
-                        WorkOrderEnabled := FALSE;
-                        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN BEGIN
-                            WorkOrderEnabled := TRUE;
-                        END;
+                        WorkOrderEnabled := false;
+                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then begin
+                            WorkOrderEnabled := true;
+                        end;
                     end;
                 }
-                field("Approved Work Order No."; rec."Approved Work Order No.")
+                field("Asset No."; Rec."Asset No.")
                 {
-                    Enabled = WorkOrderEnabled;
-                    ShowMandatory = true;
-                }
-                field("Asset No."; rec."Asset No.")
-                {
+                    ApplicationArea = All;
 
                     trigger OnValidate()
                     begin
-                        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN BEGIN
-                            IF rec."Asset No." <> xRec."Asset No." THEN BEGIN
-                                StoreRequisitionLine.SETFILTER("Document No.", rec."No.");
-                                IF StoreRequisitionLine.FINDSET THEN BEGIN
-                                    REPEAT
-                                        StoreRequisitionLine.VALIDATE("Fixed Asset No.", rec."Asset No.");
-                                        StoreRequisitionLine.MODIFY;
-                                    UNTIL StoreRequisitionLine.NEXT = 0;
-                                END;
-                            END;
-                        END;
+                        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then begin
+                            if Rec."Asset No." <> xRec."Asset No." then begin
+                                StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
+                                if StoreRequisitionLine.FindSet() then begin
+                                    repeat
+                                        StoreRequisitionLine.Validate("Fixed Asset No.", Rec."Asset No.");
+                                        StoreRequisitionLine.Modify();
+                                    until StoreRequisitionLine.Next() = 0;
+                                end;
+                            end;
+                        end;
                     end;
                 }
-                field(Justification; rec.Justification)
+                field(Justification; Rec.Justification)
                 {
+                    ApplicationArea = All;
                     MultiLine = true;
                     ShowMandatory = true;
                 }
-                field("Not Issued"; rec."Not Issued")
+                field("Not Issued"; Rec."Not Issued")
                 {
+                    ApplicationArea = All;
                 }
-                field(Status; rec.Status)
+                field(Status; Rec.Status)
                 {
+                    ApplicationArea = All;
                     Editable = false;
                 }
             }
-            part(Lines; 70035)
+            part(Lines; "Store Requistion Subform")
             {
                 Caption = 'Request Lines';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No." = field("No.");
+                ApplicationArea = All;
             }
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; "Workflow Approval FactBox")
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD("No.");
+                SubPageLink = "Document No." = field("No.");
+                ApplicationArea = All;
             }
             systempart(Notes; Notes)
             {
+                ApplicationArea = All;
             }
             systempart(Links; Links)
             {
+                ApplicationArea = All;
             }
         }
     }
@@ -133,6 +149,7 @@ page 70034 "Store Requisition Card"
         {
             action(SendApprovalRequest)
             {
+                ApplicationArea = All;
                 Caption = 'Send Approval Request';
                 Image = SendApprovalRequest;
                 Promoted = true;
@@ -141,54 +158,47 @@ page 70034 "Store Requisition Card"
 
                 trigger OnAction()
                 begin
-                    IF rec.Status = rec.Status::Approved THEN
-                        ERROR(Text001);
-                    //Ensure all required fields are captured
-                    rec.TESTFIELD("Store Location");
-                    rec.TESTFIELD(Justification);
-                    rec.TESTFIELD("Request Date");
-                    rec.TESTFIELD("Request Type");
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
+                    // Ensure all required fields are captured
+                    Rec.TestField("Store Location");
+                    Rec.TestField(Justification);
+                    Rec.TestField("Request Date");
+                    Rec.TestField("Request Type");
 
-                    IF (rec."Request Type" = rec."Request Type"::Maintenance) AND (rec."Maintenance Type" = rec."Maintenance Type"::Vehicle) THEN BEGIN
-                        rec.TESTFIELD("Asset No.");
-                    END;
+                    if (Rec."Request Type" = Rec."Request Type"::Maintenance) and (Rec."Maintenance Type" = Rec."Maintenance Type"::Truck) then begin
+                        Rec.TestField("Asset No.");
+                    end;
 
-                    IF (rec."Request Type" = rec."Request Type"::Maintenance) AND (rec."Maintenance Type" = rec."Maintenance Type"::"Other Assets") THEN
-                        rec.TESTFIELD("Asset No.");
+                    if (Rec."Request Type" = Rec."Request Type"::Maintenance) and (Rec."Maintenance Type" = Rec."Maintenance Type"::"Other Assets") then
+                        Rec.TestField("Asset No.");
 
-                    StoreRequisitionLine.SETFILTER("Document No.", rec."No.");
-                    IF NOT StoreRequisitionLine.FINDFIRST THEN
-                        ERROR(Text005)
-                    ELSE BEGIN
-                        REPEAT
-                            StoreRequisitionLine.TESTFIELD("Shortcut Dimension 2 Code");
-                            StoreRequisitionLine.TESTFIELD("Shortcut Dimension 3 Code");
-                            IF rec."Request Type" = rec."Request Type"::Maintenance THEN
-                                StoreRequisitionLine.TESTFIELD("Fixed Asset No.");
-                            StoreRequisitionLine.TESTFIELD("Location Code");
-                        UNTIL StoreRequisitionLine.NEXT = 0;
-                    END;
+                    StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
+                    if not StoreRequisitionLine.FindFirst() then
+                        Error(Text005)
+                    else begin
+                        repeat
+                            StoreRequisitionLine.TestField("Shortcut Dimension 2 Code");
+                            StoreRequisitionLine.TestField("Shortcut Dimension 3 Code");
+                            if Rec."Request Type" = Rec."Request Type"::Maintenance then
+                                StoreRequisitionLine.TestField("Fixed Asset No.");
+                            StoreRequisitionLine.TestField("Location Code");
+                        until StoreRequisitionLine.Next() = 0;
+                    end;
 
-                    StoreRequisitionHeader.SETRANGE("No.", rec."No.");
-                    IF StoreRequisitionHeader.FINDFIRST THEN
-                        RecID := StoreRequisitionHeader.RECORDID;
-                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, rec."No.", RecID, 0, rec."Request Date", 0, rec.Justification);
-                    rec.Status := rec.Status::"Pending Approval";
-                    rec.MODIFY;
+                    StoreRequisitionHeader.SetRange("No.", Rec."No.");
+                    if StoreRequisitionHeader.FindFirst() then
+                        RecID := StoreRequisitionHeader.RecordId;
+                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TableNo, Rec."No.", RecID, 0, Rec."Request Date", 0, Rec.Justification);
+                    Rec.Status := Rec.Status::"Pending Approval";
+                    Rec.Modify();
 
-                    MESSAGE('Document sent for Approval');
-
-
-                    // CAImprestMgt.SETRANGE("No.","No.");
-                    // IF CAImprestMgt.FINDFIRST THEN
-                    //  RecID := CAImprestMgt.RECORDID;
-                    // DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO,"No.",RecID,0,Date,"Amount (LCY)",Purpose);
-                    // Status := Status::"Pending Approval";
-                    // MODIFY;
+                    Message('Document sent for Approval');
                 end;
             }
             action(CancelApprovalRequest)
             {
+                ApplicationArea = All;
                 Caption = 'Cancel Approval Request';
                 Ellipsis = true;
                 Image = Cancel;
@@ -198,94 +208,75 @@ page 70034 "Store Requisition Card"
 
                 trigger OnAction()
                 begin
-                    IF rec.Status = rec.Status::Approved THEN
-                        ERROR(Text001);
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
 
-                    StoreRequisitionHeader.SETRANGE("No.", rec."No.");
-                    IF StoreRequisitionHeader.FINDFIRST THEN
-                        RecID := StoreRequisitionHeader.RECORDID;
-                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TABLENO, rec."No.");
-                    rec.Status := rec.Status::" ";
-                    rec.MODIFY;
+                    StoreRequisitionHeader.SetRange("No.", Rec."No.");
+                    if StoreRequisitionHeader.FindFirst() then
+                        RecID := StoreRequisitionHeader.RecordId;
+                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TableNo, Rec."No.");
+                    Rec.Status := Rec.Status::" ";
+                    Rec.Modify();
                 end;
             }
             action(Approve)
             {
+                ApplicationArea = All;
                 Caption = 'Approve';
                 Image = Approve;
-                //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
+                Promoted = true;
+                PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    ApprovalsMgmt: Codeunit "1535";
                 begin
-                    IF rec.Status = rec.Status::Approved THEN
-                        ERROR(Text001);
-                    IF rec.Status <> rec.Status::"Pending Approval" THEN
-                        ERROR('The document must be pending approval!');
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
+                    if Rec.Status <> Rec.Status::"Pending Approval" then
+                        Error('The document must be pending approval!');
 
-                    StoreRequisitionLine.SETFILTER("Document No.", rec."No.");
-                    IF NOT StoreRequisitionLine.FINDFIRST THEN
-                        ERROR(Text005)
-                    ELSE BEGIN
-                        REPEAT
-                            StoreRequisitionLine.TESTFIELD("Shortcut Dimension 2 Code");
-                            StoreRequisitionLine.TESTFIELD("Shortcut Dimension 3 Code");
-                            IF rec."Request Type" = rec."Request Type"::Maintenance THEN
-                                StoreRequisitionLine.TESTFIELD("Fixed Asset No.");
-                            StoreRequisitionLine.TESTFIELD("Location Code");
-                        UNTIL StoreRequisitionLine.NEXT = 0;
-                    END;
+                    StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
+                    if not StoreRequisitionLine.FindFirst() then
+                        Error(Text005)
+                    else begin
+                        repeat
+                            StoreRequisitionLine.TestField("Shortcut Dimension 2 Code");
+                            StoreRequisitionLine.TestField("Shortcut Dimension 3 Code");
+                            if Rec."Request Type" = Rec."Request Type"::Maintenance then
+                                StoreRequisitionLine.TestField("Fixed Asset No.");
+                            StoreRequisitionLine.TestField("Location Code");
+                        until StoreRequisitionLine.Next() = 0;
+                    end;
 
-                    DocumentApprovalWorkflow.ApproveDocument(RecID.TABLENO, rec."No.", RecID);
-                    IF DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
-                        rec.Status := rec.Status::Approved;
-                        rec.MODIFY;
-                    END;
+                    DocumentApprovalWorkflow.ApproveDocument(RecID.TableNo, Rec."No.", RecID);
+                    if DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TableNo, Rec."No.", RecID) then begin
+                        Rec.Status := Rec.Status::Approved;
+                        Rec.Modify();
+                    end;
                 end;
             }
             action(Reject)
             {
+                ApplicationArea = All;
                 Caption = 'Reject';
                 Image = Reject;
-                //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
-
-                trigger OnAction()
-                var
-                    ApprovalsMgmt: Codeunit "1535";
-                begin
-                    IF rec.Status = rec.Status::Approved THEN
-                        ERROR(Text001);
-
-                    DocumentApprovalWorkflow.RejectDocument(rec."No.");
-                    IF NOT DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
-                        rec.Status := rec.Status::Rejected;
-                        MODIFY;
-                    END;
-                end;
-            }
-            action("Test Report")
-            {
-                ApplicationArea = Basic, Suite;
-                Caption = 'Test Report';
-                Ellipsis = true;
-                Image = TestReport;
                 Promoted = true;
                 PromotedCategory = Process;
-                PromotedOnly = true;
-                ToolTip = 'View a test report so that you can find and correct any errors before you perform the actual posting of the document.';
-                Visible = false;
 
                 trigger OnAction()
                 begin
-                    TestReport;
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
+
+                    DocumentApprovalWorkflow.RejectDocument(Rec."No.");
+                    if not DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TableNo, Rec."No.", RecID) then begin
+                        Rec.Status := Rec.Status::Rejected;
+                        Rec.Modify();
+                    end;
                 end;
             }
             action(Post)
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'P&ost';
                 Image = PostOrder;
                 Promoted = true;
@@ -297,18 +288,16 @@ page 70034 "Store Requisition Card"
 
                 trigger OnAction()
                 begin
-                    rec.TESTFIELD(Posted, FALSE);
-                    IF rec.Status <> rec.Status::Approved THEN
-                        ERROR('You can not post the document without approval')
-                    ELSE
-                        PostIssue;
-                    IF (rec."Request Type" = rec."Request Type"::Maintenance) OR (rec."Request Type" = rec."Request Type"::"Road Work") THEN
-                        InsertMaintJournal;
+                    Rec.TestField(Posted, false);
+                    if Rec.Status <> Rec.Status::Approved then
+                        Error('You cannot post the document without approval')
+                    else
+                        PostIssue();
                 end;
             }
             action("Post and &Print")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'Post and &Print';
                 Image = PostPrint;
                 Promoted = true;
@@ -320,14 +309,11 @@ page 70034 "Store Requisition Card"
 
                 trigger OnAction()
                 begin
-                    rec.TESTFIELD(Posted, FALSE);
-                    IF rec.Status <> rec.Status::Approved THEN
-                        ERROR('You can not post the document without approval')
-                    ELSE
-                        PostIssuePrint;
-
-                    IF (rec."Request Type" = rec."Request Type"::Maintenance) OR (rec."Request Type" = rec."Request Type"::"Road Work") THEN
-                        InsertMaintJournal;
+                    Rec.TestField(Posted, false);
+                    if Rec.Status <> Rec.Status::Approved then
+                        Error('You cannot post the document without approval')
+                    else
+                        PostIssuePrint();
                 end;
             }
         }
@@ -335,39 +321,48 @@ page 70034 "Store Requisition Card"
 
     trigger OnAfterGetRecord()
     begin
-        WorkOrderEnabled := FALSE;
-        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN
-            WorkOrderEnabled := TRUE;
+        WorkOrderEnabled := false;
+        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then
+            WorkOrderEnabled := true;
 
-
-        IF rec.Posted = TRUE THEN
-            CurrPage.EDITABLE := FALSE;
+        if Rec.Posted then
+            CurrPage.Editable := false;
     end;
 
     trigger OnOpenPage()
     begin
-        WorkOrderEnabled := FALSE;
-        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN
-            WorkOrderEnabled := TRUE;
+        WorkOrderEnabled := false;
+        if Rec."Maintenance Type" = Rec."Maintenance Type"::Truck then
+            WorkOrderEnabled := true;
 
-        IF Posted = TRUE THEN
-            CurrPage.EDITABLE := FALSE;
+        if Rec.Posted then
+            CurrPage.Editable := false;
     end;
 
     var
-        DocumentApprovalWorkflow: Codeunit 50000;
-        StoreRequisitionHeader: Record 70018;
-        RecRef: RecordRef;
+        DocumentApprovalWorkflow: Codeunit "Document Approval Workflow";
+        StoreRequisitionHeader: Record "Store Requisition Header";
         RecID: RecordID;
-        StoreRequisitionLine: Record 70019;
+        StoreRequisitionLine: Record "Store Requisition Line";
         Text001: Label 'The document is already approved!';
-        Text002: Label 'The document must be approved!';
-        Text003: Label 'Sorry, you must receive the old spare part!';
-        Text004: Label 'Sorry, you must specify the return location!';
-        MaintenanceWorkHeader: Record 60009;
-        WorkOrderEnabled: Boolean;
         Text005: Label 'Your requisition must have at least one line!';
+        WorkOrderEnabled: Boolean;
         MaintTypeEditable: Boolean;
         RefVendEditable: Boolean;
+
+    local procedure PostIssue()
+    begin
+        // Placeholder for posting logic
+        Rec.Posted := true;
+        Rec."Posted DateTime" := CurrentDateTime;
+        Rec."Posted By" := UserId;
+        Rec.Modify();
+    end;
+
+    local procedure PostIssuePrint()
+    begin
+        PostIssue();
+        // Placeholder for print logic
+    end;
 }
 

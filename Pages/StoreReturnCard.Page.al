@@ -1,7 +1,8 @@
 page 70037 "Store Return Card"
 {
     PageType = Card;
-    SourceTable = 70020;
+    SourceTable = "Store Return Header";
+
 
     layout
     {
@@ -9,56 +10,70 @@ page 70037 "Store Return Card"
         {
             group(General)
             {
-                field("No."; rec."No.")
+                field("No."; Rec."No.")
                 {
+                    ApplicationArea = All;
                 }
-                field(Date; rec.Date)
+                field(Date; Rec.Date)
                 {
+                    ApplicationArea = All;
                 }
-                field("Requisition No."; rec."Requisition No.")
+                field("Requisition No."; Rec."Requisition No.")
                 {
+                    ApplicationArea = All;
                 }
-                field("Work Order No."; rec."Work Order No.")
+                field("Work Order No."; Rec."Work Order No.")
                 {
+                    ApplicationArea = All;
                 }
-                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
+                    ApplicationArea = All;
                 }
-                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
+                    ApplicationArea = All;
                 }
-                field("Asset No."; rec."Asset No.")
+                field("Asset No."; Rec."Asset No.")
                 {
+                    ApplicationArea = All;
                 }
-                field(Justification; rec.Justification)
+                field(Justification; Rec.Justification)
                 {
+                    ApplicationArea = All;
                     MultiLine = true;
                 }
-                field(Requester; rec.Requester)
+                field(Requester; Rec.Requester)
                 {
+                    ApplicationArea = All;
                 }
-                field(Status; rec.Status)
+                field(Status; Rec.Status)
                 {
+                    ApplicationArea = All;
                 }
             }
-            part(Lines; 70038)
+            part(Lines; "Store Return Subform")
             {
                 Caption = 'Lines';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No." = field("No.");
+                ApplicationArea = All;
             }
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; "Workflow Approval FactBox")
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No." = field("No.");
+                ApplicationArea = All;
             }
-            systempart(; Notes)
+            systempart(Notes; Notes)
             {
+                ApplicationArea = All;
             }
-            systempart(; Links)
+            systempart(Links; Links)
             {
+                ApplicationArea = All;
             }
         }
     }
@@ -69,6 +84,7 @@ page 70037 "Store Return Card"
         {
             action(SendApprovalRequest)
             {
+                ApplicationArea = All;
                 Caption = 'Send Approval Request';
                 Image = SendApprovalRequest;
                 Promoted = true;
@@ -77,19 +93,20 @@ page 70037 "Store Return Card"
 
                 trigger OnAction()
                 begin
-                    IF Status = Status::Approved THEN
-                        ERROR(Text001);
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
 
-                    StoreReturnHeader.SETRANGE("No.", "No.");
-                    IF StoreReturnHeader.FINDFIRST THEN
-                        RecID := StoreReturnHeader.RECORDID;
-                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, "No.", RecID, 0, Date, 0, Justification);
-                    Status := Status::"Pending Approval";
-                    MODIFY;
+                    StoreReturnHeader.SetRange("No.", Rec."No.");
+                    if StoreReturnHeader.FindFirst() then
+                        RecID := StoreReturnHeader.RecordId;
+                    DocumentApprovalWorkflow.SendApprovalRequest(RecID.TableNo, Rec."No.", RecID, 0, Rec.Date, 0, Rec.Justification);
+                    Rec.Status := Rec.Status::"Pending Approval";
+                    Rec.Modify();
                 end;
             }
             action(CancelApprovalRequest)
             {
+                ApplicationArea = All;
                 Caption = 'Cancel Approval Request';
                 Ellipsis = true;
                 Image = Cancel;
@@ -99,62 +116,60 @@ page 70037 "Store Return Card"
 
                 trigger OnAction()
                 begin
-                    IF Status = Status::Approved THEN
-                        ERROR(Text001);
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
 
-                    StoreReturnHeader.SETRANGE("No.", "No.");
-                    IF StoreReturnHeader.FINDFIRST THEN
-                        RecID := StoreReturnHeader.RECORDID;
-                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TABLENO, "No.");
-                    Status := Status::" ";
-                    MODIFY;
+                    StoreReturnHeader.SetRange("No.", Rec."No.");
+                    if StoreReturnHeader.FindFirst() then
+                        RecID := StoreReturnHeader.RecordId;
+                    DocumentApprovalWorkflow.CancelApprovalRequest(RecID.TableNo, Rec."No.");
+                    Rec.Status := Rec.Status::" ";
+                    Rec.Modify();
                 end;
             }
             action(Approve)
             {
+                ApplicationArea = All;
                 Caption = 'Approve';
                 Image = Approve;
-                //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
+                Promoted = true;
+                PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    ApprovalsMgmt: Codeunit "1535";
                 begin
-                    IF Status = Status::Approved THEN
-                        ERROR(Text001);
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
 
-                    DocumentApprovalWorkflow.ApproveDocument(RecID.TABLENO, "No.", RecID);
-                    IF DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, "No.", RecID) THEN BEGIN
-                        Status := Status::Approved;
-                        MODIFY;
-                    END;
+                    DocumentApprovalWorkflow.ApproveDocument(RecID.TableNo, Rec."No.", RecID);
+                    if DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TableNo, Rec."No.", RecID) then begin
+                        Rec.Status := Rec.Status::Approved;
+                        Rec.Modify();
+                    end;
                 end;
             }
             action(Reject)
             {
+                ApplicationArea = All;
                 Caption = 'Reject';
                 Image = Reject;
-                //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
+                Promoted = true;
+                PromotedCategory = Process;
 
                 trigger OnAction()
-                var
-                    ApprovalsMgmt: Codeunit "1535";
                 begin
-                    IF Status = Status::Approved THEN
-                        ERROR(Text001);
+                    if Rec.Status = Rec.Status::Approved then
+                        Error(Text001);
 
-                    DocumentApprovalWorkflow.RejectDocument("No.");
-                    IF NOT DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, "No.", RecID) THEN BEGIN
-                        Status := Status::Rejected;
-                        MODIFY;
-                    END;
+                    DocumentApprovalWorkflow.RejectDocument(Rec."No.");
+                    if not DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TableNo, Rec."No.", RecID) then begin
+                        Rec.Status := Rec.Status::Rejected;
+                        Rec.Modify();
+                    end;
                 end;
             }
             action("Test Report")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'Test Report';
                 Ellipsis = true;
                 Image = TestReport;
@@ -165,12 +180,12 @@ page 70037 "Store Return Card"
 
                 trigger OnAction()
                 begin
-                    TestReport;
+                    TestReport();
                 end;
             }
             action(Post)
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'P&ost';
                 Image = PostOrder;
                 Promoted = true;
@@ -181,15 +196,15 @@ page 70037 "Store Return Card"
 
                 trigger OnAction()
                 begin
-                    TESTFIELD(Posted, FALSE);
-                    PostReturn;
-                    Posted := TRUE;
-                    MODIFY;
+                    Rec.TestField(Posted, false);
+                    PostReturn();
+                    Rec.Posted := true;
+                    Rec.Modify();
                 end;
             }
             action("Post and &Print")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'Post and &Print';
                 Image = PostPrint;
                 Promoted = true;
@@ -200,20 +215,35 @@ page 70037 "Store Return Card"
 
                 trigger OnAction()
                 begin
-                    TESTFIELD(Posted, FALSE);
-                    PostReturnPrint;
-                    Posted := TRUE;
-                    MODIFY;
+                    Rec.TestField(Posted, false);
+                    PostReturnPrint();
+                    Rec.Posted := true;
+                    Rec.Modify();
                 end;
             }
         }
     }
 
     var
-        DocumentApprovalWorkflow: Codeunit "50000";
-        StoreReturnHeader: Record "70020";
-        RecRef: RecordRef;
+        DocumentApprovalWorkflow: Codeunit "Document Approval Workflow";
+        StoreReturnHeader: Record "Store Return Header";
         RecID: RecordID;
         Text001: Label 'The document is already approved!';
+
+    local procedure TestReport()
+    begin
+        // Placeholder for test report logic
+    end;
+
+    local procedure PostReturn()
+    begin
+        // Placeholder for posting logic
+    end;
+
+    local procedure PostReturnPrint()
+    begin
+        PostReturn();
+        // Placeholder for print logic
+    end;
 }
 

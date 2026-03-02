@@ -1,7 +1,7 @@
 page 70193 "Document Approval Entries"
 {
     PageType = List;
-    SourceTable = Table70102;
+    SourceTable = "Document Approval Entry";
 
     layout
     {
@@ -9,43 +9,43 @@ page 70193 "Document Approval Entries"
         {
             repeater(Group)
             {
-                field(Sequence; Sequence)
+                field(Sequence; Rec.Sequence)
                 {
                 }
-                field("Table No."; "Table No.")
+                field("Table No."; Rec."Table No.")
                 {
                 }
-                field("Document No."; "Document No.")
+                field("Document No."; Rec."Document No.")
                 {
                 }
-                field(Sender; Sender)
+                field(Sender; Rec.Sender)
                 {
                 }
-                field(Approver; Approver)
+                field(Approver; Rec.Approver)
                 {
                 }
-                field(Status; Status)
+                field(Status; Rec.Status)
                 {
                 }
-                field("Record ID to Approve"; "Record ID to Approve")
+                field("Record ID to Approve"; Rec."Record ID to Approve")
                 {
                 }
-                field("Document Date"; "Document Date")
+                field("Document Date"; Rec."Document Date")
                 {
                 }
-                field("Document Amount"; "Document Amount")
+                field("Document Amount"; Rec."Document Amount")
                 {
                 }
-                field("Document Description"; "Document Description")
+                field("Document Description"; Rec."Document Description")
                 {
                 }
-                field(Open; Open)
+                field(Open; Rec.Open)
                 {
                 }
-                field("Status Change DateTime"; "Status Change DateTime")
+                field("Status Change DateTime"; Rec."Status Change DateTime")
                 {
                 }
-                field("Send for Approval DateTime"; "Send for Approval DateTime")
+                field("Send for Approval DateTime"; Rec."Send for Approval DateTime")
                 {
                 }
             }
