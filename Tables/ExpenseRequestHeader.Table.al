@@ -34,12 +34,12 @@ table 60056 "Expense Request Header"
         field(9; Treated; Boolean)
         {
         }
-       /* field(10; "Expense Type"; Option)
+        field(10; "Expense Type"; Option)
         {
             Editable = true;
             OptionCaption = ' ,Direct Expense,Vendor Invoice,Maintenance Expenses';
             OptionMembers = " ","Direct Expense","Vendor Invoice","Maintenance Expenses";
-        }*/
+        }
         field(11; "Payment Option"; Option)
         {
             DataClassification = ToBeClassified;
@@ -80,24 +80,19 @@ table 60056 "Expense Request Header"
         }
         field(17; "Total Line Amount"; Decimal)
         {
-            CalcFormula = Sum ("Expense Request Line".Amount WHERE ("Document No."=FIELD("No.")));
+            CalcFormula = Sum("Expense Request Line".Amount WHERE("Document No." = FIELD("No.")));
             Editable = false;
             FieldClass = FlowField;
         }
-        field(18;"External Document No.";Code[10])
+        field(18; "External Document No."; Code[10])
         {
             DataClassification = ToBeClassified;
         }
-        field(19;Purpose;Text[250])
+        field(19; Purpose; Text[250])
         {
             DataClassification = ToBeClassified;
         }
-        field(20;"Work Order No.";Code[20])
-        {
-            DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header"."No." WHERE ("Approval Status"=CONST(Approved));
-        }
-        field(21;"Haulage Cash Advance No.";Code[10])
+        field(21; "Haulage Cash Advance No."; Code[10])
         {
             DataClassification = ToBeClassified;
 
@@ -109,69 +104,69 @@ table 60056 "Expense Request Header"
                 // END;
             end;
         }
-        field(22;"Amount Collected";Decimal)
+        field(22; "Amount Collected"; Decimal)
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(23;Balance;Decimal)
+        field(23; Balance; Decimal)
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(24;"Shortcut Dimension 1 Code";Code[50])
+        field(24; "Shortcut Dimension 1 Code"; Code[50])
         {
             CaptionClass = '1,2,1';
             Caption = 'Shortcut Dimension 1 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1),
-                                                          "Blocked"=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1),
+                                                          "Blocked" = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(1,"Shortcut Dimension 1 Code");
+                ValidateShortcutDimCode(1, "Shortcut Dimension 1 Code");
             end;
         }
-        field(25;"Shortcut Dimension 2 Code";Code[50])
+        field(25; "Shortcut Dimension 2 Code"; Code[50])
         {
             CaptionClass = '1,2,2';
             Caption = 'Shortcut Dimension 2 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2),
-                                                          "Blocked"=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2),
+                                                          "Blocked" = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(2,"Shortcut Dimension 2 Code");
+                ValidateShortcutDimCode(2, "Shortcut Dimension 2 Code");
             end;
         }
-        field(26;"Time Created";Time)
+        field(26; "Time Created"; Time)
         {
             DataClassification = ToBeClassified;
         }
-        field(27;"Shortcut Dimension 3 Code";Code[20])
+        field(27; "Shortcut Dimension 3 Code"; Code[20])
         {
             CaptionClass = '1,2,3';
             Caption = 'Shortcut Dimension 3 Code';
             DataClassification = ToBeClassified;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(3),
-                                                          "Blocked"=CONST(false));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(3),
+                                                          "Blocked" = CONST(false));
 
             trigger OnValidate()
             begin
-                ValidateShortcutDimCode(3,"Shortcut Dimension 3 Code");
+                ValidateShortcutDimCode(3, "Shortcut Dimension 3 Code");
             end;
         }
-        field(28;"Trip No";Code[20])
+        field(28; "Trip No"; Code[20])
         {
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(29;"Not Paid";Boolean)
+        field(29; "Not Paid"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
-        field(30;"Maintenance Road Work Approval";Boolean)
+        field(30; "Maintenance Road Work Approval"; Boolean)
         {
             DataClassification = ToBeClassified;
 
@@ -189,15 +184,15 @@ table 60056 "Expense Request Header"
                 //  END;
             end;
         }
-        field(31;"Maintenace Super Head ID";Code[15])
+        field(31; "Maintenace Super Head ID"; Code[15])
         {
             DataClassification = ToBeClassified;
         }
-        field(32;"Maint Approved DateTime";DateTime)
+        field(32; "Maint Approved DateTime"; DateTime)
         {
             DataClassification = ToBeClassified;
         }
-        field(480;"Dimension Set ID";Integer)
+        field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
             DataClassification = ToBeClassified;
@@ -211,30 +206,30 @@ table 60056 "Expense Request Header"
 
             trigger OnValidate()
             begin
-                DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID","Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
+                DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID", "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
             end;
         }
-        field(481;"Payee Account Name";Text[50])
+        field(481; "Payee Account Name"; Text[50])
         {
             DataClassification = ToBeClassified;
         }
-        field(482;"Payee Account Number";Text[20])
+        field(482; "Payee Account Number"; Text[20])
         {
             DataClassification = ToBeClassified;
         }
-        field(483;"Payee Bank Name";Text[50])
+        field(483; "Payee Bank Name"; Text[50])
         {
             DataClassification = ToBeClassified;
         }
-        field(484;"Last Modified DateTime";DateTime)
+        field(484; "Last Modified DateTime"; DateTime)
         {
             DataClassification = ToBeClassified;
         }
-        field(485;"Last Modified By";Code[40])
+        field(485; "Last Modified By"; Code[40])
         {
             DataClassification = ToBeClassified;
         }
-        field(486;"BU Head Approval";Boolean)
+        field(486; "BU Head Approval"; Boolean)
         {
             DataClassification = ToBeClassified;
 
@@ -257,15 +252,15 @@ table 60056 "Expense Request Header"
                 //  END;
             end;
         }
-        field(487;"BU Head ID";Code[15])
+        field(487; "BU Head ID"; Code[15])
         {
             DataClassification = ToBeClassified;
         }
-        field(488;"BU Head Approved DateTime";DateTime)
+        field(488; "BU Head Approved DateTime"; DateTime)
         {
             DataClassification = ToBeClassified;
         }
-        field(489;"JM Approval";Boolean)
+        field(489; "JM Approval"; Boolean)
         {
             DataClassification = ToBeClassified;
 
@@ -290,32 +285,24 @@ table 60056 "Expense Request Header"
                 //  END;
             end;
         }
-        field(490;"JM ID";Code[15])
+        field(490; "JM ID"; Code[15])
         {
             DataClassification = ToBeClassified;
         }
-        field(491;"JM Approved DateTime";DateTime)
+        field(491; "JM Approved DateTime"; DateTime)
         {
             DataClassification = ToBeClassified;
         }
-        field(492;"Truck Code";Code[10])
+        field(492; "Truck Code"; Code[10])
         {
             DataClassification = ToBeClassified;
             Editable = false;
-        }
-        field(493;"Maintenance Work Order";Code[20])
-        {
-            DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header"."No." WHERE ("Job Type"=FILTER("Road Work"),
-                                                                 "Approval Status"=FILTER(Approved),
-                                                                 "Overall Status"=FILTER(<>Closed),
-                                                                 "Delivered"=FILTER(false));
         }
     }
 
     keys
     {
-        key(Key1;"No.")
+        key(Key1; "No.")
         {
             Clustered = true;
         }
@@ -323,7 +310,7 @@ table 60056 "Expense Request Header"
 
     fieldgroups
     {
-        fieldgroup(DropDown;"No.",Requester)
+        fieldgroup(DropDown; "No.", Requester)
         {
         }
     }
@@ -336,9 +323,9 @@ table 60056 "Expense Request Header"
     trigger OnInsert()
     begin
         IF "No." = '' THEN BEGIN
-          CustomSetup.GET;
-          CustomSetup.TESTFIELD("Expense Nos.");
-          NoSeriesMgt.InitSeries(CustomSetup."Expense Nos.",xRec."No. Series",0D,"No.","No. Series");
+            CustomSetup.GET;
+            CustomSetup.TESTFIELD("Expense Nos.");
+            NoSeriesMgt.InitSeries(CustomSetup."Expense Nos.", xRec."No. Series", 0D, "No.", "No. Series");
         END;
 
         UserSetup.GET(USERID);
@@ -356,7 +343,7 @@ table 60056 "Expense Request Header"
     end;
 
     var
-        CustomSetup: Record  60005;
+        CustomSetup: Record 60005;
         NoSeriesMgt: Codeunit 396;
         Text002: Label 'cannot be specified without %1';
         UserSetup: Record 91;
@@ -385,88 +372,79 @@ table 60056 "Expense Request Header"
         GenJournalLine2: Record 81;
     begin
         //To confirm if the records dont exist
-         IF Status <> Status::Approved THEN
-          ERROR(ErrorOnPosting);
+        IF Status <> Status::Approved THEN
+            ERROR(ErrorOnPosting);
 
         IF Posted THEN
-          ERROR('This Document has already been posted');
+            ERROR('This Document has already been posted');
 
         //To check if fields are not empty
         TESTFIELD(Payee);
         TESTFIELD("Payment Option");
         TESTFIELD("Bank No.");
         IF "Payment Option" = "Payment Option"::Cheque THEN
-          TESTFIELD("Cheque No.");
+            TESTFIELD("Cheque No.");
         LineNo := 0;
-        GenJournalLine2.SETRANGE("Journal Template Name",'PAYMENTS');
-        GenJournalLine2.SETRANGE("Journal Batch Name",'BANK');
+        GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
+        GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
         IF GenJournalLine2.FINDFIRST THEN
-          GenJournalLine2.DELETEALL;
+            GenJournalLine2.DELETEALL;
 
-        IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-          ExpenseRequestLine2.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine2.FINDSET THEN BEGIN
-            REPEAT
-             ExpenseRequestLine2.TESTFIELD("Asset No.");
-             UNTIL ExpenseRequestLine2.NEXT = 0;
+        IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+            ExpenseRequestLine2.SETRANGE("Document No.", "No.");
+            IF ExpenseRequestLine2.FINDSET THEN BEGIN
+                REPEAT
+                    ExpenseRequestLine2.TESTFIELD("Asset No.");
+                UNTIL ExpenseRequestLine2.NEXT = 0;
             END;
         END;
 
-          //Posting to Journal
-          LineNo := 0;
-          ExpenseRequestLine.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        //Posting to Journal
+        LineNo := 0;
+        ExpenseRequestLine.SETRANGE("Document No.", "No.");
+        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
             REPEAT
-              GenJournalLine.INIT;
-              GenJournalLine."Journal Template Name" := 'PAYMENTS';
-              GenJournalLine."Journal Batch Name" := 'BANK';
-              GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
-              GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
-              GenJournalLine.VALIDATE("Posting Date",Date);
-               IF "Expense Type" = ("Expense Type"::Maintenance) THEN BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-                GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-                LineNo += 10;
-                FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-                GenJournalLine."Document No." := FAMaintDocNo;
-              END ELSE
-              IF "Expense Type" = ("Expense Type"::"Fixed Asset") THEN BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-                GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-                LineNo += 10;
-                FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-                GenJournalLine."Document No." := FAMaintDocNo;
-              END ELSE BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Expense Account No.")
-              END;
-              GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description",1,50);
-              IF ExpenseRequestLine."Currency Code" <> '' THEN
-                GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine."Amount (LCY)")
-              ELSE
-                GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine.Amount);
-              GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-              GenJournalLine.VALIDATE("Bal. Account No.","Bank No.");
-              GenJournalLine.VALIDATE("Shortcut Dimension 1 Code","Shortcut Dimension 1 Code");
-              GenJournalLine.VALIDATE("Shortcut Dimension 2 Code","Shortcut Dimension 2 Code");
-        //      GenJournalLine.VALIDATE("Shortcut Dimension 4 Code",ExpenseRequestLine."Shortcut Dimension 4 Code");
-              GenJournalLine.VALIDATE("Dimension Set ID",ExpenseRequestLine."Dimension Set ID");
-              GenJournalLine.INSERT;
+                GenJournalLine.INIT;
+                GenJournalLine."Journal Template Name" := 'PAYMENTS';
+                GenJournalLine."Journal Batch Name" := 'BANK';
+                GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
+                GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
+                GenJournalLine.VALIDATE("Posting Date", Date);
+                IF "Expense Type" = ("Expense Type"::"Maintenance Expenses") THEN BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
+                    GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
+                    GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
+                    LineNo += 10;
+                    FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
+                    GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
+                END;
+                GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
+                IF ExpenseRequestLine."Currency Code" <> '' THEN
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                ELSE
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
+                GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
+                GenJournalLine.VALIDATE("Shortcut Dimension 1 Code", "Shortcut Dimension 1 Code");
+                GenJournalLine.VALIDATE("Shortcut Dimension 2 Code", "Shortcut Dimension 2 Code");
+                //      GenJournalLine.VALIDATE("Shortcut Dimension 4 Code",ExpenseRequestLine."Shortcut Dimension 4 Code");
+                GenJournalLine.VALIDATE("Dimension Set ID", ExpenseRequestLine."Dimension Set ID");
+                GenJournalLine.INSERT;
             UNTIL ExpenseRequestLine.NEXT = 0;
-          END;
-          //COMMIT;
+        END;
+        //COMMIT;
 
 
-          GLEntry.SETRANGE("Document No.",GenJournalLine."Document No.");
-          IF GLEntry.FINDFIRST THEN
+        GLEntry.SETRANGE("Document No.", GenJournalLine."Document No.");
+        IF GLEntry.FINDFIRST THEN
             ERROR('This document has been posted') ELSE BEGIN
-            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post",GenJournalLine);
+            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post", GenJournalLine);
             Posted := TRUE;
-          END;
+        END;
 
         CheckPostedJnl;
     end;
@@ -478,72 +456,63 @@ table 60056 "Expense Request Header"
         GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
-          ERROR(ErrorOnPosting);
+            ERROR(ErrorOnPosting);
 
         TESTFIELD(Payee);
         TESTFIELD("Payment Option");
         TESTFIELD("Bank No.");
         IF "Payment Option" = "Payment Option"::Cheque THEN
-          TESTFIELD("Cheque No.");
+            TESTFIELD("Cheque No.");
 
-        IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-          ExpenseRequestLine2.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine2.FINDSET THEN BEGIN
-            REPEAT
-             ExpenseRequestLine2.TESTFIELD("Asset No.");
-              UNTIL ExpenseRequestLine2.NEXT = 0;
+        IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+            ExpenseRequestLine2.SETRANGE("Document No.", "No.");
+            IF ExpenseRequestLine2.FINDSET THEN BEGIN
+                REPEAT
+                    ExpenseRequestLine2.TESTFIELD("Asset No.");
+                UNTIL ExpenseRequestLine2.NEXT = 0;
             END;
         END;
 
 
-        GenJournalLine2.SETRANGE("Journal Template Name",'PAYMENTS');
-        GenJournalLine2.SETRANGE("Journal Batch Name",'BANK');
+        GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
+        GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
         IF GenJournalLine2.FINDFIRST THEN
-          GenJournalLine2.DELETEALL;
+            GenJournalLine2.DELETEALL;
 
         LineNo := 0;
-        ExpenseRequestLine.SETRANGE("Document No.","No.");
+        ExpenseRequestLine.SETRANGE("Document No.", "No.");
         IF ExpenseRequestLine.FINDFIRST THEN BEGIN
-          REPEAT
-            GenJournalLine.INIT;
-            GenJournalLine."Journal Template Name" := 'PAYMENTS';
-            GenJournalLine."Journal Batch Name" := 'BANK';
-            GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
-            GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
-            GenJournalLine.VALIDATE("Posting Date",Date);
-             IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-              GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-              GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-              LineNo += 10;
-              FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-              GenJournalLine."Document No." := FAMaintDocNo;
-            END ELSE
-            IF "Expense Type" = ("Expense Type"::"Fixed Asset") THEN BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-              GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-              GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-              LineNo += 10;
-              FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-              GenJournalLine."Document No." := FAMaintDocNo;
-            END ELSE BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Expense Account No.")
-            END;
-            GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description",1,50);
-            IF ExpenseRequestLine."Currency Code" <> '' THEN
-              GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine."Amount (LCY)")
-            ELSE
-              GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine.Amount);
-            GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-            GenJournalLine.VALIDATE("Bal. Account No.","Bank No.");
-            GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
-            GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
-         //   GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
-            GenJournalLine.INSERT;
-          UNTIL ExpenseRequestLine.NEXT = 0;
+            REPEAT
+                GenJournalLine.INIT;
+                GenJournalLine."Journal Template Name" := 'PAYMENTS';
+                GenJournalLine."Journal Batch Name" := 'BANK';
+                GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
+                GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
+                GenJournalLine.VALIDATE("Posting Date", Date);
+                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
+                    GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
+                    GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
+                    LineNo += 10;
+                    FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
+                    GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
+                END;
+                GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
+                IF ExpenseRequestLine."Currency Code" <> '' THEN
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                ELSE
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
+                GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
+                GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
+                GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
+                //   GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
+                GenJournalLine.INSERT;
+            UNTIL ExpenseRequestLine.NEXT = 0;
         END;
         COMMIT;
 
@@ -557,161 +526,143 @@ table 60056 "Expense Request Header"
         GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
-          ERROR(ErrorOnPosting);
+            ERROR(ErrorOnPosting);
 
         TESTFIELD(Payee);
         TESTFIELD("Payment Option");
         TESTFIELD("Bank No.");
         IF "Payment Option" = "Payment Option"::Cheque THEN
-          TESTFIELD("Cheque No.");
+            TESTFIELD("Cheque No.");
         LineNo := 0;
-        IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-          ExpenseRequestLine2.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine2.FINDSET THEN BEGIN
-            REPEAT
-             ExpenseRequestLine2.TESTFIELD("Asset No.");
-              UNTIL ExpenseRequestLine2.NEXT = 0;
+        IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+            ExpenseRequestLine2.SETRANGE("Document No.", "No.");
+            IF ExpenseRequestLine2.FINDSET THEN BEGIN
+                REPEAT
+                    ExpenseRequestLine2.TESTFIELD("Asset No.");
+                UNTIL ExpenseRequestLine2.NEXT = 0;
             END;
         END;
 
 
-        GenJournalLine2.SETRANGE("Journal Template Name",'PAYMENTS');
-        GenJournalLine2.SETRANGE("Journal Batch Name",'BANK');
+        GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
+        GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
         IF GenJournalLine2.FINDFIRST THEN
-          GenJournalLine2.DELETEALL;
+            GenJournalLine2.DELETEALL;
 
-        ExpenseRequestLine.SETRANGE("Document No.","No.");
+        ExpenseRequestLine.SETRANGE("Document No.", "No.");
         IF ExpenseRequestLine.FINDFIRST THEN BEGIN
-          REPEAT
-            GenJournalLine.INIT;
-            GenJournalLine."Journal Template Name" := 'PAYMENTS';
-            GenJournalLine."Journal Batch Name" := 'BANK';
-            GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
-            GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
-            GenJournalLine.VALIDATE("Posting Date",Date);
+            REPEAT
+                GenJournalLine.INIT;
+                GenJournalLine."Journal Template Name" := 'PAYMENTS';
+                GenJournalLine."Journal Batch Name" := 'BANK';
+                GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
+                GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
+                GenJournalLine.VALIDATE("Posting Date", Date);
 
-            IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-              GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-              GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-              LineNo += 10;
-              FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-              GenJournalLine."Document No." := FAMaintDocNo;
-            END ELSE
-            IF "Expense Type" = ("Expense Type"::"Fixed Asset") THEN BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-              GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-              GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-              LineNo += 10;
-              FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-              GenJournalLine."Document No." := FAMaintDocNo;
-            END ELSE BEGIN
-              GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
-              GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Expense Account No.")
-            END;
+                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
+                    GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
+                    GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
+                    LineNo += 10;
+                    FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
+                    GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
+                END;
 
-            GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description",1,50);
-            IF ExpenseRequestLine."Currency Code" <> '' THEN
-              GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine."Amount (LCY)")
-            ELSE
-              GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine.Amount);
+                GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
+                IF ExpenseRequestLine."Currency Code" <> '' THEN
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                ELSE
+                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
 
-            GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-            GenJournalLine.VALIDATE("Bal. Account No.","Bank No.");
-            GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
-            GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
-         //   GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
-            GenJournalLine.INSERT;
-          UNTIL ExpenseRequestLine.NEXT = 0;
+                GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
+                GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
+                GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
+                GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
+                //   GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
+                GenJournalLine.INSERT;
+            UNTIL ExpenseRequestLine.NEXT = 0;
         END;
         COMMIT;
         TestReportPrint.PrintGenJnlLine(GenJournalLine);
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure PostPrint()
     var
         GenJournalLine: Record 81;
         GenJournalLine2: Record 81;
     begin
         IF Status <> Status::Approved THEN
-          ERROR(ErrorOnPosting);
+            ERROR(ErrorOnPosting);
 
         TESTFIELD(Payee);
         TESTFIELD("Payment Option");
         TESTFIELD("Bank No.");
         IF "Payment Option" = "Payment Option"::Cheque THEN
-          TESTFIELD("Cheque No.");
+            TESTFIELD("Cheque No.");
 
-        IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-          ExpenseRequestLine2.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine2.FINDSET THEN BEGIN
-            REPEAT
-             ExpenseRequestLine2.TESTFIELD("Asset No.");
-              UNTIL ExpenseRequestLine2.NEXT = 0;
+        IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+            ExpenseRequestLine2.SETRANGE("Document No.", "No.");
+            IF ExpenseRequestLine2.FINDSET THEN BEGIN
+                REPEAT
+                    ExpenseRequestLine2.TESTFIELD("Asset No.");
+                UNTIL ExpenseRequestLine2.NEXT = 0;
             END;
         END;
 
 
-          LineNo := 0;
-          GenJournalLine2.SETRANGE("Journal Template Name",'PAYMENTS');
-          GenJournalLine2.SETRANGE("Journal Batch Name",'BANK');
-          IF GenJournalLine2.FINDFIRST THEN
+        LineNo := 0;
+        GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
+        GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
+        IF GenJournalLine2.FINDFIRST THEN
             GenJournalLine2.DELETEALL;
 
-          ExpenseRequestLine.SETRANGE("Document No.","No.");
-          IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        ExpenseRequestLine.SETRANGE("Document No.", "No.");
+        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
             REPEAT
-              GenJournalLine.INIT;
-              GenJournalLine."Journal Template Name" := 'PAYMENTS';
-              GenJournalLine."Journal Batch Name" := 'BANK';
-              GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
-              GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
-              GenJournalLine.VALIDATE("Posting Date",Date);
+                GenJournalLine.INIT;
+                GenJournalLine."Journal Template Name" := 'PAYMENTS';
+                GenJournalLine."Journal Batch Name" := 'BANK';
+                GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
+                GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
+                GenJournalLine.VALIDATE("Posting Date", Date);
 
-           IF "Expense Type" = "Expense Type"::Maintenance THEN BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-                GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-                LineNo += 10;
-                FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-                GenJournalLine."Document No." := FAMaintDocNo;
-              END ELSE
-              IF "Expense Type" = ("Expense Type"::"Fixed Asset") THEN BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Asset No.");
-                GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
-                GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-                LineNo += 10;
-                FAMaintDocNo := 'FAM_'+ExpenseRequestLine."Document No."+'_'+FORMAT(LineNo);
-                GenJournalLine."Document No." := FAMaintDocNo;
-              END ELSE BEGIN
-                GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
-                GenJournalLine.VALIDATE("Account No.",ExpenseRequestLine."Expense Account No.")
-              END;
-              GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description",1,50);
-              GenJournalLine.VALIDATE("Debit Amount",ExpenseRequestLine.Amount);
-              GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
-              GenJournalLine.VALIDATE("Bal. Account No.","Bank No.");
-              GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
-              GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
-         //     GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
-              //GenJournalLine.VALIDATE("Dimension Set ID","Dimension Set ID");
-              GenJournalLine.INSERT;
+                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
+                    GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
+                    GenJournalLine."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
+                    LineNo += 10;
+                    FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
+                    GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE BEGIN
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
+                END;
+                GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
+                GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
+                GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
+                GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
+                GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
+                //     GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
+                //GenJournalLine.VALIDATE("Dimension Set ID","Dimension Set ID");
+                GenJournalLine.INSERT;
             UNTIL ExpenseRequestLine.NEXT = 0;
-          END;
+        END;
 
 
-            GLEntry.SETRANGE("Document No.",GenJournalLine."Document No.");
-            IF GLEntry.FINDFIRST THEN
-              ERROR('This document has been posted') ELSE BEGIN
+        GLEntry.SETRANGE("Document No.", GenJournalLine."Document No.");
+        IF GLEntry.FINDFIRST THEN
+            ERROR('This document has been posted') ELSE BEGIN
 
-            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post+Print",GenJournalLine);
+            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post+Print", GenJournalLine);
 
-          END;
+        END;
 
         CheckPostedJnl;
     end;
@@ -719,29 +670,29 @@ table 60056 "Expense Request Header"
     //[Scope('Internal')]
     procedure CheckPostedJnl()
     begin
-        GLEntry.SETCURRENTKEY("Document No.","Posting Date");
-        GLEntry.SETRANGE("Document No.","No.");
+        GLEntry.SETCURRENTKEY("Document No.", "Posting Date");
+        GLEntry.SETRANGE("Document No.", "No.");
         IF GLEntry.FINDFIRST THEN BEGIN
-          Posted := TRUE;
-          MODIFY;
+            Posted := TRUE;
+            MODIFY;
 
-          ExpenseRequestLine.SETFILTER("Document No.","No.");
-          IF ExpenseRequestLine.FINDSET THEN BEGIN
-            REPEAT
-              ExpenseRequestLine.posted:= TRUE;
-              ExpenseRequestLine.MODIFY;
-            UNTIL ExpenseRequestLine.NEXT = 0;
-           END;
+            ExpenseRequestLine.SETFILTER("Document No.", "No.");
+            IF ExpenseRequestLine.FINDSET THEN BEGIN
+                REPEAT
+                    ExpenseRequestLine.posted := TRUE;
+                    ExpenseRequestLine.MODIFY;
+                UNTIL ExpenseRequestLine.NEXT = 0;
+            END;
 
         END;
     end;
 
-    procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
+    procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
-        DimMgt.ValidateShortcutDimValues(FieldNumber,ShortcutDimCode,"Dimension Set ID");
+        DimMgt.ValidateShortcutDimValues(FieldNumber, ShortcutDimCode, "Dimension Set ID");
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;
@@ -749,13 +700,13 @@ table 60056 "Expense Request Header"
         OldDimSetID := "Dimension Set ID";
         "Dimension Set ID" :=
           DimMgt.EditDimensionSet(
-            "Dimension Set ID",STRSUBSTNO('%1',"No."),
-            "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
+            "Dimension Set ID", STRSUBSTNO('%1', "No."),
+            "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
         IF OldDimSetID <> "Dimension Set ID" THEN
-          MODIFY;
+            MODIFY;
     end;
 
-  //  [Scope('Internal')]
+    //  [Scope('Internal')]
     procedure PostMaintenanceOnIssue()
     var
         FAJournalLine: Record 5621;

@@ -326,6 +326,39 @@ table 60057 "Expense Request Line"
             DataClassification = ToBeClassified;
             Editable = false;
         }
+        field(29; "Payee Code"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            //TableRelation = IF ("Transaction Type" = FILTER("Travel Authorization" | "Group Activity" | "Retirement Reimbursement")) Employee."No." WHERE(Status = Filter(<> Terminated))
+            //ELSE IF ("Transaction Type" = FILTER("Advance Request")) Employee."No." WHERE(Status = Filter(<> Terminated))
+            //ELSE IF ("Transaction Type" = CONST("Vendor Invoice")) Vendor."No." WHERE(Blocked = CONST(" "));
+
+            trigger OnValidate()
+            var
+                Customer: Record Customer;
+                Employee: Record Employee;
+                Vendor: Record Vendor;
+
+            begin
+                IF ("Expense Type" = "Expense Type"::"Direct Expense") THEN BEGIN
+                    GLAccount.GET("Payee Code");
+                    "Payee Name" := GLAccount.Name;
+                END ELSE IF ("Expense Type" = "Expense Type"::"Vendor Invoice") THEN BEGIN
+                    Vendor.GET("Payee Code");
+                    "Payee Name" := Vendor.Name;
+                    IF Vendor."Vendor Posting Group" = '' then
+                        error('Posting Group must be set for the payables account!')
+                    else If VendorPostingGroup."Payables Account" = '' then
+                        error('Payables account must be setup for the posting group!')
+                    else
+                        VALIDATE("Expense Account No.", VendorPostingGroup."Payables Account");
+                END;
+            end;
+        }
+        field(30; "Payee Name"; Text[150])
+        {
+            DataClassification = ToBeClassified;
+        }
         field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
@@ -383,6 +416,7 @@ table 60057 "Expense Request Line"
         UserSetup: Record 91;
         GLBudgetEntry: Record "G/L Budget Entry";
         GLEntry: Record "G/L Entry";
+        VendorPostingGroup: Record "Vendor Posting Group";
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin

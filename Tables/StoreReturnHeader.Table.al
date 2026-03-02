@@ -89,8 +89,6 @@ table 70020 "Store Return Header"
                     "Requisition No." := StoresRequisition."No.";
                     Location := StoresRequisition."Store Location";
                     Justification := StoresRequisition.Justification;
-                    //"Sanction No./Allocation Code" := StoresRequisition."Posted DateTime";
-                    "Work Order No." := StoresRequisition."Approved Work Order No.";
                     Requester := StoresRequisition.Requester;
                     "Asset No." := StoresRequisition."Asset No.";
 

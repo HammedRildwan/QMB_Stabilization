@@ -74,22 +74,6 @@ table 70018 "Store Requisition Header"
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(13; "Approved Work Order No."; Code[13])
-        {
-            DataClassification = ToBeClassified;
-            TableRelation = "Maintenance Work Header"."No." WHERE ("Approval Status"=CONST(Approved),
-                                                                 "Delivered"=FILTER(false));
-
-            trigger OnValidate()
-            var
-                MaintenanceWorkHeader: Record "Maintenance Work Header";
-            begin
-                IF "Request Type" = "Request Type"::Maintenance THEN BEGIN
-                  MaintenanceWorkHeader.GET("Approved Work Order No.");
-                "Asset No." := MaintenanceWorkHeader."Truck No.";
-                END;
-            end;
-        }
         field(14;"Request Type";Option)
         {
             DataClassification = ToBeClassified;
@@ -235,7 +219,6 @@ table 70018 "Store Requisition Header"
         StoreReqLine: Record 70019;
         MaintenanceLedgEntry: Record 5625;
         LineNo: Integer;
-        MaintenanceWorkHeader: Record 60009;
         Text001: Label 'Sorry, you can not change Store Location for a Posted or Approved Store Requisition!';
         Text002: Label 'Sorry, you can not change Approved Work Order for a Posted or Approved Store Requisition!';
         Text003: Label 'Maintenance Fault Code %1 on %2';
