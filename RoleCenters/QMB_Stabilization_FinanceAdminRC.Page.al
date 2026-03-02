@@ -243,7 +243,7 @@ page 70602 "QMB Stab. Finance Admin RC"
             action(CustomSetup)
             {
                 ApplicationArea = All;
-                Caption = 'QMB Setup';
+                Caption = 'Finance and Admin Setup';
                 Image = Setup;
                 RunObject = page "Custom Setup";
                 ToolTip = 'Configure number series, budgets, and other application settings.';
