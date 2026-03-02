@@ -5,7 +5,7 @@ page 70122 "Expense Subform"
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = Table60057;
+    SourceTable = 60057;
 
     layout
     {
@@ -13,52 +13,26 @@ page 70122 "Expense Subform"
         {
             repeater(Group)
             {
-                field("Expense Category"; "Expense Category")
+                field("Expense Category"; rec."Expense Category")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field("Expense Description"; "Expense Description")
+                field("Expense Description"; rec."Expense Description")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field("Expense Account No."; "Expense Account No.")
+                field("Expense Account No."; rec."Expense Account No.")
                 {
                 }
-                field("Account Name"; "Account Name")
+                field("Account Name"; rec."Account Name")
                 {
                     Editable = false;
                 }
-                field("Maintenance Code"; "Maintenance Code")
+                field("Maintenance Code"; rec."Maintenance Code")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field("Asset No."; "Asset No.")
-                {
-                    Editable = NOT ApprovedNotEditable;
-
-                    trigger OnValidate()
-                    begin
-                        IF "Expense Category" = "Expense Category"::Maintenance THEN
-                            "Asset No." := "Shortcut Dimension 4 Code";
-                    end;
-                }
-                field(Amount; Amount)
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Shortcut Dimension 3 Code"; "Shortcut Dimension 3 Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Shortcut Dimension 4 Code"; "Shortcut Dimension 4 Code")
+                field("Asset No."; rec."Asset No.")
                 {
                     Editable = NOT ApprovedNotEditable;
 
@@ -68,15 +42,41 @@ page 70122 "Expense Subform"
                             "Asset No." := "Shortcut Dimension 4 Code";
                     end;
                 }
-                field(Remark; Remark)
+                field(Amount; rec.Amount)
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field("Currency Code"; "Currency Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field(posted; posted)
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Shortcut Dimension 4 Code"; rec."Shortcut Dimension 4 Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+
+                    trigger OnValidate()
+                    begin
+                        IF "Expense Category" = "Expense Category"::Maintenance THEN
+                            "Asset No." := "Shortcut Dimension 4 Code";
+                    end;
+                }
+                field(Remark; rec.Remark)
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Currency Code"; rec."Currency Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field(posted; rec.posted)
                 {
                     Editable = false;
                 }

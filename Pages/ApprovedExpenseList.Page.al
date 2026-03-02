@@ -3,9 +3,9 @@ page 70124 "Approved Expense List"
     CardPageID = "Expense Card";
     Editable = false;
     PageType = List;
-    SourceTable = Table60056;
-    SourceTableView = WHERE (Posted = CONST (No),
-                            Status = FILTER (Approved),
+    SourceTable = 60056;
+    SourceTableView = WHERE(Posted = CONST(false),
+                            Status = FILTER(Approved),
                             Not Paid=FILTER(No),
                             Expense Type=FILTER(Maintenance|Trans R-Work|Miscellaneous|' '));
 
@@ -15,43 +15,43 @@ page 70124 "Approved Expense List"
         {
             repeater(Group)
             {
-                field("No.";"No.")
+                field("No."; rec."No.")
                 {
                 }
-                field(Date;Date)
+                field(Date; rec.Date)
                 {
                 }
-                field("Expense Type";"Expense Type")
+                field("Expense Type"; rec."Expense Type")
                 {
                 }
-                field(Requester;Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field(Status;Status)
+                field(Status; rec.Status)
                 {
                 }
-                field("Total Line Amount";"Total Line Amount")
+                field("Total Line Amount"; rec."Total Line Amount")
                 {
                 }
-                field("Shortcut Dimension 1 Code";"Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field(Purpose;Purpose)
+                field(Purpose; rec.Purpose)
                 {
                 }
-                field("Bank No.";"Bank No.")
+                field("Bank No."; rec."Bank No.")
                 {
                 }
-                field("Bank Name";"Bank Name")
+                field("Bank Name"; rec."Bank Name")
                 {
                 }
-                field("Shortcut Dimension 2 Code";"Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Shortcut Dimension 3 Code";"Shortcut Dimension 3 Code")
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                 }
-                field(Posted;Posted)
+                field(Posted; rec.Posted)
                 {
                 }
             }

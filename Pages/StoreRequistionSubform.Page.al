@@ -4,7 +4,7 @@ page 70035 "Store Requistion Subform"
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = Table70019;
+    SourceTable = 70019;
 
     layout
     {
@@ -12,68 +12,68 @@ page 70035 "Store Requistion Subform"
         {
             repeater(Group)
             {
-                field("Posting Date"; "Posting Date")
+                field("Posting Date"; rec."Posting Date")
                 {
                 }
-                field("Item No."; "Item No.")
+                field("Item No."; rec."Item No.")
                 {
                 }
-                field(Description; Description)
-                {
-                    Editable = false;
-                }
-                field("Unit of Measure"; "Unit of Measure")
-                {
-                }
-                field("Variant Code"; "Variant Code")
-                {
-                }
-                field("Location Code"; "Location Code")
-                {
-                }
-                field("Fixed Asset No."; "Fixed Asset No.")
+                field(Description; rec.Description)
                 {
                     Editable = false;
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Unit of Measure"; rec."Unit of Measure")
                 {
                 }
-                field("Shortcut Dimension 3 Code"; "Shortcut Dimension 3 Code")
+                field("Variant Code"; rec."Variant Code")
+                {
+                }
+                field("Location Code"; rec."Location Code")
+                {
+                }
+                field("Fixed Asset No."; rec."Fixed Asset No.")
+                {
+                    Editable = false;
+                }
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
+                {
+                }
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                     ShowMandatory = true;
                 }
-                field("Maintenance Code"; "Maintenance Code")
+                field("Maintenance Code"; rec."Maintenance Code")
                 {
                     ShowMandatory = true;
                 }
-                field("Available Quantity"; "Available Quantity")
+                field("Available Quantity"; rec."Available Quantity")
                 {
                 }
-                field("Quantity Requested"; "Quantity Requested")
+                field("Quantity Requested"; rec."Quantity Requested")
                 {
                 }
-                field("Quantity to Issue"; "Quantity to Issue")
+                field("Quantity to Issue"; rec."Quantity to Issue")
                 {
                 }
-                field("Quantity Issued"; "Quantity Issued")
+                field("Quantity Issued"; rec."Quantity Issued")
                 {
                 }
-                field("Remaining Quantity"; "Remaining Quantity")
+                field("Remaining Quantity"; rec."Remaining Quantity")
                 {
                 }
-                field(Amount; Amount)
+                field(Amount; rec.Amount)
                 {
                 }
-                field("Unit Price"; "Unit Price")
+                field("Unit Price"; rec."Unit Price")
                 {
                 }
-                field("Assigned Technician"; "Assigned Technician")
+                field("Assigned Technician"; rec."Assigned Technician")
                 {
                 }
-                field("Technician Name"; "Technician Name")
+                field("Technician Name"; rec."Technician Name")
                 {
                 }
-                field("Old Spare Part Returned"; "Old Spare Part Returned")
+                field("Old Spare Part Returned"; rec."Old Spare Part Returned")
                 {
                 }
             }

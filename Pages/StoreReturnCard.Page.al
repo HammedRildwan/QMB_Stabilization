@@ -1,7 +1,7 @@
 page 70037 "Store Return Card"
 {
     PageType = Card;
-    SourceTable = Table70020;
+    SourceTable = 70020;
 
     layout
     {
@@ -9,35 +9,35 @@ page 70037 "Store Return Card"
         {
             group(General)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                 }
-                field(Date; Date)
+                field(Date; rec.Date)
                 {
                 }
-                field("Requisition No."; "Requisition No.")
+                field("Requisition No."; rec."Requisition No.")
                 {
                 }
-                field("Work Order No."; "Work Order No.")
+                field("Work Order No."; rec."Work Order No.")
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Asset No."; "Asset No.")
+                field("Asset No."; rec."Asset No.")
                 {
                 }
-                field(Justification; Justification)
+                field(Justification; rec.Justification)
                 {
                     MultiLine = true;
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                 }
             }

@@ -1,7 +1,7 @@
 page 70034 "Store Requisition Card"
 {
     PageType = Card;
-    SourceTable = Table70018;
+    SourceTable = 70018;
 
     layout
     {
@@ -9,17 +9,17 @@ page 70034 "Store Requisition Card"
         {
             group(General)
             {
-                field("Request Date"; "Request Date")
+                field("Request Date"; rec."Request Date")
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                     Importance = Additional;
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                     Importance = Additional;
 
@@ -35,56 +35,56 @@ page 70034 "Store Requisition Card"
                         END;
                     end;
                 }
-                field("Store Location"; "Store Location")
+                field("Store Location"; rec."Store Location")
                 {
                 }
-                field("Request Type"; "Request Type")
+                field("Request Type"; rec."Request Type")
                 {
 
                     trigger OnValidate()
                     begin
                         MaintTypeEditable := FALSE;
-                        IF ("Request Type" = "Request Type"::Maintenance) OR ("Request Type" = "Request Type"::"Internal Consumption")
-                          OR ("Request Type" = "Request Type"::"Road Work") THEN BEGIN
+                        IF (rec."Request Type" = rec."Request Type"::Maintenance) OR (rec."Request Type" = rec."Request Type"::"Internal Consumption")
+                          OR (rec."Request Type" = rec."Request Type"::"Road Work") THEN BEGIN
                             MaintTypeEditable := TRUE;
                         END;
 
-                        IF "Request Type" = "Request Type"::Refurbishment THEN
+                        IF rec."Request Type" = rec."Request Type"::Refurbishment THEN
                             RefVendEditable := TRUE;
                     end;
                 }
-                field("Refurbishment Vendor"; "Refurbishment Vendor")
+                field("Refurbishment Vendor"; rec."Refurbishment Vendor")
                 {
                     Editable = RefVendEditable;
                 }
-                field("Maintenance Type"; "Maintenance Type")
+                field("Maintenance Type"; rec."Maintenance Type")
                 {
                     Editable = MaintTypeEditable;
 
                     trigger OnValidate()
                     begin
                         WorkOrderEnabled := FALSE;
-                        IF "Maintenance Type" = "Maintenance Type"::Truck THEN BEGIN
+                        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN BEGIN
                             WorkOrderEnabled := TRUE;
                         END;
                     end;
                 }
-                field("Approved Work Order No."; "Approved Work Order No.")
+                field("Approved Work Order No."; rec."Approved Work Order No.")
                 {
                     Enabled = WorkOrderEnabled;
                     ShowMandatory = true;
                 }
-                field("Asset No."; "Asset No.")
+                field("Asset No."; rec."Asset No.")
                 {
 
                     trigger OnValidate()
                     begin
-                        IF "Maintenance Type" = "Maintenance Type"::Truck THEN BEGIN
-                            IF "Asset No." <> xRec."Asset No." THEN BEGIN
-                                StoreRequisitionLine.SETFILTER("Document No.", "No.");
+                        IF rec."Maintenance Type" = rec."Maintenance Type"::Truck THEN BEGIN
+                            IF rec."Asset No." <> xRec."Asset No." THEN BEGIN
+                                StoreRequisitionLine.SETFILTER("Document No.", rec."No.");
                                 IF StoreRequisitionLine.FINDSET THEN BEGIN
                                     REPEAT
-                                        StoreRequisitionLine.VALIDATE("Fixed Asset No.", "Asset No.");
+                                        StoreRequisitionLine.VALIDATE("Fixed Asset No.", rec."Asset No.");
                                         StoreRequisitionLine.MODIFY;
                                     UNTIL StoreRequisitionLine.NEXT = 0;
                                 END;
@@ -92,15 +92,15 @@ page 70034 "Store Requisition Card"
                         END;
                     end;
                 }
-                field(Justification; Justification)
+                field(Justification; rec.Justification)
                 {
                     MultiLine = true;
                     ShowMandatory = true;
                 }
-                field("Not Issued"; "Not Issued")
+                field("Not Issued"; rec."Not Issued")
                 {
                 }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                     Editable = false;
                 }

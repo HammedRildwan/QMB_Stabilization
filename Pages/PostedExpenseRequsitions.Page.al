@@ -3,11 +3,11 @@ page 60081 "Posted Expense Requsitions"
     CardPageID = "Expense Card";
     Editable = false;
     PageType = List;
-    SourceTable = Table60056;
-    SourceTableView = SORTING (No.)
+    SourceTable = 60056;
+    SourceTableView = SORTING ("No.")
                       ORDER(Descending)
                       WHERE (Status = CONST (Approved),
-                            Posted = CONST (Yes));
+                            Posted = CONST (true));
 
     layout
     {
@@ -15,40 +15,40 @@ page 60081 "Posted Expense Requsitions"
         {
             repeater(Group)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                 }
-                field(Date; Date)
+                field(Date; rec.Date)
                 {
                 }
-                field("Last Modified DateTime"; "Last Modified DateTime")
+                field("Last Modified DateTime"; rec."Last Modified DateTime")
                 {
                 }
-                field("Expense Type"; "Expense Type")
+                field("Expense Type"; rec."Expense Type")
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Shortcut Dimension 3 Code"; "Shortcut Dimension 3 Code")
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                 }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                 }
-                field("Total Line Amount"; "Total Line Amount")
+                field("Total Line Amount"; rec."Total Line Amount")
                 {
                 }
-                field(Purpose; Purpose)
+                field(Purpose; rec.Purpose)
                 {
                 }
-                field(Posted; Posted)
+                field(Posted; rec.Posted)
                 {
                 }
             }
@@ -58,7 +58,7 @@ page 60081 "Posted Expense Requsitions"
             part(Approvals; 70194)
             {
                 Caption = 'Approvals';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No."=FIELD(No.);
             }
             systempart(; Notes)
             {

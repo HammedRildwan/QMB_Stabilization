@@ -3,8 +3,8 @@ page 70036 "Store Return List"
     CardPageID = "Store Return Card";
     Editable = false;
     PageType = List;
-    SourceTable = Table70020;
-    SourceTableView = SORTING (No.)
+    SourceTable = 70020;
+    SourceTableView = SORTING ("No.")
                       ORDER(Descending)
                       WHERE (Posted = CONST (No));
 
@@ -14,31 +14,28 @@ page 70036 "Store Return List"
         {
             repeater(Group)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                 }
-                field(Date; Date)
+                field(Date; rec.Date)
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Asset No."; "Asset No.")
+                field("Asset No."; rec."Asset No.")
                 {
                 }
-                field("Requisition No."; "Requisition No.")
+                field("Requisition No."; rec."Requisition No.")
                 {
                 }
-                field(Status; Status)
-                {
-                }
-                field("Work Order No."; "Work Order No.")
+                field(Status; rec.Status)
                 {
                 }
             }

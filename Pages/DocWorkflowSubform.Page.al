@@ -1,7 +1,7 @@
 page 70192 "Doc. Workflow Subform"
 {
     PageType = ListPart;
-    SourceTable = Table70101;
+    SourceTable = 70101;
 
     layout
     {
@@ -9,18 +9,18 @@ page 70192 "Doc. Workflow Subform"
         {
             repeater(Group)
             {
-                field("Sender User ID"; "Sender User ID")
+                field("Sender User ID"; rec."Sender User ID")
                 {
                     Visible = false;
                 }
-                field("Table No."; "Table No.")
+                field("Table No."; rec."Table No.")
                 {
                     Visible = false;
                 }
-                field(Sequence; Sequence)
+                field(Sequence; rec.Sequence)
                 {
                 }
-                field(Approver; Approver)
+                field(Approver; rec.Approver)
                 {
                 }
             }

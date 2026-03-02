@@ -4,7 +4,7 @@ page 70120 "Expense List"
     DeleteAllowed = false;
     Editable = false;
     PageType = List;
-    SourceTable = Table60056;
+    SourceTable = 60056;
     SourceTableView = WHERE (Posted = CONST (No));
 
     layout
@@ -13,34 +13,34 @@ page 70120 "Expense List"
         {
             repeater(Group)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                 }
-                field(Date; Date)
+                field(Date; rec.Date)
                 {
                 }
-                field("Expense Type"; "Expense Type")
+                field("Expense Type"; rec."Expense Type")
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                 }
-                field("Total Line Amount"; "Total Line Amount")
+                field("Total Line Amount"; rec."Total Line Amount")
                 {
                 }
-                field(Purpose; Purpose)
+                field(Purpose; rec.Purpose)
                 {
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Shortcut Dimension 3 Code"; "Shortcut Dimension 3 Code")
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                 }
-                field(Posted; Posted)
+                field(Posted; rec.Posted)
                 {
                 }
             }

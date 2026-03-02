@@ -1,28 +1,28 @@
 page 70194 "Workflow Approval FactBox"
 {
     PageType = CardPart;
-    SourceTable = Table70102;
+    SourceTable = 70102;
 
     layout
     {
         area(content)
         {
-            field(Sequence; Sequence)
+            field(Sequence; rec.Sequence)
             {
             }
-            field(Sender; Sender)
+            field(Sender; rec.Sender)
             {
             }
-            field(Approver; Approver)
+            field(Approver; rec.Approver)
             {
             }
-            field(Status; Status)
+            field(Status; rec.Status)
             {
             }
-            field("Status Change DateTime"; "Status Change DateTime")
+            field("Status Change DateTime"; rec."Status Change DateTime")
             {
             }
-            field("Send for Approval DateTime"; "Send for Approval DateTime")
+            field("Send for Approval DateTime"; rec."Send for Approval DateTime")
             {
             }
         }

@@ -3,7 +3,7 @@ page 70190 "Doc. Workflow List"
     CardPageID = "Doc. Workflow Card";
     Editable = false;
     PageType = List;
-    SourceTable = Table70100;
+    SourceTable = 70100;
 
     layout
     {
@@ -11,16 +11,16 @@ page 70190 "Doc. Workflow List"
         {
             repeater(Group)
             {
-                field("User ID"; "User ID")
+                field("User ID"; rec."User ID")
                 {
                 }
-                field("Table No."; "Table No.")
+                field("Table No."; rec."Table No.")
                 {
                 }
-                field("Table Name"; "Table Name")
+                field("Table Name"; rec."Table Name")
                 {
                 }
-                field("Approval Limit"; "Approval Limit")
+                field("Approval Limit"; rec."Approval Limit")
                 {
                 }
             }

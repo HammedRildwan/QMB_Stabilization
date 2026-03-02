@@ -3,11 +3,11 @@ page 70033 "Store Requisition List"
     CardPageID = "Store Requisition Card";
     Editable = false;
     PageType = List;
-    SourceTable = Table70018;
-    SourceTableView = SORTING (No.)
+    SourceTable = 70018;
+    SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE (Posted = CONST (No),
-                            Status = FILTER (<> Approved));
+                      WHERE(Posted = CONST(false),
+                            Status = FILTER(<> Approved));
 
     layout
     {
@@ -15,34 +15,31 @@ page 70033 "Store Requisition List"
         {
             repeater(Group)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                 }
-                field("Request Date"; "Request Date")
+                field("Request Date"; rec."Request Date")
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Store Location"; "Store Location")
+                field("Store Location"; rec."Store Location")
                 {
                 }
-                field("Request Type"; "Request Type")
+                field("Request Type"; rec."Request Type")
                 {
                 }
-                field("Approved Work Order No."; "Approved Work Order No.")
+                field("Asset No."; rec."Asset No.")
                 {
                 }
-                field("Asset No."; "Asset No.")
-                {
-                }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                 }
             }

@@ -2,8 +2,8 @@ page 70121 "Expense Card"
 {
     DeleteAllowed = false;
     PageType = Card;
-    SourceTable = Table60056;
-    SourceTableView = WHERE (Posted = CONST (No));
+    SourceTable = 60056;
+    SourceTableView = WHERE (Posted = CONST (false));
 
     layout
     {
@@ -11,86 +11,86 @@ page 70121 "Expense Card"
         {
             group(General)
             {
-                field("No."; "No.")
+                field("No."; rec."No.")
                 {
                     Editable = false;
                 }
-                field(Date; Date)
+                field(Date; rec.Date)
                 {
                 }
-                field(Requester; Requester)
+                field(Requester; rec.Requester)
                 {
                 }
-                field("Expense Type"; "Expense Type")
+                field("Expense Type"; rec."Expense Type")
                 {
                 }
-                field("Trip No"; "Trip No")
+                field("Trip No"; rec."Trip No")
                 {
                 }
-                field("Maintenance Work Order"; "Maintenance Work Order")
+                field("Maintenance Work Order"; rec."Maintenance Work Order")
                 {
                 }
-                field(Status; Status)
+                field(Status; rec.Status)
                 {
                 }
-                field(Purpose; Purpose)
+                field(Purpose; rec.Purpose)
                 {
                 }
-                field("Total Line Amount"; "Total Line Amount")
+                field("Total Line Amount"; rec."Total Line Amount")
                 {
                 }
-                field(Payee; Payee)
+                field(Payee; rec.Payee)
                 {
                 }
-                field(Posted; Posted)
+                field(Posted; rec.Posted)
                 {
                     Editable = false;
                 }
-                field("Payment Option"; "Payment Option")
+                field("Payment Option"; rec."Payment Option")
                 {
                 }
-                field("Bank No."; "Bank No.")
+                field("Bank No."; rec."Bank No.")
                 {
                 }
-                field("Bank Name"; "Bank Name")
+                field("Bank Name"; rec."Bank Name")
                 {
                 }
-                field("Cheque No."; "Cheque No.")
+                field("Cheque No."; rec."Cheque No.")
                 {
                 }
-                field("Shortcut Dimension 1 Code"; "Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                     Editable = true;
                     ShowMandatory = true;
                 }
-                field("Shortcut Dimension 2 Code"; "Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
                 {
                     Editable = true;
                     ShowMandatory = true;
                 }
-                field("Shortcut Dimension 3 Code"; "Shortcut Dimension 3 Code")
+                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                 }
-                field("Truck Code"; "Truck Code")
+                field("Truck Code"; rec."Truck Code")
                 {
                 }
-                field("Last Modified DateTime"; "Last Modified DateTime")
-                {
-                    Editable = false;
-                }
-                field("Last Modified By"; "Last Modified By")
+                field("Last Modified DateTime"; rec."Last Modified DateTime")
                 {
                     Editable = false;
                 }
-                field("Not Paid"; "Not Paid")
+                field("Last Modified By"; rec."Last Modified By")
+                {
+                    Editable = false;
+                }
+                field("Not Paid"; rec."Not Paid")
                 {
                 }
-                field("BU Head Approval"; "BU Head Approval")
+                field("BU Head Approval"; rec."BU Head Approval")
                 {
                     Editable = true;
                     Visible = true;
                 }
-                field("JM Approval"; "JM Approval")
+                field("JM Approval"; rec."JM Approval")
                 {
                     Editable = false;
                 }
@@ -98,7 +98,7 @@ page 70121 "Expense Card"
             part(Lines; 70122)
             {
                 Caption = 'Lines';
-                SubPageLink = Document No.=FIELD(No.);
+                SubPageLink = "Document No." = FIELD("No.");
             }
         }
         area(factboxes)
@@ -135,9 +135,6 @@ page 70121 "Expense Card"
                     TESTFIELD(Date);
                     TESTFIELD(Payee);
                     TESTFIELD("Expense Type");
-                    TESTFIELD("Shortcut Dimension 1 Code");
-                    TESTFIELD("Shortcut Dimension 2 Code");
-                    TESTFIELD("Shortcut Dimension 3 Code");
                     IF "Expense Type" = "Expense Type"::"Trip Allowance" THEN
                         TESTFIELD("Trip No");
                     IF "Expense Type" = "Expense Type"::"Road Work" THEN

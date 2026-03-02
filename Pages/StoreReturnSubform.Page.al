@@ -4,7 +4,7 @@ page 70038 "Store Return Subform"
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = Table70021;
+    SourceTable = 70021;
 
     layout
     {
@@ -12,35 +12,35 @@ page 70038 "Store Return Subform"
         {
             repeater(Group)
             {
-                field("Item No."; "Item No.")
+                field("Item No."; rec."Item No.")
                 {
                 }
-                field(Description; Description)
+                field(Description; rec.Description)
                 {
                 }
-                field("Unit of Measure"; "Unit of Measure")
+                field("Unit of Measure"; rec."Unit of Measure")
                 {
                 }
-                field("Variant Code"; "Variant Code")
+                field("Variant Code"; rec."Variant Code")
                 {
                 }
-                field("Location Code"; "Location Code")
+                field("Location Code"; rec."Location Code")
                 {
                 }
-                field("Quantity Issued"; "Quantity Issued")
+                field("Quantity Issued"; rec."Quantity Issued")
                 {
                 }
-                field("Quantity to Return"; "Quantity to Return")
+                field("Quantity to Return"; rec."Quantity to Return")
                 {
                 }
-                field("Fixed Asset No"; "Fixed Asset No")
+                field("Fixed Asset No"; rec."Fixed Asset No")
                 {
                     Editable = false;
                 }
-                field("Unit Price"; "Unit Price")
+                field("Unit Price"; rec."Unit Price")
                 {
                 }
-                field(Amount; Amount)
+                field(Amount; rec.Amount)
                 {
                 }
             }
