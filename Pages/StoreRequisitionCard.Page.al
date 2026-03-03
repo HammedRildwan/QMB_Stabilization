@@ -346,6 +346,7 @@ page 70034 "Store Requisition Card"
     local procedure PostIssue()
     begin
         // Placeholder for posting logic
+        PostIssue();
         Rec.Posted := true;
         Rec."Posted DateTime" := CurrentDateTime;
         Rec."Posted By" := UserId;
