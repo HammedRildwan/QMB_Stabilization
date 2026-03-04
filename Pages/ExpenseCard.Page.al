@@ -65,9 +65,6 @@ page 70121 "Expense Card"
                 field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
                 }
-                field("Truck Code"; rec."Truck Code")
-                {
-                }
                 field("Last Modified DateTime"; rec."Last Modified DateTime")
                 {
                     Editable = false;
@@ -287,7 +284,7 @@ page 70121 "Expense Card"
             action(PostMaint)
             {
                 Caption = 'PostMaint';
-                Visible = false;
+                Visible = true;
 
                 trigger OnAction()
                 begin
