@@ -19,12 +19,19 @@ page 70604 "Custom Setup"
             group(General)
             {
                 Caption = 'General';
+                ShowCaption = true;
 
                 field("Primary Key"; Rec."Primary Key")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the primary key for the setup record.';
                     Visible = false;
+                }
+                field("Budget Code"; Rec."Budget Code")
+                {
+                    Caption = 'Default Budget Code';
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the default budget code for budget checking.';
                 }
                 field("Default Approval Due Days"; Rec."Default Approval Due Days")
                 {
@@ -42,6 +49,8 @@ page 70604 "Custom Setup"
             group(NumberSeries)
             {
                 Caption = 'Number Series';
+                ShowCaption = true;
+                Visible = true;
 
                 field("Expense Nos."; Rec."Expense Nos.")
                 {
@@ -73,6 +82,7 @@ page 70604 "Custom Setup"
             group(WorkOrders)
             {
                 Caption = 'Work Orders & Maintenance';
+                ShowCaption = true;
                 Visible = false; // Hidden until work order and maintenance features are enabled
 
                 field("Work Order Header Nos."; Rec."Work Order Header Nos.")
@@ -89,12 +99,9 @@ page 70604 "Custom Setup"
             group(Budgeting)
             {
                 Caption = 'Budgeting';
+                ShowCaption = true;
+                Visible = false; // Hidden until budgeting features are enabled
 
-                field("Budget Code"; Rec."Budget Code")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the default budget code for budget checking.';
-                }
             }
         }
     }

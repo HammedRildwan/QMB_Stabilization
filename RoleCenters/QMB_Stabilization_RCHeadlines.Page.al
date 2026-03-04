@@ -175,7 +175,7 @@ page 70600 "QMB Stab. RC Headlines"
             StoreReturnHeadline := StrSubstNo(StoreReturnHeadlineLbl, PendingStoreReturns);
 
         // Compute budget headline
-        RCCue.CalcFields("Total Expense Amount");
+        //RCCue.CalcFields("Total Expense Amount");
         ApprovedExpenseAmount := RCCue."Total Expense Amount";
 
         ShowBudgetHeadline := ApprovedExpenseAmount > 0;

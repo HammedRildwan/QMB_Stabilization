@@ -1,0 +1,72 @@
+permissionset 70600 "QMB Stab. Objects"
+{
+    Caption = 'QMB Stabilization - All Objects';
+    Assignable = true;
+
+    Permissions =
+        // Tables
+        table "Custom Setup" = X,
+        table "Document Approval Entry" = X,
+        table "Doc. Workflow Header" = X,
+        table "Doc. Workflow Line" = X,
+        table "Expense Request Header" = X,
+        table "Expense Request Line" = X,
+        table "Store Requisition Header" = X,
+        table "Store Requisition Line" = X,
+        table "Store Return Header" = X,
+        table "Store Return Line" = X,
+        table "QMB Stab. Role Center Cue" = X,
+        table "Month-End Checklist Template" = X,
+        table "Month-End Closing Header" = X,
+        table "Month-End Closing Line" = X,
+        // Table Data
+        tabledata "Custom Setup" = RIMD,
+        tabledata "Document Approval Entry" = RIMD,
+        tabledata "Doc. Workflow Header" = RIMD,
+        tabledata "Doc. Workflow Line" = RIMD,
+        tabledata "Expense Request Header" = RIMD,
+        tabledata "Expense Request Line" = RIMD,
+        tabledata "Store Requisition Header" = RIMD,
+        tabledata "Store Requisition Line" = RIMD,
+        tabledata "Store Return Header" = RIMD,
+        tabledata "Store Return Line" = RIMD,
+        tabledata "QMB Stab. Role Center Cue" = RIMD,
+        tabledata "Month-End Checklist Template" = RIMD,
+        tabledata "Month-End Closing Header" = RIMD,
+        tabledata "Month-End Closing Line" = RIMD,
+        // Codeunits
+        codeunit "Document Approval Workflow" = X,
+        codeunit "Month-End Closing Mgt." = X,
+        // Pages
+        page "Custom Setup" = X,
+        page "Document Approval Entries" = X,
+        page "Doc. Workflow Card" = X,
+        page "Doc. Workflow List" = X,
+        page "Doc. Workflow Subform" = X,
+        page "Expense Card" = X,
+        page "Expense List" = X,
+        page "Expense Subform" = X,
+        page "Approved Expense List" = X,
+        page "Posted Expense Requsitions" = X,
+        page "Store Requisition Card" = X,
+        page "Store Requisition List" = X,
+        page "Store Requistion Subform" = X,
+        page "Store Return Card" = X,
+        page "Store Return List" = X,
+        page "Store Return Subform" = X,
+        page "Workflow Approval FactBox" = X,
+        page "QMB Stab. Finance Admin Act." = X,
+        page "QMB Stab. Finance Admin RC" = X,
+        page "QMB Stab. My Approvals Part" = X,
+        page "QMB Stab. RC Headlines" = X,
+        page "Month-End Closing Card" = X,
+        page "Month-End Closing Subform" = X,
+        page "Month-End Closing List" = X,
+        page "Month-End Checklist Templates" = X,
+        page "Month-End Task Summary FactBox" = X,
+        // Reports
+        report "Expense Request Report" = X,
+        report "Store Requisition Report" = X,
+        report "Store Return Report" = X,
+        report "Approval Status Report" = X;
+}

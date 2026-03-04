@@ -222,12 +222,7 @@ page 70601 "QMB Stab. Finance Admin Act."
     }
 
     trigger OnOpenPage()
-    var
-        ExpenseRequestHeader: Record "Expense Request Header";
-        RecID: RecordId;
     begin
         Rec.GetOrCreate();
-        ExpenseRequestHeader.Get();
-        ExpenseRequestHeader.CalcFields("Total Line Amount");
     end;
 }

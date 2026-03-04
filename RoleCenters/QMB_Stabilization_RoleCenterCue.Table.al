@@ -120,14 +120,14 @@ table 70103 "QMB Stab. Role Center Cue"
         field(40; "Total Expense Amount"; Decimal)
         {
             Caption = 'Total Expense Amount';
-            FieldClass = FlowField;
-            CalcFormula = sum("Expense Request Header"."Total Line Amount" where(Status = const(Approved), Posted = const(false)));
+            FieldClass = Normal;
+            Editable = false;
         }
         field(41; "Posted Expense Amount"; Decimal)
         {
             Caption = 'Posted Expense Amount';
-            FieldClass = FlowField;
-            CalcFormula = sum("Expense Request Header"."Total Line Amount" where(Posted = const(true)));
+            FieldClass = Normal;
+            Editable = false;
         }
 
         // ============================================================
@@ -194,5 +194,39 @@ table 70103 "QMB Stab. Role Center Cue"
             Init();
             Insert();
         end;
+        CalculateExpenseAmounts();
+    end;
+
+    procedure CalculateExpenseAmounts()
+    var
+        ExpenseHeader: Record "Expense Request Header";
+        TotalApproved: Decimal;
+        TotalPosted: Decimal;
+    begin
+        TotalApproved := 0;
+        TotalPosted := 0;
+
+        // Calculate Total Expense Amount (Approved but not Posted)
+        ExpenseHeader.Reset();
+        ExpenseHeader.SetRange(Status, ExpenseHeader.Status::Approved);
+        ExpenseHeader.SetRange(Posted, false);
+        if ExpenseHeader.FindSet() then
+            repeat
+                ExpenseHeader.CalcFields("Total Line Amount");
+                TotalApproved += ExpenseHeader."Total Line Amount";
+            until ExpenseHeader.Next() = 0;
+
+        // Calculate Posted Expense Amount
+        ExpenseHeader.Reset();
+        ExpenseHeader.SetRange(Posted, true);
+        if ExpenseHeader.FindSet() then
+            repeat
+                ExpenseHeader.CalcFields("Total Line Amount");
+                TotalPosted += ExpenseHeader."Total Line Amount";
+            until ExpenseHeader.Next() = 0;
+
+        Rec."Total Expense Amount" := TotalApproved;
+        Rec."Posted Expense Amount" := TotalPosted;
+        if Rec.Modify() then;
     end;
 }
