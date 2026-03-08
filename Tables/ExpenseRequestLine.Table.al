@@ -348,8 +348,9 @@ table 60057 "Expense Request Line"
                     Vendor.GET("Payee Code");
                     "Payee Name" := Vendor.Name;
                     IF Vendor."Vendor Posting Group" = '' then
-                        error('Posting Group must be set for the payables account!')
-                    else If VendorPostingGroup."Payables Account" = '' then
+                        error('Posting Group must be set for the payables account!');
+                    VendorPostingGroup.GET(Vendor."Vendor Posting Group");
+                    If VendorPostingGroup."Payables Account" = '' then
                         error('Payables account must be setup for the posting group!')
                     else
                         VALIDATE("Expense Account No.", VendorPostingGroup."Payables Account");
@@ -383,7 +384,7 @@ table 60057 "Expense Request Line"
                                 PurchInvHeader.CALCFIELDS("Amount Including VAT");
                                 VALIDATE("Shortcut Dimension 1 Code", PurchInvHeader."Shortcut Dimension 1 Code");
                                 VALIDATE("Shortcut Dimension 2 Code", PurchInvHeader."Shortcut Dimension 2 Code");
-                                VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
+                                // VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
                                 Amount := PurchInvHeader."Amount Including VAT";
                             END;
                         END;
