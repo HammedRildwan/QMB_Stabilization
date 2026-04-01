@@ -329,9 +329,10 @@ table 60057 "Expense Request Line"
         field(29; "Payee Code"; Code[20])
         {
             DataClassification = ToBeClassified;
-            //TableRelation = IF ("Transaction Type" = FILTER("Travel Authorization" | "Group Activity" | "Retirement Reimbursement")) Employee."No." WHERE(Status = Filter(<> Terminated))
-            //ELSE IF ("Transaction Type" = FILTER("Advance Request")) Employee."No." WHERE(Status = Filter(<> Terminated))
-            //ELSE IF ("Transaction Type" = CONST("Vendor Invoice")) Vendor."No." WHERE(Blocked = CONST(" "));
+            TableRelation = IF ("Expense Type" = FILTER("Direct Expense")) "G/L Account"."No." WHERE(Blocked = Filter(false),
+                                                                                                    "Direct Posting" = CONST(true))
+            ELSE IF ("Expense Type" = FILTER("Maintenance Expenses")) "Fixed Asset"."No." WHERE(Blocked = Filter(false))
+            ELSE IF ("Expense Type" = CONST("Vendor Invoice")) Vendor."No." WHERE(Blocked = CONST(" "));
 
             trigger OnValidate()
             var
@@ -347,8 +348,9 @@ table 60057 "Expense Request Line"
                     Vendor.GET("Payee Code");
                     "Payee Name" := Vendor.Name;
                     IF Vendor."Vendor Posting Group" = '' then
-                        error('Posting Group must be set for the payables account!')
-                    else If VendorPostingGroup."Payables Account" = '' then
+                        error('Posting Group must be set for the payables account!');
+                    VendorPostingGroup.GET(Vendor."Vendor Posting Group");
+                    If VendorPostingGroup."Payables Account" = '' then
                         error('Payables account must be setup for the posting group!')
                     else
                         VALIDATE("Expense Account No.", VendorPostingGroup."Payables Account");
@@ -358,6 +360,37 @@ table 60057 "Expense Request Line"
         field(30; "Payee Name"; Text[150])
         {
             DataClassification = ToBeClassified;
+        }
+        field(47; "Approved Document No."; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = IF ("Expense Type" = CONST("Vendor Invoice")) "Purch. Inv. Header"."No.";
+            // ELSE IF ("Expense Type" = CONST("Retirement Reimbursement")) "e-Retirement Header"."Document No" WHERE(Posted = CONST(true), "Additional Pay Amount (LCY)" = FILTER(> 0), "Staff No" = FIELD("Payee Code"));
+
+            trigger OnValidate()
+            var
+                //ExpenseRequestsRegister: Record "Expense Requests Register";
+                PurchInvHeader: Record "Purch. Inv. Header";
+            begin
+
+                //populate relevant fileds with data from approved travel or expense request
+                //TESTFIELD("Transaction Type");
+                CASE "Expense Type" OF
+                    "Expense Type"::"Vendor Invoice":
+                        BEGIN
+                            PurchInvHeader.SETFILTER("No.", "Approved Document No.");
+                            IF PurchInvHeader.FINDFIRST THEN BEGIN
+                                "Expense Description" := COPYSTR(PurchInvHeader."Posting Description", 1, 100);
+                                PurchInvHeader.CALCFIELDS("Amount Including VAT");
+                                VALIDATE("Shortcut Dimension 1 Code", PurchInvHeader."Shortcut Dimension 1 Code");
+                                VALIDATE("Shortcut Dimension 2 Code", PurchInvHeader."Shortcut Dimension 2 Code");
+                                // VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
+                                Amount := PurchInvHeader."Amount Including VAT";
+                            END;
+                        END;
+
+                END;
+            end;
         }
         field(480; "Dimension Set ID"; Integer)
         {

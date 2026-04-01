@@ -13,11 +13,23 @@ page 70122 "Expense Subform"
         {
             repeater(Group)
             {
-                field("Expense Category"; rec."Expense Category")
+                field("Payee Code"; rec."Payee Code")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
+                field("Payee Name"; rec."Payee Name")
+                {
+                    Editable = false;
+                }
                 field("Expense type"; rec."Expense type")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Posted Document No."; rec."Approved Document No.")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Maintenance Expense Category"; rec."Expense Category")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
@@ -74,14 +86,6 @@ page 70122 "Expense Subform"
                     Editable = false;
                 }
                 field("G/L Balance"; rec."G/L Balance")
-                {
-                    Editable = false;
-                }
-                field("Payee Code"; rec."Payee Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Payee Name"; rec."Payee Name")
                 {
                     Editable = false;
                 }
