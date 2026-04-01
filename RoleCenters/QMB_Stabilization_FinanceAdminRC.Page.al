@@ -49,11 +49,11 @@ page 70602 "QMB Stab. Finance Admin RC"
             action(NewExpenseRequest)
             {
                 ApplicationArea = All;
-                Caption = 'New Expense Request';
+                Caption = 'New Payment Request';
                 Image = NewDocument;
                 RunObject = page "Expense Card";
                 RunPageMode = Create;
-                ToolTip = 'Create a new expense request document.';
+                ToolTip = 'Create a new payment request document.';
             }
             action(NewStoreRequisition)
             {
@@ -76,9 +76,9 @@ page 70602 "QMB Stab. Finance Admin RC"
         }
         area(Sections)
         {
-            group(ExpenseManagement)
+            group(PaymentManagement)
             {
-                Caption = 'Expense Management';
+                Caption = 'Payment Management';
 
                 action(ExpenseRequests)
                 {
@@ -86,23 +86,23 @@ page 70602 "QMB Stab. Finance Admin RC"
                     Caption = 'Expense Requests';
                     Image = Journals;
                     RunObject = page "Expense List";
-                    ToolTip = 'View and manage expense requests.';
+                    ToolTip = 'View and manage payment requests.';
                 }
                 action(ApprovedExpenses)
                 {
                     ApplicationArea = All;
-                    Caption = 'Approved Expenses';
+                    Caption = 'Approved Payments';
                     Image = Approve;
                     RunObject = page "Approved Expense List";
-                    ToolTip = 'View approved expense requests ready to post.';
+                    ToolTip = 'View approved payment requests ready to post.';
                 }
                 action(PostedExpenses)
                 {
                     ApplicationArea = All;
-                    Caption = 'Posted Expenses';
+                    Caption = 'Posted Payments';
                     Image = PostedOrder;
                     RunObject = page "Posted Expense Requsitions";
-                    ToolTip = 'View posted expense requests.';
+                    ToolTip = 'View posted payment requests.';
                 }
             }
             group(StoreManagement)
@@ -230,10 +230,10 @@ page 70602 "QMB Stab. Finance Admin RC"
                 action(ExpenseRequestReport)
                 {
                     ApplicationArea = All;
-                    Caption = 'Expense Request Report';
+                    Caption = 'Payment Request Report';
                     Image = Report;
                     RunObject = report "Expense Request Report";
-                    ToolTip = 'Print expense request report with details and totals.';
+                    ToolTip = 'Print payment request report with details and totals.';
                 }
                 action(StoreRequisitionReport)
                 {
@@ -267,9 +267,9 @@ page 70602 "QMB Stab. Finance Admin RC"
             action(ExpenseListEmbed)
             {
                 ApplicationArea = All;
-                Caption = 'Expense Requests';
+                Caption = 'Payment Requests';
                 RunObject = page "Expense List";
-                ToolTip = 'View expense requests.';
+                ToolTip = 'View payment requests.';
             }
             action(StoreRequisitionsEmbed)
             {
@@ -613,10 +613,10 @@ page 70602 "QMB Stab. Finance Admin RC"
                 action(RunExpenseReport)
                 {
                     ApplicationArea = All;
-                    Caption = 'Expense Request Report';
+                    Caption = 'Payment Request Report';
                     Image = Report;
                     RunObject = report "Expense Request Report";
-                    ToolTip = 'Print expense request report.';
+                    ToolTip = 'Print payment request report.';
                 }
                 action(RunStoreReqReport)
                 {

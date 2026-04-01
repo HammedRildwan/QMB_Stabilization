@@ -4,6 +4,7 @@ page 70121 "Expense Card"
     PageType = Card;
     SourceTable = 60056;
     SourceTableView = WHERE(Posted = CONST(false));
+    Caption = 'Payment Request';
 
     layout
     {
