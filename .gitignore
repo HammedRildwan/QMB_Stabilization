@@ -1,0 +1,12 @@
+# Compiled app packages
+*.app
+
+# VS Code settings (optional - remove if you want to share settings)
+# .vscode/
+
+# AL Language compiler output
+.alpackages/
+.alcache/
+
+# Launch configurations with sensitive data
+# launch.json
