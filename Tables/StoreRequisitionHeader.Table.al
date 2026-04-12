@@ -264,12 +264,13 @@ table 70018 "Store Requisition Header"
                 ERROR('You must select a Request Type');
             ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
             ItemJournalLine2.SETRANGE("Journal Batch Name", 'ISSUE');
-            IF ItemJournalLine2.FINDFIRST THEN
+            IF ItemJournalLine2.FINDSET THEN
                 ItemJournalLine2.DELETEALL;
 
             StoreRequisitionLine.SETRANGE("Document No.", "No.");
-            IF StoreRequisitionLine.FINDFIRST THEN BEGIN
+            IF StoreRequisitionLine.FINDSET THEN BEGIN
                 REPEAT
+                    ItemJournalLine.INIT;
                     ItemJournalLine."Journal Template Name" := 'ITEM';
                     ItemJournalLine."Journal Batch Name" := 'ISSUE';
                     ItemJournalLine."Line No." := StoreRequisitionLine."Line No.";
@@ -316,12 +317,13 @@ table 70018 "Store Requisition Header"
             ERROR('You must select a Request Type');
         ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
         ItemJournalLine2.SETRANGE("Journal Batch Name", 'ISSUE');
-        IF ItemJournalLine2.FINDFIRST THEN
+        IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
         StoreRequisitionLine.SETRANGE("Document No.", "No.");
-        IF StoreRequisitionLine.FINDFIRST THEN BEGIN
+        IF StoreRequisitionLine.FINDSET THEN BEGIN
             REPEAT
+                ItemJournalLine.INIT;
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'ISSUE';
                 ItemJournalLine."Line No." := StoreRequisitionLine."Line No.";
@@ -367,12 +369,13 @@ table 70018 "Store Requisition Header"
             ERROR('You must select a Request Type');
         ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
         ItemJournalLine2.SETRANGE("Journal Batch Name", 'ISSUE');
-        IF ItemJournalLine2.FINDFIRST THEN
+        IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
         StoreRequisitionLine.SETRANGE("Document No.", "No.");
-        IF StoreRequisitionLine.FINDFIRST THEN BEGIN
+        IF StoreRequisitionLine.FINDSET THEN BEGIN
             REPEAT
+                ItemJournalLine.INIT;
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'ISSUE';
                 ItemJournalLine."Line No." := StoreRequisitionLine."Line No.";
@@ -443,9 +446,9 @@ table 70018 "Store Requisition Header"
 
         ItemLedgEntry2.SETCURRENTKEY("Document No.");
         ItemLedgEntry2.SETRANGE("Document No.", "No.");
-        IF ItemLedgEntry2.FINDFIRST THEN BEGIN
+        IF ItemLedgEntry2.FINDSET THEN BEGIN
             REPEAT
-
+                MaintenanceLedgEntry.INIT;
                 MaintenanceLedgEntry."Entry No." := LineNo + 1;
                 MaintenanceLedgEntry."Document No." := ItemLedgEntry2."Document No.";
                 MaintenanceLedgEntry."Posting Date" := ItemLedgEntry2."Posting Date";

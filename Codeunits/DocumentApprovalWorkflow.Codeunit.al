@@ -47,7 +47,7 @@ codeunit 50000 "Document Approval Workflow"
         DocWorkflowLine.SETRANGE("Table No.", DocWorkflowHeader."Table No.");
         DocWorkflowLine.SETRANGE("Approval Limit", DocWorkflowHeader."Approval Limit");
 
-        IF DocWorkflowLine.FINDFIRST THEN BEGIN
+        IF DocWorkflowLine.FINDSET THEN BEGIN
             REPEAT
                 DocumentApprovalEntry.INIT;
                 DocumentApprovalEntry.Sequence += 1;
