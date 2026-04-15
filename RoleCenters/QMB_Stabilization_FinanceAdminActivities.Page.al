@@ -47,7 +47,7 @@ page 53217 "QMB Stab. Finance Admin Act."
                 {
                     ApplicationArea = All;
                     Caption = 'Posted';
-                    DrillDownPageId = "Posted Expense Requsitions";
+                    DrillDownPageId = "Approved Expense List";
                     ToolTip = 'Number of posted payment requests.';
                 }
 

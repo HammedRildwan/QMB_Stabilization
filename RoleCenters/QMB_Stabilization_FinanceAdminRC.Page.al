@@ -101,7 +101,7 @@ page 53218 "QMB Stab. Finance Admin RC"
                     ApplicationArea = All;
                     Caption = 'Posted Payments';
                     Image = PostedOrder;
-                    RunObject = page "Posted Expense Requsitions";
+                    RunObject = page "Approved Expense List";
                     ToolTip = 'View posted payment requests.';
                 }
             }

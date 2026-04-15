@@ -104,6 +104,10 @@ table 53002 "Expense Request Line"
                         WHTRate := 0.1
                     ELSE IF "WHT Rate" = "WHT Rate"::"5%" THEN
                         WHTRate := 0.05
+                    ELSE IF "WHT Rate" = "WHT Rate"::"2%" THEN
+                        WHTRate := 0.02
+                    ELSE IF "WHT Rate" = "WHT Rate"::"15%" THEN
+                        WHTRate := 0.15
                     ELSE
                         WHTRate := 0;
 
@@ -270,8 +274,8 @@ table 53002 "Expense Request Line"
         {
             DataClassification = ToBeClassified;
             Editable = false;
-            OptionCaption = 'N/A,5%,10%,2%';
-            OptionMembers = "N/A","5%","10%","2%";
+            OptionCaption = 'N/A,2%,5%,10%,15%';
+            OptionMembers = "N/A","2%","5%","10%","15%";
 
             trigger OnValidate()
             var
@@ -290,6 +294,8 @@ table 53002 "Expense Request Line"
                     WHTRate := 0.05
                 ELSE IF "WHT Rate" = "WHT Rate"::"2%" THEN
                     WHTRate := 0.02
+                ELSE IF "WHT Rate" = "WHT Rate"::"15%" THEN
+                    WHTRate := 0.15
                 ELSE
                     WHTRate := 0;
 
