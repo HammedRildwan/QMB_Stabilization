@@ -345,18 +345,12 @@ page 53202 "Store Requisition Card"
 
     local procedure PostIssue()
     begin
-        // Placeholder for posting logic
-        PostIssue();
-        Rec.Posted := true;
-        Rec."Posted DateTime" := CurrentDateTime;
-        Rec."Posted By" := UserId;
-        Rec.Modify();
+        Rec.PostIssue();
     end;
 
     local procedure PostIssuePrint()
     begin
-        PostIssue();
-        // Placeholder for print logic
+        Rec.PostIssuePrint();
     end;
 }
 

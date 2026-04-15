@@ -404,7 +404,7 @@ table 53001 "Expense Request Header"
         //Posting to Journal
         LineNo := 0;
         ExpenseRequestLine.SETRANGE("Document No.", "No.");
-        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        IF ExpenseRequestLine.FINDSET THEN BEGIN
             REPEAT
                 GenJournalLine.INIT;
                 GenJournalLine."Journal Template Name" := 'PAYMENTS';
@@ -478,12 +478,12 @@ table 53001 "Expense Request Header"
 
         GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
         GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
-        IF GenJournalLine2.FINDFIRST THEN
+        IF GenJournalLine2.FINDSET THEN
             GenJournalLine2.DELETEALL;
 
         LineNo := 0;
         ExpenseRequestLine.SETRANGE("Document No.", "No.");
-        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        IF ExpenseRequestLine.FINDSET THEN BEGIN
             REPEAT
                 GenJournalLine.INIT;
                 GenJournalLine."Journal Template Name" := 'PAYMENTS';
@@ -548,11 +548,11 @@ table 53001 "Expense Request Header"
 
         GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
         GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
-        IF GenJournalLine2.FINDFIRST THEN
+        IF GenJournalLine2.FINDSET THEN
             GenJournalLine2.DELETEALL;
 
         ExpenseRequestLine.SETRANGE("Document No.", "No.");
-        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        IF ExpenseRequestLine.FINDSET THEN BEGIN
             REPEAT
                 GenJournalLine.INIT;
                 GenJournalLine."Journal Template Name" := 'PAYMENTS';
@@ -620,11 +620,11 @@ table 53001 "Expense Request Header"
         LineNo := 0;
         GenJournalLine2.SETRANGE("Journal Template Name", 'PAYMENTS');
         GenJournalLine2.SETRANGE("Journal Batch Name", 'BANK');
-        IF GenJournalLine2.FINDFIRST THEN
+        IF GenJournalLine2.FINDSET THEN
             GenJournalLine2.DELETEALL;
 
         ExpenseRequestLine.SETRANGE("Document No.", "No.");
-        IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+        IF ExpenseRequestLine.FINDSET THEN BEGIN
             REPEAT
                 GenJournalLine.INIT;
                 GenJournalLine."Journal Template Name" := 'PAYMENTS';

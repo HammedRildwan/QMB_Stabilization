@@ -85,7 +85,7 @@ table 53008 "Store Return Header"
             trigger OnLookup()
             begin
                 StoresRequisition.SETRANGE(Posted, TRUE);
-                IF PAGE.RUNMODAL(70091, StoresRequisition) = ACTION::LookupOK THEN BEGIN
+                IF PAGE.RUNMODAL(70033, StoresRequisition) = ACTION::LookupOK THEN BEGIN
                     "Requisition No." := StoresRequisition."No.";
                     Location := StoresRequisition."Store Location";
                     Justification := StoresRequisition.Justification;
@@ -94,7 +94,7 @@ table 53008 "Store Return Header"
 
 
                     StoresRequisitionLine.SETRANGE("Document No.", "Requisition No.");
-                    IF StoresRequisitionLine.FINDFIRST THEN BEGIN
+                    IF StoresRequisitionLine.FINDSET THEN BEGIN
 
                         StoresReturnLine2.SETRANGE("Document No.", "No.");
                         StoresReturnLine2.DELETEALL;
@@ -216,12 +216,13 @@ table 53008 "Store Return Header"
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
         ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
-        IF ItemJournalLine2.FINDFIRST THEN
+        IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
         StoresReturnLine.SETRANGE("Document No.", "No.");
-        IF StoresReturnLine.FINDFIRST THEN BEGIN
+        IF StoresReturnLine.FINDSET THEN BEGIN
             REPEAT
+                ItemJournalLine.INIT;
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'RETURN';
                 ItemJournalLine."Line No." := StoresReturnLine."Line No.";
@@ -250,12 +251,13 @@ table 53008 "Store Return Header"
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
         ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
-        IF ItemJournalLine2.FINDFIRST THEN
+        IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
         StoresReturnLine.SETRANGE("Document No.", "No.");
-        IF StoresReturnLine.FINDFIRST THEN BEGIN
+        IF StoresReturnLine.FINDSET THEN BEGIN
             REPEAT
+                ItemJournalLine.INIT;
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'RETURN';
                 ItemJournalLine."Line No." := StoresReturnLine."Line No.";
@@ -284,12 +286,13 @@ table 53008 "Store Return Header"
     begin
         ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
         ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
-        IF ItemJournalLine2.FINDFIRST THEN
+        IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
         StoresReturnLine.SETRANGE("Document No.", "No.");
-        IF StoresReturnLine.FINDFIRST THEN BEGIN
+        IF StoresReturnLine.FINDSET THEN BEGIN
             REPEAT
+                ItemJournalLine.INIT;
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'RETURN';
                 ItemJournalLine."Line No." := StoresReturnLine."Line No.";
