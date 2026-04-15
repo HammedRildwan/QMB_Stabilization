@@ -1,7 +1,7 @@
-page 70194 "Workflow Approval FactBox"
+page 53215 "Workflow Approval FactBox"
 {
     PageType = CardPart;
-    SourceTable = 70102;
+    SourceTable = 53012;
 
     layout
     {

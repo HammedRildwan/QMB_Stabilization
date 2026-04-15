@@ -1,4 +1,4 @@
-permissionset 70600 "QMB Stab. Objects"
+permissionset 53700 "QMB Stab. Objects"
 {
     Caption = 'QMB Stabilization - All Objects';
     Assignable = true;
@@ -19,6 +19,15 @@ permissionset 70600 "QMB Stab. Objects"
         table "Month-End Checklist Template" = X,
         table "Month-End Closing Header" = X,
         table "Month-End Closing Line" = X,
+        // POS Tables
+        table "POS Setup" = X,
+        table "POS Terminal" = X,
+        table "POS Shift" = X,
+        table "POS Transaction Header" = X,
+        table "POS Transaction Line" = X,
+        table "POS Payment Entry" = X,
+        table "POS Transaction Archive" = X,
+        table "POS Role Center Cue" = X,
         // Table Data
         tabledata "Custom Setup" = RIMD,
         tabledata "Document Approval Entry" = RIMD,
@@ -34,9 +43,22 @@ permissionset 70600 "QMB Stab. Objects"
         tabledata "Month-End Checklist Template" = RIMD,
         tabledata "Month-End Closing Header" = RIMD,
         tabledata "Month-End Closing Line" = RIMD,
+        // POS Table Data
+        tabledata "POS Setup" = RIMD,
+        tabledata "POS Terminal" = RIMD,
+        tabledata "POS Shift" = RIMD,
+        tabledata "POS Transaction Header" = RIMD,
+        tabledata "POS Transaction Line" = RIMD,
+        tabledata "POS Payment Entry" = RIMD,
+        tabledata "POS Transaction Archive" = RIMD,
+        tabledata "POS Role Center Cue" = RIMD,
         // Codeunits
         codeunit "Document Approval Workflow" = X,
         codeunit "Month-End Closing Mgt." = X,
+        // POS Codeunits
+        codeunit "POS Transaction Mgt." = X,
+        codeunit "POS Posting" = X,
+        codeunit "POS Shift Mgt." = X,
         // Pages
         page "Custom Setup" = X,
         page "Document Approval Entries" = X,
@@ -64,9 +86,36 @@ permissionset 70600 "QMB Stab. Objects"
         page "Month-End Closing List" = X,
         page "Month-End Checklist Templates" = X,
         page "Month-End Task Summary FactBox" = X,
+        // POS Pages
+        page "POS Setup" = X,
+        page "POS Terminal List" = X,
+        page "POS Terminal Card" = X,
+        page "POS Checkout" = X,
+        page "POS Cart Subform" = X,
+        page "POS Payment Dialog" = X,
+        page "POS Shift Management" = X,
+        page "POS Void Reason Dialog" = X,
+        page "POS Shift FactBox" = X,
+        page "POS Float Entry" = X,
+        page "POS Transaction List" = X,
+        page "POS Transaction Card" = X,
+        page "POS Payment Subform" = X,
+        // POS Role Centers
+        page "POS Cashier Role Center" = X,
+        page "POS Cashier Activities" = X,
+        page "POS Manager Role Center" = X,
+        page "POS Manager Activities" = X,
+        page "POS Hypermart Activities" = X,
+        page "POS Restaurant Activities" = X,
+        page "POS Bar Activities" = X,
+        page "POS Laundromat Activities" = X,
         // Reports
         report "Expense Request Report" = X,
         report "Store Requisition Report" = X,
         report "Store Return Report" = X,
-        report "Approval Status Report" = X;
+        report "Approval Status Report" = X,
+        // POS Reports
+        report "POS Transaction Report" = X,
+        report "POS Shift Report" = X,
+        report "POS Sales by Section Report" = X;
 }

@@ -2,7 +2,7 @@
 // Store Return Report
 // Lists store returns with item details and return quantities
 // ------------------------------------------------------------------------------------------------
-report 70702 "Store Return Report"
+report 53502 "Store Return Report"
 {
     Caption = 'Store Return Report';
     UsageCategory = ReportsAndAnalysis;

@@ -1,4 +1,4 @@
-table 70021 "Store Return Line"
+table 53009 "Store Return Line"
 {
 
     fields
@@ -65,13 +65,13 @@ table 70021 "Store Return Line"
         field(30; "Variant Code"; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Item Variant".Code WHERE ("Item No."=FIELD("Item No."));
+            TableRelation = "Item Variant".Code WHERE("Item No." = FIELD("Item No."));
         }
     }
 
     keys
     {
-        key(Key1;"Document No.","Line No.")
+        key(Key1; "Document No.", "Line No.")
         {
             Clustered = true;
         }

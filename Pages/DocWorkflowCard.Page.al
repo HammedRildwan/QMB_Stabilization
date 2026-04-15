@@ -1,7 +1,7 @@
-page 70191 "Doc. Workflow Card"
+page 53212 "Doc. Workflow Card"
 {
     PageType = Card;
-    SourceTable = 70100;
+    SourceTable = 53010;
 
     layout
     {
@@ -22,12 +22,12 @@ page 70191 "Doc. Workflow Card"
                 {
                 }
             }
-            part(Line; 70192)
+            part(Line; 53213)
             {
                 Caption = 'Line';
-                SubPageLink = "Sender User ID"=FIELD("User ID"),
-                              "Table No."=FIELD("Table No."),
-                              "Approval Limit"=FIELD("Approval Limit");
+                SubPageLink = "Sender User ID" = FIELD("User ID"),
+                              "Table No." = FIELD("Table No."),
+                              "Approval Limit" = FIELD("Approval Limit");
             }
         }
     }

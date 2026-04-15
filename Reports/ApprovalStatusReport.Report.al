@@ -2,7 +2,7 @@
 // Document Approval Status Report
 // Provides overview of document approval workflow status across all entities
 // ------------------------------------------------------------------------------------------------
-report 70703 "Approval Status Report"
+report 53503 "Approval Status Report"
 {
     Caption = 'Document Approval Status Report';
     UsageCategory = ReportsAndAnalysis;

@@ -1,9 +1,9 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // My Pending Approvals Part
 // ListPart showing current user's pending approval requests
 // Shared across multiple Role Centers
 // ------------------------------------------------------------------------------------------------
-page 70603 "QMB Stab. My Approvals Part"
+page 53219 "QMB Stab. My Approvals Part"
 {
     Caption = 'My Pending Approvals';
     PageType = ListPart;

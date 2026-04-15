@@ -2,7 +2,7 @@
 // Store Requisition Report
 // Lists store requisitions with item details and issuance status
 // ------------------------------------------------------------------------------------------------
-report 70701 "Store Requisition Report"
+report 53501 "Store Requisition Report"
 {
     Caption = 'Store Requisition Report';
     UsageCategory = ReportsAndAnalysis;

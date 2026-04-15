@@ -1,4 +1,4 @@
-table 60057 "Expense Request Line"
+table 53002 "Expense Request Line"
 {
 
     fields
@@ -442,7 +442,7 @@ table 60057 "Expense Request Line"
     var
         GLAccount: Record 15;
         DimMgt: Codeunit 408;
-        ExpReq: Record 60056;
+        ExpReq: Record 53001;
         CurrExchRate: Record 330;
         CustomSetup: Record "Custom Setup";
         Text002: Label 'cannot be specified without %1';

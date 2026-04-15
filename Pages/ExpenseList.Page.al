@@ -1,11 +1,11 @@
-page 70120 "Expense List"
+page 53207 "Expense List"
 {
     CardPageID = "Expense Card";
     DeleteAllowed = false;
     Editable = false;
     PageType = List;
-    SourceTable = 60056;
-    SourceTableView = WHERE (Posted = CONST (false));
+    SourceTable = 53001;
+    SourceTableView = WHERE(Posted = CONST(false));
 
     layout
     {
@@ -47,10 +47,10 @@ page 70120 "Expense List"
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; 53215)
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD("No.");
+                SubPageLink = "Document No." = FIELD("No.");
             }
             systempart(Notes; Notes)
             {

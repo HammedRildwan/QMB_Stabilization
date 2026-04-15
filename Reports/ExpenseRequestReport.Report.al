@@ -2,7 +2,7 @@
 // Expense Request Report
 // Lists expense requests with line details, totals, and status information
 // ------------------------------------------------------------------------------------------------
-report 70700 "Expense Request Report"
+report 53500 "Expense Request Report"
 {
     Caption = 'Expense Request Report';
     UsageCategory = ReportsAndAnalysis;

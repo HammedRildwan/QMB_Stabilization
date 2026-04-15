@@ -1,4 +1,4 @@
-enum 60082 "Month-End Closing Status"
+enum 53602 "Month-End Closing Status"
 {
     Caption = 'Month-End Closing Status';
     Extensible = true;

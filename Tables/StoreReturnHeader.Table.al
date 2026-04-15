@@ -1,7 +1,7 @@
-table 70020 "Store Return Header"
+table 53008 "Store Return Header"
 {
-    DrillDownPageID = 70036;
-    LookupPageID = 70036;
+    DrillDownPageID = 53204;
+    LookupPageID = 53204;
 
     fields
     {
@@ -25,7 +25,7 @@ table 70020 "Store Return Header"
             Caption = 'Shortcut Dimension 1 Code';
             DataClassification = ToBeClassified;
             Editable = false;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1));
 
             trigger OnValidate()
             begin
@@ -38,7 +38,7 @@ table 70020 "Store Return Header"
             Caption = 'Shortcut Dimension 2 Code';
             DataClassification = ToBeClassified;
             Editable = false;
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2));
 
             trigger OnValidate()
             begin
@@ -135,7 +135,7 @@ table 70020 "Store Return Header"
 
             end;
         }
-        field(480;"Dimension Set ID";Integer)
+        field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
             DataClassification = ToBeClassified;
@@ -151,7 +151,7 @@ table 70020 "Store Return Header"
 
     keys
     {
-        key(Key1;"No.")
+        key(Key1; "No.")
         {
             Clustered = true;
         }
@@ -162,11 +162,14 @@ table 70020 "Store Return Header"
     }
 
     trigger OnInsert()
+    var
+        NoSeries: Codeunit "No. Series";
     begin
         IF "No." = '' THEN BEGIN
-          CustomSetup.GET;
-          CustomSetup.TESTFIELD("Store Return Nos.");
-          NoSeriesMgt.InitSeries(CustomSetup."Store Return Nos.","No. Series",0D,"No.","No. Series");
+            CustomSetup.GET;
+            CustomSetup.TESTFIELD("Store Return Nos.");
+            "No." := NoSeries.GetNextNo(CustomSetup."Store Return Nos.");
+            "No. Series" := CustomSetup."Store Return Nos.";
         END;
     end;
 
@@ -174,28 +177,27 @@ table 70020 "Store Return Header"
         UserSetup: Record 91;
         DimMgt: Codeunit 408;
         PurchasesPayablesSetup: Record 312;
-        StoresRequisition: Record 70018;
-        StoresRequisitionLine: Record 70019;
-        StoresReturnLine: Record 70021;
-        StoresReturnLine2: Record 70021;
+        StoresRequisition: Record 53006;
+        StoresRequisitionLine: Record 53007;
+        StoresReturnLine: Record 53009;
+        StoresReturnLine2: Record 53009;
         ItemJournalLine: Record 83;
         ItemJournalLine2: Record 83;
         ReportPrint: Codeunit 228;
         GLEntry: Record 17;
-        CustomSetup: Record 60005;
-        NoSeriesMgt: Codeunit 396;
+        CustomSetup: Record 53000;
 
-    local procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
+    local procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     var
         OldDimSetID: Integer;
     begin
         OldDimSetID := "Dimension Set ID";
-        DimMgt.ValidateShortcutDimValues(FieldNumber,ShortcutDimCode,"Dimension Set ID");
+        DimMgt.ValidateShortcutDimValues(FieldNumber, ShortcutDimCode, "Dimension Set ID");
         IF "No." <> '' THEN
-          MODIFY;
+            MODIFY;
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure ShowDocDim()
     var
         OldDimSetID: Integer;
@@ -203,121 +205,121 @@ table 70020 "Store Return Header"
         OldDimSetID := "Dimension Set ID";
         "Dimension Set ID" :=
           DimMgt.EditDimensionSet(
-            "Dimension Set ID",STRSUBSTNO('%1',"No."),
-            "Shortcut Dimension 1 Code","Shortcut Dimension 2 Code");
+            "Dimension Set ID", STRSUBSTNO('%1', "No."),
+            "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
         IF OldDimSetID <> "Dimension Set ID" THEN
-          MODIFY;
+            MODIFY;
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure PostReturn()
     begin
-        ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
-        ItemJournalLine2.SETRANGE("Journal Batch Name",'RETURN');
+        ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
+        ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
         IF ItemJournalLine2.FINDFIRST THEN
-          ItemJournalLine2.DELETEALL;
+            ItemJournalLine2.DELETEALL;
 
-        StoresReturnLine.SETRANGE("Document No.","No.");
+        StoresReturnLine.SETRANGE("Document No.", "No.");
         IF StoresReturnLine.FINDFIRST THEN BEGIN
-          REPEAT
-            ItemJournalLine."Journal Template Name" := 'ITEM';
-            ItemJournalLine."Journal Batch Name" := 'RETURN';
-            ItemJournalLine."Line No." := StoresReturnLine."Line No.";
-            ItemJournalLine.VALIDATE("Item No.",StoresReturnLine."Item No.");
-            ItemJournalLine.VALIDATE("Unit of Measure Code",StoresReturnLine."Unit of Measure");
-            IF StoresReturnLine."Variant Code" <> '' THEN
-              ItemJournalLine.VALIDATE("Variant Code",StoresReturnLine."Variant Code");
-            ItemJournalLine."Posting Date" := Date;
-            ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
-            ItemJournalLine."Document No." := "No.";
-            ItemJournalLine."Document Date" := Date;
-            ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
-            ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
-            ItemJournalLine.VALIDATE(Quantity,StoresReturnLine."Quantity to Return");
-            ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
-            ItemJournalLine.INSERT;
-          UNTIL StoresReturnLine.NEXT = 0;
-            CODEUNIT.RUN(CODEUNIT::"Item Jnl.-Post",ItemJournalLine);
+            REPEAT
+                ItemJournalLine."Journal Template Name" := 'ITEM';
+                ItemJournalLine."Journal Batch Name" := 'RETURN';
+                ItemJournalLine."Line No." := StoresReturnLine."Line No.";
+                ItemJournalLine.VALIDATE("Item No.", StoresReturnLine."Item No.");
+                ItemJournalLine.VALIDATE("Unit of Measure Code", StoresReturnLine."Unit of Measure");
+                IF StoresReturnLine."Variant Code" <> '' THEN
+                    ItemJournalLine.VALIDATE("Variant Code", StoresReturnLine."Variant Code");
+                ItemJournalLine."Posting Date" := Date;
+                ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
+                ItemJournalLine."Document No." := "No.";
+                ItemJournalLine."Document Date" := Date;
+                ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
+                ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                ItemJournalLine.VALIDATE(Quantity, StoresReturnLine."Quantity to Return");
+                ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
+                ItemJournalLine.INSERT;
+            UNTIL StoresReturnLine.NEXT = 0;
+            CODEUNIT.RUN(CODEUNIT::"Item Jnl.-Post", ItemJournalLine);
         END;
 
         CheckPostedJnl;
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure PostReturnPrint()
     begin
-        ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
-        ItemJournalLine2.SETRANGE("Journal Batch Name",'RETURN');
+        ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
+        ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
         IF ItemJournalLine2.FINDFIRST THEN
-          ItemJournalLine2.DELETEALL;
+            ItemJournalLine2.DELETEALL;
 
-        StoresReturnLine.SETRANGE("Document No.","No.");
+        StoresReturnLine.SETRANGE("Document No.", "No.");
         IF StoresReturnLine.FINDFIRST THEN BEGIN
-          REPEAT
-            ItemJournalLine."Journal Template Name" := 'ITEM';
-            ItemJournalLine."Journal Batch Name" := 'RETURN';
-            ItemJournalLine."Line No." := StoresReturnLine."Line No.";
-            ItemJournalLine.VALIDATE("Item No.",StoresReturnLine."Item No.");
-            ItemJournalLine.VALIDATE("Unit of Measure Code",StoresReturnLine."Unit of Measure");
-            IF StoresReturnLine."Variant Code" <> '' THEN
-              ItemJournalLine.VALIDATE("Variant Code",StoresReturnLine."Variant Code");
-            ItemJournalLine."Posting Date" := Date;
-            ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
-            ItemJournalLine."Document No." := "No.";
-            ItemJournalLine."Document Date" := Date;
-            ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
-            ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
-            ItemJournalLine.VALIDATE(Quantity,StoresReturnLine."Quantity to Return");
-            ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
-            ItemJournalLine.INSERT;
-          UNTIL StoresReturnLine.NEXT = 0;
-            CODEUNIT.RUN(CODEUNIT::"Item Jnl.-Post+Print",ItemJournalLine);
+            REPEAT
+                ItemJournalLine."Journal Template Name" := 'ITEM';
+                ItemJournalLine."Journal Batch Name" := 'RETURN';
+                ItemJournalLine."Line No." := StoresReturnLine."Line No.";
+                ItemJournalLine.VALIDATE("Item No.", StoresReturnLine."Item No.");
+                ItemJournalLine.VALIDATE("Unit of Measure Code", StoresReturnLine."Unit of Measure");
+                IF StoresReturnLine."Variant Code" <> '' THEN
+                    ItemJournalLine.VALIDATE("Variant Code", StoresReturnLine."Variant Code");
+                ItemJournalLine."Posting Date" := Date;
+                ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
+                ItemJournalLine."Document No." := "No.";
+                ItemJournalLine."Document Date" := Date;
+                ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
+                ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                ItemJournalLine.VALIDATE(Quantity, StoresReturnLine."Quantity to Return");
+                ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
+                ItemJournalLine.INSERT;
+            UNTIL StoresReturnLine.NEXT = 0;
+            CODEUNIT.RUN(CODEUNIT::"Item Jnl.-Post+Print", ItemJournalLine);
         END;
 
         //CheckPostedJnl;
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure TestReport()
     begin
-        ItemJournalLine2.SETRANGE("Journal Template Name",'ITEM');
-        ItemJournalLine2.SETRANGE("Journal Batch Name",'RETURN');
+        ItemJournalLine2.SETRANGE("Journal Template Name", 'ITEM');
+        ItemJournalLine2.SETRANGE("Journal Batch Name", 'RETURN');
         IF ItemJournalLine2.FINDFIRST THEN
-          ItemJournalLine2.DELETEALL;
+            ItemJournalLine2.DELETEALL;
 
-        StoresReturnLine.SETRANGE("Document No.","No.");
+        StoresReturnLine.SETRANGE("Document No.", "No.");
         IF StoresReturnLine.FINDFIRST THEN BEGIN
-          REPEAT
-            ItemJournalLine."Journal Template Name" := 'ITEM';
-            ItemJournalLine."Journal Batch Name" := 'RETURN';
-            ItemJournalLine."Line No." := StoresReturnLine."Line No.";
-            ItemJournalLine.VALIDATE("Item No.",StoresReturnLine."Item No.");
-            ItemJournalLine.VALIDATE("Unit of Measure Code",StoresReturnLine."Unit of Measure");
-            IF StoresReturnLine."Variant Code" <> '' THEN
-              ItemJournalLine.VALIDATE("Variant Code",StoresReturnLine."Variant Code");
-            ItemJournalLine."Posting Date" := Date;
-            ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
-            ItemJournalLine."Document No." := "No.";
-            ItemJournalLine."Document Date" := Date;
-            ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
-            ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
-            ItemJournalLine.VALIDATE(Quantity,StoresReturnLine."Quantity to Return");
-            ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
-            ItemJournalLine.INSERT;
-            COMMIT;
-          UNTIL StoresReturnLine.NEXT = 0;
+            REPEAT
+                ItemJournalLine."Journal Template Name" := 'ITEM';
+                ItemJournalLine."Journal Batch Name" := 'RETURN';
+                ItemJournalLine."Line No." := StoresReturnLine."Line No.";
+                ItemJournalLine.VALIDATE("Item No.", StoresReturnLine."Item No.");
+                ItemJournalLine.VALIDATE("Unit of Measure Code", StoresReturnLine."Unit of Measure");
+                IF StoresReturnLine."Variant Code" <> '' THEN
+                    ItemJournalLine.VALIDATE("Variant Code", StoresReturnLine."Variant Code");
+                ItemJournalLine."Posting Date" := Date;
+                ItemJournalLine."Entry Type" := ItemJournalLine."Entry Type"::"Positive Adjmt.";
+                ItemJournalLine."Document No." := "No.";
+                ItemJournalLine."Document Date" := Date;
+                ItemJournalLine."Location Code" := StoresReturnLine."Location Code";
+                ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                ItemJournalLine.VALIDATE(Quantity, StoresReturnLine."Quantity to Return");
+                ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
+                ItemJournalLine.INSERT;
+                COMMIT;
+            UNTIL StoresReturnLine.NEXT = 0;
             ReportPrint.PrintItemJnlLine(ItemJournalLine);
         END;
     end;
 
-   // [Scope('Internal')]
+    // [Scope('Internal')]
     procedure CheckPostedJnl()
     begin
-        GLEntry.SETCURRENTKEY("Document No.","Posting Date");
-        GLEntry.SETRANGE("Document No.","No.");
+        GLEntry.SETCURRENTKEY("Document No.", "Posting Date");
+        GLEntry.SETRANGE("Document No.", "No.");
         IF GLEntry.FINDFIRST THEN BEGIN
-          Posted := TRUE;
-          MODIFY;
+            Posted := TRUE;
+            MODIFY;
         END;
     end;
 }

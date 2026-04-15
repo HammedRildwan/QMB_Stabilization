@@ -1,4 +1,4 @@
-table 60081 "Month-End Closing Header"
+table 53004 "Month-End Closing Header"
 {
     Caption = 'Month-End Closing Header';
     DataClassification = CustomerContent;
@@ -114,10 +114,10 @@ table 60081 "Month-End Closing Header"
 
     trigger OnInsert()
     var
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeries: Codeunit "No. Series";
     begin
         if "No." = '' then begin
-            "No." := NoSeriesMgt.GetNextNo('MONTHEND', WorkDate(), true);
+            "No." := NoSeries.GetNextNo('MONTHEND');
         end;
         "Created By" := CopyStr(UserId, 1, 50);
         "Created Date" := WorkDate();

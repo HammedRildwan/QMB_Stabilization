@@ -1,4 +1,4 @@
-table 60080 "Month-End Checklist Template"
+table 53003 "Month-End Checklist Template"
 {
     Caption = 'Month-End Checklist Template';
     DataClassification = CustomerContent;

@@ -1,8 +1,8 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Role Center Headlines Provider
 // Displays dynamic headline messages for EthicalDynamics365 Role Centers
 // ------------------------------------------------------------------------------------------------
-page 70600 "QMB Stab. RC Headlines"
+page 53216 "QMB Stab. RC Headlines"
 {
     Caption = 'Headlines';
     PageType = HeadlinePart;

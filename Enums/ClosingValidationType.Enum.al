@@ -1,4 +1,4 @@
-enum 60081 "Closing Validation Type"
+enum 53601 "Closing Validation Type"
 {
     Caption = 'Closing Validation Type';
     Extensible = true;

@@ -1,4 +1,4 @@
-table 60082 "Month-End Closing Line"
+table 53005 "Month-End Closing Line"
 {
     Caption = 'Month-End Closing Line';
     DataClassification = CustomerContent;

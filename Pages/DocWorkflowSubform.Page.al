@@ -1,7 +1,7 @@
-page 70192 "Doc. Workflow Subform"
+page 53213 "Doc. Workflow Subform"
 {
     PageType = ListPart;
-    SourceTable = 70101;
+    SourceTable = 53011;
 
     layout
     {

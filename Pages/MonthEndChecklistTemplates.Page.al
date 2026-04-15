@@ -1,4 +1,4 @@
-page 70663 "Month-End Checklist Templates"
+page 53224 "Month-End Checklist Templates"
 {
     Caption = 'Month-End Checklist Templates';
     PageType = List;

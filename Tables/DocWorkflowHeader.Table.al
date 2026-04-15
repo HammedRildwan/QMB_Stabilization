@@ -1,4 +1,4 @@
-table 70100 "Doc. Workflow Header"
+table 53010 "Doc. Workflow Header"
 {
 
     fields
@@ -11,21 +11,21 @@ table 70100 "Doc. Workflow Header"
         field(2; "Table No."; Integer)
         {
             DataClassification = ToBeClassified;
-            TableRelation = AllObj."Object ID" WHERE ("Object Type"=FILTER(Table));
+            TableRelation = AllObj."Object ID" WHERE("Object Type" = FILTER(Table));
 
             trigger OnValidate()
             begin
-                IF AllObj.GET(AllObj."Object Type"::Table,"Table No.") THEN
-                  "Table Name" := AllObj."Object Name"
+                IF AllObj.GET(AllObj."Object Type"::Table, "Table No.") THEN
+                    "Table Name" := AllObj."Object Name"
                 ELSE
-                  "Table Name" := '';
+                    "Table Name" := '';
             end;
         }
-        field(3;"Table Name";Text[70])
+        field(3; "Table Name"; Text[70])
         {
             DataClassification = ToBeClassified;
         }
-        field(4;"Approval Limit";Decimal)
+        field(4; "Approval Limit"; Decimal)
         {
             DataClassification = ToBeClassified;
         }
@@ -33,7 +33,7 @@ table 70100 "Doc. Workflow Header"
 
     keys
     {
-        key(Key1;"User ID","Table No.","Approval Limit")
+        key(Key1; "User ID", "Table No.", "Approval Limit")
         {
             Clustered = true;
         }

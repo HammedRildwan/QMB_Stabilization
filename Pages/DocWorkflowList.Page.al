@@ -1,9 +1,9 @@
-page 70190 "Doc. Workflow List"
+page 53211 "Doc. Workflow List"
 {
     CardPageID = "Doc. Workflow Card";
     Editable = false;
     PageType = List;
-    SourceTable = 70100;
+    SourceTable = 53010;
 
     layout
     {

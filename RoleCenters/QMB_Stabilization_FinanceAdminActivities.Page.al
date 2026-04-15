@@ -1,8 +1,8 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Finance and Admin Activities
 // Cue group page part for relevant KPIs
 // ------------------------------------------------------------------------------------------------
-page 70601 "QMB Stab. Finance Admin Act."
+page 53217 "QMB Stab. Finance Admin Act."
 {
     Caption = 'Finance and Admin Operations';
     PageType = CardPart;

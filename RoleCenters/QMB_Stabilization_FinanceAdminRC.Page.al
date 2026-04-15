@@ -1,9 +1,9 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Role Center: Finance Officer
 // For accounting and financial operations staff
 // Focus: G/L postings, profit recognition, reconciliation, tax compliance
 // ------------------------------------------------------------------------------------------------
-page 70602 "QMB Stab. Finance Admin RC"
+page 53218 "QMB Stab. Finance Admin RC"
 {
     Caption = 'QMB Stab. Finance and Admin Manager';
     PageType = RoleCenter;

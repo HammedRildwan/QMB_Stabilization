@@ -1,4 +1,4 @@
-page 70660 "Month-End Closing Card"
+page 53221 "Month-End Closing Card"
 {
     Caption = 'Month-End Closing';
     PageType = Document;

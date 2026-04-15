@@ -1,4 +1,4 @@
-page 70037 "Store Return Card"
+page 53205 "Store Return Card"
 {
     PageType = Card;
     SourceTable = "Store Return Header";

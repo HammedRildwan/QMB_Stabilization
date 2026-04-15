@@ -2,7 +2,7 @@
   "id": "b6ffa528-7732-4d48-b05c-8f1d61e3ef69",
   "name": "QMB_Stabilization",
   "publisher": "CODEWARE Nigeria",
-  "version": "1.0.0.2",
+  "version": "1.0.0.20250413",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -10,14 +10,16 @@
   "help": "",
   "url": "",
   "logo": "",
-  "dependencies": [],
+  "dependencies": [
+    
+  ],
   "screenshots": [],
-  "platform": "1.0.0.0",
-  "application": "19.0.0.0",
+  "platform": "27.0.0.0",
+  "application": "27.0.0.0",
   "idRanges": [
     {
-      "from": 50000,
-      "to": 90149
+      "from": 53000,
+      "to": 53999
     }
   ],
   "resourceExposurePolicy": {
@@ -25,7 +27,7 @@
     "allowDownloadingSource": false,
     "includeSourceInSymbolFile": true
   },
-  "runtime": "8.0",
+  "runtime": "13.0",
   "features": [
     "NoImplicitWith"
   ]

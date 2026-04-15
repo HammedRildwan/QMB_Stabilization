@@ -1,4 +1,4 @@
-table 70101 "Doc. Workflow Line"
+table 53011 "Doc. Workflow Line"
 {
 
     fields
@@ -20,9 +20,9 @@ table 70101 "Doc. Workflow Line"
         field(4; "Table No."; Integer)
         {
             DataClassification = ToBeClassified;
-            TableRelation = AllObj."Object ID" WHERE ("Object Type"=FILTER(Table));
+            TableRelation = AllObj."Object ID" WHERE("Object Type" = FILTER(Table));
         }
-        field(5;"Approval Limit";Decimal)
+        field(5; "Approval Limit"; Decimal)
         {
             DataClassification = ToBeClassified;
         }
@@ -30,7 +30,7 @@ table 70101 "Doc. Workflow Line"
 
     keys
     {
-        key(Key1;"Sender User ID",Sequence,"Table No.","Approval Limit")
+        key(Key1; "Sender User ID", Sequence, "Table No.", "Approval Limit")
         {
             Clustered = true;
         }

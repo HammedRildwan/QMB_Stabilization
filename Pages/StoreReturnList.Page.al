@@ -1,12 +1,12 @@
-page 70036 "Store Return List"
+page 53204 "Store Return List"
 {
     CardPageID = "Store Return Card";
     Editable = false;
     PageType = List;
-    SourceTable = 70020;
-    SourceTableView = SORTING ("No.")
+    SourceTable = 53008;
+    SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE (Posted = CONST (false));
+                      WHERE(Posted = CONST(false));
 
     layout
     {
@@ -42,10 +42,10 @@ page 70036 "Store Return List"
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; 53215)
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD("No.");
+                SubPageLink = "Document No." = FIELD("No.");
             }
             systempart(Notes; Notes)
             {

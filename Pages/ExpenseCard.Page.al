@@ -1,8 +1,8 @@
-page 70121 "Expense Card"
+page 53208 "Expense Card"
 {
     DeleteAllowed = false;
     PageType = Card;
-    SourceTable = 60056;
+    SourceTable = 53001;
     SourceTableView = WHERE(Posted = CONST(false));
     Caption = 'Payment Request';
 
@@ -78,7 +78,7 @@ page 70121 "Expense Card"
                 {
                 }
             }
-            part(Lines; 70122)
+            part(Lines; 53209)
             {
                 Caption = 'Lines';
                 SubPageLink = "Document No." = FIELD("No.");
@@ -86,7 +86,7 @@ page 70121 "Expense Card"
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; 53215)
             {
                 Caption = 'Approvals';
                 SubPageLink = "Document No." = FIELD("No.");
@@ -320,9 +320,9 @@ page 70121 "Expense Card"
     end;
 
     var
-        DocumentApprovalWorkflow: Codeunit 50000;
-        ExpenseRequestHeader: Record 60056;
-        ExpenseRequestLine: Record 60057;
+        DocumentApprovalWorkflow: Codeunit 53400;
+        ExpenseRequestHeader: Record 53001;
+        ExpenseRequestLine: Record 53002;
         RecRef: RecordRef;
         RecID: RecordID;
         UserSetup: Record 91;

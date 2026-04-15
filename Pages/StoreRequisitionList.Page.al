@@ -1,9 +1,9 @@
-page 70033 "Store Requisition List"
+page 53201 "Store Requisition List"
 {
     CardPageID = "Store Requisition Card";
     Editable = false;
     PageType = List;
-    SourceTable = 70018;
+    SourceTable = 53006;
     SourceTableView = SORTING("No.")
                       ORDER(Descending);
 

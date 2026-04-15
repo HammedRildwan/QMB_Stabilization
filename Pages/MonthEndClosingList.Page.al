@@ -1,4 +1,4 @@
-page 70662 "Month-End Closing List"
+page 53223 "Month-End Closing List"
 {
     Caption = 'Month-End Closings';
     PageType = List;

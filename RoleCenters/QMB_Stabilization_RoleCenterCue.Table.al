@@ -1,9 +1,9 @@
-﻿// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 // Role Center Cue Table
 // Shared cue table for all QMB's Specific Role Centers
 // Provides FlowFields for KPIs across all the entities in this PTE
 // ------------------------------------------------------------------------------------------------
-table 70103 "QMB Stab. Role Center Cue"
+table 53013 "QMB Stab. Role Center Cue"
 {
     Caption = 'QMB Role Center Cue';
     DataClassification = CustomerContent;

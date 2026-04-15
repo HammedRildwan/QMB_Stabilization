@@ -1,4 +1,4 @@
-page 70664 "Month-End Task Summary FactBox"
+page 53225 "Month-End Task Summary FactBox"
 {
     Caption = 'Task Summary';
     PageType = CardPart;

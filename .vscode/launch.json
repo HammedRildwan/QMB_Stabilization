@@ -1,13 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
+        /*{
             "name": "Your own server",
             "request": "launch",
             "type": "al",
             "environmentType": "OnPrem",
-            "server": "http://localhost",
-            "serverInstance": "BC190",
+            "server": "http://localhost:8080/bc220",
+            "serverInstance": "BC220",
             "authentication": "Windows",
             "startupObjectId": 22,
             "startupObjectType": "Page",
@@ -18,6 +18,24 @@
             "tenant": "default",
             "usePublicURLFromServer": true,
             "port": 19049
+        }*/
+          {
+            "name": "Publish: Codeware Microsoft cloud sandbox",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "Sandbox",
+            "environmentName": "CustomerDemo",
+            "tenant": "2373a921-a6fe-4ee1-a785-838b208582ee",
+            "schemaUpdateMode": "ForceSync",
+            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": "All",
+            "breakOnRecordWrite": "None",
+            "launchBrowser": true,
+            "enableSqlInformationDebugger": true,
+            "enableLongRunningSqlStatements": true,
+            "longRunningSqlStatementsThreshold": 500,
+            "numberOfSqlStatements": 10
         }
     ]
 }

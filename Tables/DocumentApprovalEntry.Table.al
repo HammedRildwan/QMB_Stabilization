@@ -1,4 +1,4 @@
-table 70102 "Document Approval Entry"
+table 53012 "Document Approval Entry"
 {
 
     fields

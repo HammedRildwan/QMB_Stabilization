@@ -1,4 +1,4 @@
-codeunit 60080 "Month-End Closing Mgt."
+codeunit 53401 "Month-End Closing Mgt."
 {
 
     procedure ValidateTask(var ClosingLine: Record "Month-End Closing Line"; var Passed: Boolean; var Message: Text[250])

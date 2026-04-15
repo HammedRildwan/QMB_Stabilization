@@ -1,11 +1,11 @@
-page 70122 "Expense Subform"
+page 53209 "Expense Subform"
 {
     AutoSplitKey = true;
     CardPageID = "Expense Card";
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = 60057;
+    SourceTable = 53002;
 
     layout
     {
@@ -157,10 +157,10 @@ page 70122 "Expense Subform"
     var
         EditExpAccNo: Boolean;
         EditAsset: Boolean;
-        ExpenseRequestHeader: Record 60056;
+        ExpenseRequestHeader: Record 53001;
         UserSetup: Record 91;
         AmountEditable: Boolean;
-        ExpenseRequestHeader2: Record 60056;
+        ExpenseRequestHeader2: Record 53001;
         ApprovedNotEditable: Boolean;
 }
 

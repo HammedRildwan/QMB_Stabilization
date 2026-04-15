@@ -2,7 +2,7 @@
 // Custom Setup Page
 // Setup page for configuring number series and other application settings
 // ------------------------------------------------------------------------------------------------
-page 70604 "Custom Setup"
+page 53220 "Custom Setup"
 {
     Caption = 'QMB Stab. Setup';
     PageType = Card;

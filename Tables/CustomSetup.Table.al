@@ -1,4 +1,4 @@
-table 60005 "Custom Setup"
+table 53000 "Custom Setup"
 {
 
     fields

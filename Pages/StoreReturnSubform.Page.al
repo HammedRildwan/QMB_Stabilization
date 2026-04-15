@@ -1,10 +1,10 @@
-page 70038 "Store Return Subform"
+page 53206 "Store Return Subform"
 {
     AutoSplitKey = true;
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = 70021;
+    SourceTable = 53009;
 
     layout
     {

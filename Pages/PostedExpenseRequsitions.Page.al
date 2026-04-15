@@ -1,13 +1,13 @@
-page 60081 "Posted Expense Requsitions"
+page 53200 "Posted Expense Requsitions"
 {
     CardPageID = "Expense Card";
     Editable = false;
     PageType = List;
-    SourceTable = 60056;
-    SourceTableView = SORTING ("No.")
+    SourceTable = 53001;
+    SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE (Status = CONST (Approved),
-                            Posted = CONST (true));
+                      WHERE(Status = CONST(Approved),
+                            Posted = CONST(true));
 
     layout
     {
@@ -55,10 +55,10 @@ page 60081 "Posted Expense Requsitions"
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; 53215)
             {
                 Caption = 'Approvals';
-                SubPageLink = "Document No."=FIELD("No.");
+                SubPageLink = "Document No." = FIELD("No.");
             }
             systempart(Notes; Notes)
             {

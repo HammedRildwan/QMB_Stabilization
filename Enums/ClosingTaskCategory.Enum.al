@@ -1,4 +1,4 @@
-enum 60080 "Closing Task Category"
+enum 53600 "Closing Task Category"
 {
     Caption = 'Closing Task Category';
     Extensible = true;

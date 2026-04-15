@@ -1,4 +1,4 @@
-table 70018 "Store Requisition Header"
+table 53006 "Store Requisition Header"
 {
     DataCaptionFields = "No.", Requester, "Store Location", "Request Type";
     //DrillDownPageID = 60119;
@@ -153,11 +153,14 @@ table 70018 "Store Requisition Header"
     end;
 
     trigger OnInsert()
+    var
+        NoSeries: Codeunit "No. Series";
     begin
         IF "No." = '' THEN BEGIN
             CustomSetup.GET;
             CustomSetup.TESTFIELD("Store Requisition Nos.");
-            NoSeriesMgt.InitSeries(CustomSetup."Store Requisition Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            "No." := NoSeries.GetNextNo(CustomSetup."Store Requisition Nos.");
+            "No. Series" := CustomSetup."Store Requisition Nos.";
         END;
 
         "Request Date" := TODAY;
@@ -212,11 +215,10 @@ table 70018 "Store Requisition Header"
         ReportPrint: Codeunit 228;
         GLEntry: Record 17;
         ItemRec: Record 27;
-        StoreRequisitionLine: Record 70019;
-        CustomSetup: Record 60005;
-        NoSeriesMgt: Codeunit 396;
+        StoreRequisitionLine: Record 53007;
+        CustomSetup: Record 53000;
         ItemLedgEntry: Record 32;
-        StoreReqLine: Record 70019;
+        StoreReqLine: Record 53007;
         MaintenanceLedgEntry: Record 5625;
         LineNo: Integer;
         Text001: Label 'Sorry, you can not change Store Location for a Posted or Approved Store Requisition!';

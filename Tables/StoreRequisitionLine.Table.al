@@ -1,4 +1,4 @@
-table 70019 "Store Requisition Line"
+table 53007 "Store Requisition Line"
 {
 
     fields
@@ -18,7 +18,7 @@ table 70019 "Store Requisition Line"
 
             trigger OnValidate()
             var
-                StoreRequisitionHeader: Record 70018;
+                StoreRequisitionHeader: Record 53006;
                 Item: Record 27;
             begin
                 IF Item.GET("Item No.") THEN BEGIN
@@ -59,7 +59,7 @@ table 70019 "Store Requisition Line"
 
             trigger OnValidate()
             var
-                StoreRequisitionHeader: Record 70018;
+                StoreRequisitionHeader: Record 53006;
                 Text002: Label 'Store Location should be selected on the header!';
                 Text001: Label 'There is no sufficient quantity for this item!';
                 Text003: Label 'Quantity to Issue cannot be greater than %1';
@@ -94,7 +94,7 @@ table 70019 "Store Requisition Line"
 
             trigger OnValidate()
             var
-                StoreRequisitionHeader: Record 70018;
+                StoreRequisitionHeader: Record 53006;
                 Text001: Label 'There is no sufficient quantity for this item!';
                 Text002: Label 'Store Location should be selected on the header!';
                 Text003: Label 'Quantity to Issue cannot be greater than %1';
@@ -147,7 +147,7 @@ table 70019 "Store Requisition Line"
 
             trigger OnValidate()
             var
-                StoreRequisitionHeader: Record 70018;
+                StoreRequisitionHeader: Record 53006;
                 Text002: Label 'Store Location should be selected on the header!';
                 Item: Record 27;
             begin
@@ -229,7 +229,7 @@ table 70019 "Store Requisition Line"
 
             trigger OnValidate()
             var
-                StoreRequisitionHeader: Record 70018;
+                StoreRequisitionHeader: Record 53006;
                 Truck: Record 5600;
             begin
                 StoreRequisitionHeader.GET("Document No.");
@@ -355,7 +355,7 @@ table 70019 "Store Requisition Line"
                 //DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID","Shortcut Dimension 3 Code");
             end;
         }
-        field(50000; "Date-H"; Date)
+        field(53000; "Date-H"; Date)
         {
             CalcFormula = Lookup("Store Requisition Header"."Request Date" WHERE("No." = FIELD("Document No.")));
             FieldClass = FlowField;
@@ -410,7 +410,7 @@ table 70019 "Store Requisition Line"
         ItemQty: Decimal;
         Text001: Label 'There is no sufficient quantity for this item!';
         DimMgt: Codeunit DimensionManagement;
-        StoreRequisitionHeader: Record 70018;
+        StoreRequisitionHeader: Record 53006;
         Text002: Label 'Store Location should be selected on the header!';
         Text003: Label 'Sorry, you can not issue more than the requested quantity %1!';
         FARec: Record 5600;

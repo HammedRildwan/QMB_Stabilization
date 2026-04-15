@@ -1,4 +1,4 @@
-enum 60083 "Closing Task Status"
+enum 53603 "Closing Task Status"
 {
     Caption = 'Closing Task Status';
     Extensible = true;

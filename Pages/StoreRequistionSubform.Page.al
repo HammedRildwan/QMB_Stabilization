@@ -1,10 +1,10 @@
-page 70035 "Store Requistion Subform"
+page 53203 "Store Requistion Subform"
 {
     AutoSplitKey = true;
     DelayedInsert = true;
     MultipleNewLines = true;
     PageType = ListPart;
-    SourceTable = 70019;
+    SourceTable = 53007;
 
     layout
     {

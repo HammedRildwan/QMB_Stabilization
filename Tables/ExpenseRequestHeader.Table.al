@@ -1,6 +1,6 @@
-table 60056 "Expense Request Header"
+table 53001 "Expense Request Header"
 {
-    LookupPageID = 70120;
+    LookupPageID = 53207;
 
     fields
     {
@@ -321,11 +321,14 @@ table 60056 "Expense Request Header"
     end;
 
     trigger OnInsert()
+    var
+        NoSeries: Codeunit "No. Series";
     begin
         IF "No." = '' THEN BEGIN
             CustomSetup.GET;
             CustomSetup.TESTFIELD("Expense Nos.");
-            NoSeriesMgt.InitSeries(CustomSetup."Expense Nos.", xRec."No. Series", 0D, "No.", "No. Series");
+            "No." := NoSeries.GetNextNo(CustomSetup."Expense Nos.");
+            "No. Series" := CustomSetup."Expense Nos.";
         END;
 
         UserSetup.GET(USERID);
@@ -343,8 +346,7 @@ table 60056 "Expense Request Header"
     end;
 
     var
-        CustomSetup: Record 60005;
-        NoSeriesMgt: Codeunit 396;
+        CustomSetup: Record 53000;
         Text002: Label 'cannot be specified without %1';
         UserSetup: Record 91;
         UserSetup2: Record 91;
@@ -354,8 +356,8 @@ table 60056 "Expense Request Header"
         GLEntry2: Record 17;
         GenJnlPost: Codeunit 231;
         TestReportPrint: Codeunit 228;
-        ExpenseRequestLine: Record 60057;
-        ExpenseRequestLine2: Record 60057;
+        ExpenseRequestLine: Record 53002;
+        ExpenseRequestLine2: Record 53002;
         BankAccount: Record 270;
         ErrorOnPosting: Label 'This document needs to be approved before posting.';
         DimMgt: Codeunit 408;

@@ -1,4 +1,4 @@
-codeunit 50000 "Document Approval Workflow"
+codeunit 53400 "Document Approval Workflow"
 {
 
     trigger OnRun()
@@ -6,13 +6,13 @@ codeunit 50000 "Document Approval Workflow"
     end;
 
     var
-        DocWorkflowHeader: Record 70100;
-        DocWorkflowLine: Record 70101;
-        DocumentApprovalEntry: Record 70102;
+        DocWorkflowHeader: Record 53010;
+        DocWorkflowLine: Record 53011;
+        DocumentApprovalEntry: Record 53012;
         Text001: Label 'Approval request has been sent.';
         Text002: Label 'The approval cannot be cancelled because it has been treated by your approver.';
         Text003: Label 'Please hold on. This document requires a prior approval.';
-        DocumentApprovalEntry2: Record 70102;
+        DocumentApprovalEntry2: Record 53012;
         UserSetup: Record 91;
         Text004: Label 'This document has been approved.';
         Text005: Label 'The document has been rejected.';

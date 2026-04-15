@@ -1,4 +1,4 @@
-page 70193 "Document Approval Entries"
+page 53214 "Document Approval Entries"
 {
     PageType = List;
     SourceTable = "Document Approval Entry";

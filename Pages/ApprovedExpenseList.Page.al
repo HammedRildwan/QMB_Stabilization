@@ -1,9 +1,9 @@
-page 70124 "Approved Expense List"
+page 53210 "Approved Expense List"
 {
     CardPageID = "Expense Card";
     Editable = false;
     PageType = List;
-    SourceTable = 60056;
+    SourceTable = 53001;
     SourceTableView = WHERE(Posted = CONST(false),
                             Status = FILTER(Approved),
                             "Not Paid" = FILTER(false),
@@ -58,7 +58,7 @@ page 70124 "Approved Expense List"
         }
         area(factboxes)
         {
-            part(Approvals; 70194)
+            part(Approvals; 53215)
             {
                 Caption = 'Approvals';
                 SubPageLink = "Document No." = FIELD("No.");
@@ -87,6 +87,6 @@ page 70124 "Approved Expense List"
 
     var
         UserSetup: Record 91;
-        ExpenseRequestHeader: Record 60056;
+        ExpenseRequestHeader: Record 53001;
 }
 

@@ -1,4 +1,4 @@
-page 70034 "Store Requisition Card"
+page 53202 "Store Requisition Card"
 {
     PageType = Card;
     SourceTable = "Store Requisition Header";

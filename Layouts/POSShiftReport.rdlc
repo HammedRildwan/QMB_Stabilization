@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="ShiftNoLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ShiftNoLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ShiftNoLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TerminalLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TerminalLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TerminalLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CashierLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>CashierLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>CashierLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="OpenedLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>OpenedLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>OpenedLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ClosedLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ClosedLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ClosedLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="FloatLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>FloatLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>FloatLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ExpectedLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>ExpectedLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>ExpectedLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DeclaredLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>DeclaredLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>DeclaredLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="VarianceLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>VarianceLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>VarianceLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalSalesLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TotalSalesLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TotalSalesLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CashSalesLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>CashSalesLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>CashSalesLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TransCountLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TransCountLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TransCountLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SummaryLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>SummaryLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>SummaryLabel</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TransactionsLabel">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>TransactionsLabel</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>TransactionsLabel</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="ShiftNo">
+          <DataField>ShiftNo</DataField>
+        </Field>
+        <Field Name="TerminalID">
+          <DataField>TerminalID</DataField>
+        </Field>
+        <Field Name="UserID">
+          <DataField>UserID</DataField>
+        </Field>
+        <Field Name="BusinessSection">
+          <DataField>BusinessSection</DataField>
+        </Field>
+        <Field Name="Status">
+          <DataField>Status</DataField>
+        </Field>
+        <Field Name="OpeningDateTime">
+          <DataField>OpeningDateTime</DataField>
+        </Field>
+        <Field Name="ClosingDateTime">
+          <DataField>ClosingDateTime</DataField>
+        </Field>
+        <Field Name="OpeningFloat">
+          <DataField>OpeningFloat</DataField>
+        </Field>
+        <Field Name="OpeningFloatFormat">
+          <DataField>OpeningFloatFormat</DataField>
+        </Field>
+        <Field Name="ExpectedCash">
+          <DataField>ExpectedCash</DataField>
+        </Field>
+        <Field Name="ExpectedCashFormat">
+          <DataField>ExpectedCashFormat</DataField>
+        </Field>
+        <Field Name="DeclaredCash">
+          <DataField>DeclaredCash</DataField>
+        </Field>
+        <Field Name="DeclaredCashFormat">
+          <DataField>DeclaredCashFormat</DataField>
+        </Field>
+        <Field Name="Variance">
+          <DataField>Variance</DataField>
+        </Field>
+        <Field Name="VarianceFormat">
+          <DataField>VarianceFormat</DataField>
+        </Field>
+        <Field Name="TotalSales">
+          <DataField>TotalSales</DataField>
+        </Field>
+        <Field Name="TotalSalesFormat">
+          <DataField>TotalSalesFormat</DataField>
+        </Field>
+        <Field Name="TotalCashSales">
+          <DataField>TotalCashSales</DataField>
+        </Field>
+        <Field Name="TotalCashSalesFormat">
+          <DataField>TotalCashSalesFormat</DataField>
+        </Field>
+        <Field Name="TransactionCount">
+          <DataField>TransactionCount</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="TransNo">
+          <DataField>TransNo</DataField>
+        </Field>
+        <Field Name="TransDate">
+          <DataField>TransDate</DataField>
+        </Field>
+        <Field Name="TransTime">
+          <DataField>TransTime</DataField>
+        </Field>
+        <Field Name="TransCustomer">
+          <DataField>TransCustomer</DataField>
+        </Field>
+        <Field Name="TransTotal">
+          <DataField>TransTotal</DataField>
+        </Field>
+        <Field Name="TransTotalFormat">
+          <DataField>TransTotalFormat</DataField>
+        </Field>
+        <Field Name="TransStatus">
+          <DataField>TransStatus</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>
