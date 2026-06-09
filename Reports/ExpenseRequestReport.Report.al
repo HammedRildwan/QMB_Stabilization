@@ -23,14 +23,22 @@ report 53500 "Expense Request Report"
             column(ExpenseType; "Expense Type") { }
             column(PaymentOption; "Payment Option") { }
             column(BankName; "Bank Name") { }
+            column(BankNo; "Bank No.") { }
             column(ChequeNo; "Cheque No.") { }
             column(Payee; Payee) { }
+            column(PayeeAccountName; "Payee Account Name") { }
+            column(PayeeAccountNumber; "Payee Account Number") { }
+            column(PayeeBankName; "Payee Bank Name") { }
             column(Purpose; Purpose) { }
             column(TotalLineAmount; "Total Line Amount") { }
             column(Posted; Posted) { }
+            column(NotPaid; "Not Paid") { }
             column(ExternalDocumentNo; "External Document No.") { }
             column(ShortcutDimension1Code; "Shortcut Dimension 1 Code") { }
             column(ShortcutDimension2Code; "Shortcut Dimension 2 Code") { }
+            column(ShortcutDimension3Code; "Shortcut Dimension 3 Code") { }
+            column(LastModifiedBy; "Last Modified By") { }
+            column(LastModifiedDateTime; "Last Modified DateTime") { }
             column(CompanyName; CompanyName) { }
             column(ReportTitle; ReportTitleLbl) { }
             column(PrintDate; Format(Today, 0, '<Day,2>/<Month,2>/<Year4>')) { }
@@ -41,12 +49,20 @@ report 53500 "Expense Request Report"
                 DataItemTableView = sorting("Document No.", "Line No.");
 
                 column(LineNo; "Line No.") { }
+                column(LineExpenseType; "Expense Type") { }
+                column(LinePayeeCode; "Payee Code") { }
+                column(LinePayeeName; "Payee Name") { }
                 column(ExpenseDescription; "Expense Description") { }
                 column(ExpenseAccountNo; "Expense Account No.") { }
                 column(AccountName; "Account Name") { }
+                column(ApprovedDocumentNo; "Approved Document No.") { }
+                column(MaintenanceCode; "Maintenance Code") { }
+                column(AssetNo; "Asset No.") { }
                 column(Amount; Amount) { }
                 column(AmountLCY; "Amount (LCY)") { }
                 column(CurrencyCode; "Currency Code") { }
+                column(WHTAmount; "WHT Amount") { }
+                column(LineRemark; Remark) { }
                 column(BudgetedAmount; "Budgeted Amount") { }
                 column(BudgetBalance; "Budget Balance") { }
             }
