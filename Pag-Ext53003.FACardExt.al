@@ -1,4 +1,4 @@
-pageextension 53003 FACardExt extends "Fixed Asset Card"
+pageextension 53030 FACardExt extends "Fixed Asset Card"
 {
     layout
     {
