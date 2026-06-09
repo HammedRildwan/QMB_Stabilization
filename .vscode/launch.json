@@ -25,6 +25,7 @@
             "request": "launch",
             "environmentType": "Sandbox",
             "environmentName": "CustomerDemo",
+           // "authentication": "AAD",
             "tenant": "2373a921-a6fe-4ee1-a785-838b208582ee",
             "schemaUpdateMode": "ForceSync",
             "startupObjectId": 22,

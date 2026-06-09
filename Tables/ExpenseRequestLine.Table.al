@@ -370,7 +370,7 @@ table 53002 "Expense Request Line"
         field(47; "Approved Document No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = IF ("Expense Type" = CONST("Vendor Invoice")) "Purch. Inv. Header"."No.";
+            TableRelation = IF ("Expense Type" = CONST("Vendor Invoice")) "Purch. Inv. Header"."No." WHERE("Expense Fully Paid" = CONST(false));
             // ELSE IF ("Expense Type" = CONST("Retirement Reimbursement")) "e-Retirement Header"."Document No" WHERE(Posted = CONST(true), "Additional Pay Amount (LCY)" = FILTER(> 0), "Staff No" = FIELD("Payee Code"));
 
             trigger OnValidate()
@@ -386,12 +386,17 @@ table 53002 "Expense Request Line"
                         BEGIN
                             PurchInvHeader.SETFILTER("No.", "Approved Document No.");
                             IF PurchInvHeader.FINDFIRST THEN BEGIN
+                                IF PurchInvHeader."Expense Fully Paid" THEN
+                                    ERROR('Posted invoice %1 has been fully paid and cannot be selected again.', PurchInvHeader."No.");
                                 "Expense Description" := COPYSTR(PurchInvHeader."Posting Description", 1, 100);
                                 PurchInvHeader.CALCFIELDS("Amount Including VAT");
                                 VALIDATE("Shortcut Dimension 1 Code", PurchInvHeader."Shortcut Dimension 1 Code");
                                 VALIDATE("Shortcut Dimension 2 Code", PurchInvHeader."Shortcut Dimension 2 Code");
                                 // VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
-                                Amount := PurchInvHeader."Amount Including VAT";
+                                IF PurchInvHeader."Expense Balance Initialized" THEN
+                                    Amount := PurchInvHeader."Expense Remaining Balance"
+                                ELSE
+                                    Amount := PurchInvHeader."Amount Including VAT";
                             END;
                         END;
 

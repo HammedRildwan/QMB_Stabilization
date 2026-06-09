@@ -50,6 +50,20 @@ report 53500 "Expense Request Report"
                 column(BudgetedAmount; "Budgeted Amount") { }
                 column(BudgetBalance; "Budget Balance") { }
             }
+
+            dataitem(DocumentApprovalEntry; "Document Approval Entry")
+            {
+                DataItemLink = "Document No." = field("No.");
+                DataItemTableView = sorting(Sequence) where("Table No." = const(53001));
+
+                column(ApprovalSequence; Sequence) { }
+                column(ApprovalRequester; Sender) { }
+                column(ApprovalApprover; Approver) { }
+                column(ApprovalStatus; Format(Status)) { }
+                column(ApprovalDocumentDate; "Document Date") { }
+                column(ApprovalDocumentAmount; "Document Amount") { }
+                column(ApprovalStatusChangeDateTime; "Status Change DateTime") { }
+            }
         }
     }
 
