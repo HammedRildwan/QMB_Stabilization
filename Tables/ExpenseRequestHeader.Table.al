@@ -681,12 +681,39 @@ table 53001 "Expense Request Header"
             ExpenseRequestLine.SETFILTER("Document No.", "No.");
             IF ExpenseRequestLine.FINDSET THEN BEGIN
                 REPEAT
-                    ExpenseRequestLine.posted := TRUE;
-                    ExpenseRequestLine.MODIFY;
+                    IF NOT ExpenseRequestLine.posted THEN BEGIN
+                        IF "Expense Type" = "Expense Type"::"Vendor Invoice" THEN
+                            UpdateVendorInvoiceRemaining(ExpenseRequestLine);
+                        ExpenseRequestLine.posted := TRUE;
+                        ExpenseRequestLine.MODIFY;
+                    END;
                 UNTIL ExpenseRequestLine.NEXT = 0;
             END;
 
         END;
+    end;
+
+    procedure UpdateVendorInvoiceRemaining(ExpLine: Record "Expense Request Line")
+    var
+        PurchInvHeader: Record "Purch. Inv. Header";
+    begin
+        IF ExpLine."Approved Document No." = '' THEN
+            EXIT;
+        IF NOT PurchInvHeader.GET(ExpLine."Approved Document No.") THEN
+            EXIT;
+
+        IF NOT PurchInvHeader."Expense Balance Initialized" THEN BEGIN
+            PurchInvHeader.CALCFIELDS("Amount Including VAT");
+            PurchInvHeader."Expense Remaining Balance" := PurchInvHeader."Amount Including VAT";
+            PurchInvHeader."Expense Balance Initialized" := TRUE;
+        END;
+
+        PurchInvHeader."Expense Remaining Balance" -= ExpLine.Amount;
+        IF PurchInvHeader."Expense Remaining Balance" <= 0 THEN BEGIN
+            PurchInvHeader."Expense Remaining Balance" := 0;
+            PurchInvHeader."Expense Fully Paid" := TRUE;
+        END;
+        PurchInvHeader.MODIFY;
     end;
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
