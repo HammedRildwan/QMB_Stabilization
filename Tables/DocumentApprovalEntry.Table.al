@@ -61,9 +61,14 @@ table 53012 "Document Approval Entry"
 
     keys
     {
-        key(Key1; Sequence)
+        key(Key1; Sequence, "Document No.")
         {
             Clustered = true;
+        }
+
+        key(Key2; "Document No.", Status, Approver)
+        {
+
         }
     }
 

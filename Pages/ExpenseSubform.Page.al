@@ -13,14 +13,6 @@ page 53209 "Expense Subform"
         {
             repeater(Group)
             {
-                field("Payee Code"; rec."Payee Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Payee Name"; rec."Payee Name")
-                {
-                    Editable = false;
-                }
                 field("Expense type"; rec."Expense type")
                 {
                     Editable = NOT ApprovedNotEditable;
@@ -29,14 +21,25 @@ page 53209 "Expense Subform"
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
+
                 field("Maintenance Expense Category"; rec."Expense Category")
                 {
-                    Editable = NOT ApprovedNotEditable;
+                    Editable = MaintExpenseCategoryEditable;
+                    Caption = 'Maintenance Expense Category';
                 }
                 field("Expense Description"; rec."Expense Description")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
+                field("Payee Code"; Rec."Payee Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Payee Name"; Rec."Payee Name")
+                {
+                    Editable = false;
+                }
+
                 field("Expense Account No."; rec."Expense Account No.")
                 {
                     Editable = NOT ApprovedNotEditable;
@@ -47,23 +50,29 @@ page 53209 "Expense Subform"
                 }
                 field("Maintenance Code"; rec."Maintenance Code")
                 {
-                    Editable = NOT ApprovedNotEditable;
+                    Visible = false;
+
                 }
                 field("Asset No."; rec."Asset No.")
                 {
-                    Editable = NOT ApprovedNotEditable;
+                    Editable = MaintExpenseCategoryEditable;
                 }
                 field(Amount; rec.Amount)
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Currency Code"; Rec."Currency Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+
+                field("Exchange Rate"; rec."Exchange Rate")
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
                 field("Amount (LCY)"; rec."Amount (LCY)")
                 {
                     Editable = false;
-                }
-                field("Exchange Rate"; rec."Exchange Rate")
-                {
-                    Editable = NOT ApprovedNotEditable;
                 }
                 field("WHT Rate"; rec."WHT Rate")
                 {
@@ -81,14 +90,6 @@ page 53209 "Expense Subform"
                 {
                     Editable = false;
                 }
-                field("Budget Balance"; rec."Budget Balance")
-                {
-                    Editable = false;
-                }
-                field("G/L Balance"; rec."G/L Balance")
-                {
-                    Editable = false;
-                }
                 field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                     Editable = NOT ApprovedNotEditable;
@@ -99,16 +100,23 @@ page 53209 "Expense Subform"
                 }
                 field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
+                    Visible = false;
                     Editable = NOT ApprovedNotEditable;
+                }
+
+                field("Budget Balance"; rec."Budget Balance")
+                {
+                    Editable = false;
+                }
+                field("G/L Balance"; rec."G/L Balance")
+                {
+                    Editable = false;
                 }
                 field(Remark; rec.Remark)
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
-                field("Currency Code"; rec."Currency Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
+
                 field(posted; rec.posted)
                 {
                     Editable = false;
@@ -129,13 +137,22 @@ page 53209 "Expense Subform"
         // ELSE
         //  AmountEditable := TRUE;
 
-        IF rec."Document No." <> '' THEN BEGIN
+        /*IF rec."Document No." <> '' THEN BEGIN
             ExpenseRequestHeader.GET(rec."Document No.");
             IF ExpenseRequestHeader.Status = ExpenseRequestHeader.Status::Approved THEN
                 ApprovedNotEditable := TRUE
             ELSE
                 ApprovedNotEditable := FALSE;
-        END;
+        END;*/
+        MaintExpenseCategoryEditable := FALSE;
+        PayeeEditable := FALSE;
+        IF rec."Expense type" = rec."Expense Type"::"Direct Expense" THEN
+            PayeeEditable := TRUE;
+        If rec."Expense type" = rec."Expense Type"::"Maintenance Expenses" THEN
+            MaintExpenseCategoryEditable := TRUE;
+
+
+
     end;
 
     trigger OnModifyRecord(): Boolean
@@ -162,5 +179,7 @@ page 53209 "Expense Subform"
         AmountEditable: Boolean;
         ExpenseRequestHeader2: Record 53001;
         ApprovedNotEditable: Boolean;
+        MaintExpenseCategoryEditable: Boolean;
+        PayeeEditable: Boolean;
 }
 

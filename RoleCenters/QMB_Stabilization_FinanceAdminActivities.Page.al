@@ -29,7 +29,7 @@ page 53217 "QMB Stab. Finance Admin Act."
                 {
                     ApplicationArea = All;
                     Caption = 'Pending Approval';
-                    DrillDownPageId = "Expense List";
+                    DrillDownPageId = "Expenses Pending Approval";
                     ToolTip = 'Number of Payment requests pending approval.';
                     Style = Attention;
                     StyleExpr = Rec."Pending Expense Approvals" > 0;
@@ -47,7 +47,7 @@ page 53217 "QMB Stab. Finance Admin Act."
                 {
                     ApplicationArea = All;
                     Caption = 'Posted';
-                    DrillDownPageId = "Approved Expense List";
+                    DrillDownPageId = "Posted Expense List";
                     ToolTip = 'Number of posted payment requests.';
                 }
 

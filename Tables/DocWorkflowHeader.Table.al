@@ -3,7 +3,7 @@ table 53010 "Doc. Workflow Header"
 
     fields
     {
-        field(1; "User ID"; Code[20])
+        field(1; "User ID"; Code[50])
         {
             DataClassification = ToBeClassified;
             TableRelation = "User Setup"."User ID";

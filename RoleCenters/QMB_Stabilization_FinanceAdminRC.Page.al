@@ -83,10 +83,19 @@ page 53218 "QMB Stab. Finance Admin RC"
                 action(ExpenseRequests)
                 {
                     ApplicationArea = All;
-                    Caption = 'Expense Requests';
+                    Caption = 'Payment Requests';
                     Image = Journals;
                     RunObject = page "Expense List";
                     ToolTip = 'View and manage payment requests.';
+                }
+                action(PendingApprovals)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Pending Approvals';
+                    Image = Approvals;
+                    RunObject = page "Expenses Pending Approval";
+                    ToolTip = 'View payment requests pending approval.';
+
                 }
                 action(ApprovedExpenses)
                 {
@@ -101,7 +110,7 @@ page 53218 "QMB Stab. Finance Admin RC"
                     ApplicationArea = All;
                     Caption = 'Posted Payments';
                     Image = PostedOrder;
-                    RunObject = page "Approved Expense List";
+                    RunObject = page "Posted Expense List";
                     ToolTip = 'View posted payment requests.';
                 }
             }

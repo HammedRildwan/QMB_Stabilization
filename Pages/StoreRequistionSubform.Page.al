@@ -35,12 +35,15 @@ page 53203 "Store Requistion Subform"
                 {
                     Editable = false;
                 }
-                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
-                {
-                }
-                field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
                 {
                     ShowMandatory = true;
+
+                }
+                field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
+                {
+                    ShowMandatory = true;
+
                 }
                 field("Maintenance Code"; rec."Maintenance Code")
                 {

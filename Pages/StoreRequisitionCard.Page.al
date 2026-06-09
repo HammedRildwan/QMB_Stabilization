@@ -24,12 +24,24 @@ page 53202 "Store Requisition Card"
                 field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
                     ApplicationArea = All;
-                    Importance = Additional;
+                    //Importance = Additional;
+                    trigger OnValidate()
+                    begin
+                        if Rec."Shortcut Dimension 2 Code" <> xRec."Shortcut Dimension 1 Code" then begin
+                            StoreRequisitionLine.SetFilter("Document No.", Rec."No.");
+                            if StoreRequisitionLine.FindSet() then begin
+                                repeat
+                                    StoreRequisitionLine.Validate("Shortcut Dimension 1 Code", Rec."Shortcut Dimension 1 Code");
+                                    StoreRequisitionLine.Modify();
+                                until StoreRequisitionLine.Next() = 0;
+                            end;
+                        end;
+                    end;
                 }
                 field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
                     ApplicationArea = All;
-                    Importance = Additional;
+                    //Importance = Additional;
 
                     trigger OnValidate()
                     begin
@@ -103,6 +115,8 @@ page 53202 "Store Requisition Card"
                 field("Not Issued"; Rec."Not Issued")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field(Status; Rec.Status)
                 {
@@ -171,8 +185,8 @@ page 53202 "Store Requisition Card"
                         Error(Text005)
                     else begin
                         repeat
+                            StoreRequisitionLine.TestField("Shortcut Dimension 1 Code");
                             StoreRequisitionLine.TestField("Shortcut Dimension 2 Code");
-                            StoreRequisitionLine.TestField("Shortcut Dimension 3 Code");
                             if Rec."Request Type" = Rec."Request Type"::Maintenance then
                                 StoreRequisitionLine.TestField("Fixed Asset No.");
                             StoreRequisitionLine.TestField("Location Code");
@@ -232,8 +246,8 @@ page 53202 "Store Requisition Card"
                         Error(Text005)
                     else begin
                         repeat
+                            StoreRequisitionLine.TestField("Shortcut Dimension 1 Code");
                             StoreRequisitionLine.TestField("Shortcut Dimension 2 Code");
-                            StoreRequisitionLine.TestField("Shortcut Dimension 3 Code");
                             if Rec."Request Type" = Rec."Request Type"::Maintenance then
                                 StoreRequisitionLine.TestField("Fixed Asset No.");
                             StoreRequisitionLine.TestField("Location Code");

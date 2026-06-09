@@ -16,12 +16,12 @@ table 53001 "Expense Request Header"
                     ERROR('Date cannot be greater than today');
             end;
         }
-        field(4; Requester; Text[20])
+        field(4; Requester; Text[50])
         {
             Editable = true;
             TableRelation = "User Setup"."User ID";
         }
-        field(7; "No. Series"; Code[10])
+        field(7; "No. Series"; Code[20])
         {
             TableRelation = "No. Series".Code;
         }
@@ -43,8 +43,8 @@ table 53001 "Expense Request Header"
         field(11; "Payment Option"; Option)
         {
             DataClassification = ToBeClassified;
-            OptionCaption = ' ,Cash,Cheque';
-            OptionMembers = " ",Cash,Cheque;
+            OptionCaption = ' ,Cash,Cheque,Bank Transfer';
+            OptionMembers = " ",Cash,Cheque,BankTransfer;
         }
         field(12; "Bank No."; Code[10])
         {

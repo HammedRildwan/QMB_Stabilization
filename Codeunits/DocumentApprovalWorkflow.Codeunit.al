@@ -39,13 +39,14 @@ codeunit 53400 "Document Approval Workflow"
     begin
         //create approval entries
         DocumentApprovalEntry.Sequence := 0;
+        DocWorkflowHeader.GET(USERID, TableID);
         DocWorkflowHeader.SETRANGE("User ID", USERID);
         DocWorkflowHeader.SETRANGE("Table No.", TableID);
-        DocWorkflowHeader.SETFILTER("Approval Limit", '>=%1', Limit);
+        //DocWorkflowHeader.SETFILTER("Approval Limit", '>=%1', Limit);
         IF DocWorkflowHeader.FINDFIRST THEN;
         DocWorkflowLine.SETRANGE("Sender User ID", DocWorkflowHeader."User ID");
         DocWorkflowLine.SETRANGE("Table No.", DocWorkflowHeader."Table No.");
-        DocWorkflowLine.SETRANGE("Approval Limit", DocWorkflowHeader."Approval Limit");
+        //DocWorkflowLine.SETRANGE("Approval Limit", DocWorkflowHeader."Approval Limit");
 
         IF DocWorkflowLine.FINDSET THEN BEGIN
             REPEAT
@@ -61,7 +62,9 @@ codeunit 53400 "Document Approval Workflow"
                 DocumentApprovalEntry."Document Description" := COPYSTR(DocDesc, 1, 150);
                 DocumentApprovalEntry.INSERT;
             UNTIL DocWorkflowLine.NEXT = 0;
-        END;
+            Message(Text001);
+        END ELSE
+            ERROR(Text014);
 
         //make first approval entry visible for approval and send email to approver
         DocumentApprovalEntry.RESET;

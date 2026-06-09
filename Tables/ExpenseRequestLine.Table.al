@@ -335,9 +335,7 @@ table 53002 "Expense Request Line"
         field(29; "Payee Code"; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = IF ("Expense Type" = FILTER("Direct Expense")) "G/L Account"."No." WHERE(Blocked = Filter(false),
-                                                                                                    "Direct Posting" = CONST(true))
-            ELSE IF ("Expense Type" = FILTER("Maintenance Expenses")) "Fixed Asset"."No." WHERE(Blocked = Filter(false))
+            TableRelation = IF ("Expense Type" = FILTER("Direct Expense" | "Maintenance Expenses")) Employee."No."
             ELSE IF ("Expense Type" = CONST("Vendor Invoice")) Vendor."No." WHERE(Blocked = CONST(" "));
 
             trigger OnValidate()
@@ -347,9 +345,9 @@ table 53002 "Expense Request Line"
                 Vendor: Record Vendor;
 
             begin
-                IF ("Expense Type" = "Expense Type"::"Direct Expense") THEN BEGIN
-                    GLAccount.GET("Payee Code");
-                    "Payee Name" := GLAccount.Name;
+                IF ("Expense Type" = "Expense Type"::"Direct Expense") OR ("Expense Type" = "Expense Type"::"Maintenance Expenses") THEN BEGIN
+                    Employee.GET("Payee Code");
+                    "Payee Name" := Employee.FullName();
                 END ELSE IF ("Expense Type" = "Expense Type"::"Vendor Invoice") THEN BEGIN
                     Vendor.GET("Payee Code");
                     "Payee Name" := Vendor.Name;
@@ -366,6 +364,7 @@ table 53002 "Expense Request Line"
         field(30; "Payee Name"; Text[150])
         {
             DataClassification = ToBeClassified;
+            Editable = false;
         }
         field(47; "Approved Document No."; Code[20])
         {
@@ -390,7 +389,7 @@ table 53002 "Expense Request Line"
                                 PurchInvHeader.CALCFIELDS("Amount Including VAT");
                                 VALIDATE("Shortcut Dimension 1 Code", PurchInvHeader."Shortcut Dimension 1 Code");
                                 VALIDATE("Shortcut Dimension 2 Code", PurchInvHeader."Shortcut Dimension 2 Code");
-                                // VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
+                                VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
                                 Amount := PurchInvHeader."Amount Including VAT";
                             END;
                         END;
@@ -456,6 +455,8 @@ table 53002 "Expense Request Line"
         GLBudgetEntry: Record "G/L Budget Entry";
         GLEntry: Record "G/L Entry";
         VendorPostingGroup: Record "Vendor Posting Group";
+        Employee: Record Employee;
+        Vendor: Record Vendor;
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin

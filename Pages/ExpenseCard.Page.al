@@ -24,6 +24,7 @@ page 53208 "Expense Card"
                 }
                 field("Expense Type"; rec."Expense Type")
                 {
+                    Visible = false;
                 }
                 field(Status; rec.Status)
                 {
@@ -65,6 +66,7 @@ page 53208 "Expense Card"
                 }
                 field("Shortcut Dimension 3 Code"; rec."Shortcut Dimension 3 Code")
                 {
+                    Visible = false;
                 }
                 field("Last Modified DateTime"; rec."Last Modified DateTime")
                 {
@@ -76,6 +78,7 @@ page 53208 "Expense Card"
                 }
                 field("Not Paid"; rec."Not Paid")
                 {
+                    Editable = false;
                 }
             }
             part(Lines; 53209)
@@ -109,15 +112,19 @@ page 53208 "Expense Card"
                 Caption = 'Send Approval Request';
                 Image = SendApprovalRequest;
                 Promoted = true;
+                Enabled = (Rec.Status = Rec.Status::" ") OR (Rec.Status = Rec.Status::Rejected);
                 PromotedCategory = Process;
                 PromotedOnly = true;
 
                 trigger OnAction()
                 begin
+
+
                     rec.TESTFIELD(Purpose);
                     rec.TESTFIELD(Date);
-                    rec.TESTFIELD("Expense Type");
+                    //rec.TESTFIELD("Expense Type");
                     rec.CALCFIELDS("Total Line Amount");
+                    rec.TestField(Purpose);
                     IF rec."Total Line Amount" = 0 THEN
                         ERROR('Line Amount must have value!');
 
@@ -130,6 +137,7 @@ page 53208 "Expense Card"
                     DocumentApprovalWorkflow.SendApprovalRequest(RecID.TABLENO, rec."No.", RecID, rec."Total Line Amount", rec.Date, rec."Total Line Amount", STRSUBSTNO('Expense Approval Requisition for %1', rec.Payee));
                     rec.Status := rec.Status::"Pending Approval";
                     rec.MODIFY;
+                    CurrPage.CLOSE
                 end;
             }
             action(CancelApprovalRequest)
@@ -137,6 +145,7 @@ page 53208 "Expense Card"
                 Caption = 'Cancel Approval Request';
                 Ellipsis = true;
                 Image = Cancel;
+                Enabled = Rec.Status = Rec.Status::"Pending Approval";
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
@@ -158,8 +167,10 @@ page 53208 "Expense Card"
             {
                 Caption = 'Approve';
                 Image = Approve;
+                Enabled = Rec.Status = Rec.Status::"Pending Approval";
+                Promoted = true;
                 //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
+                PromotedCategory = Process;
 
                 trigger OnAction()
                 var
@@ -180,6 +191,7 @@ page 53208 "Expense Card"
                     IF DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
                         rec.Status := rec.Status::Approved;
                         rec.MODIFY;
+                        CurrPage.CLOSE;
                     END;
                 end;
             }
@@ -187,8 +199,10 @@ page 53208 "Expense Card"
             {
                 Caption = 'Reject';
                 Image = Reject;
+                Enabled = Rec.Status = Rec.Status::"Pending Approval";
                 //The property 'PromotedCategory' can only be set if the property 'Promoted' is set to 'true'
-                //PromotedCategory = Process;
+                Promoted = true;
+                PromotedCategory = Process;
 
                 trigger OnAction()
                 var
@@ -201,6 +215,7 @@ page 53208 "Expense Card"
                     IF NOT DocumentApprovalWorkflow.ApprovalStatusCheck(RecID.TABLENO, rec."No.", RecID) THEN BEGIN
                         rec.Status := rec.Status::Rejected;
                         rec.MODIFY;
+                        CurrPage.CLOSE;
                     END;
                 end;
             }

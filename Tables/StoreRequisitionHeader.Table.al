@@ -88,7 +88,7 @@ table 53006 "Store Requisition Header"
         field(16; "Asset No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = IF ("Maintenance Type" = FILTER("Other Assets")) "Fixed Asset"."No.";
+            TableRelation = "Fixed Asset"."No.";
 
             trigger OnValidate()
             begin

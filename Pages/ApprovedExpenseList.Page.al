@@ -4,10 +4,8 @@ page 53210 "Approved Expense List"
     Editable = false;
     PageType = List;
     SourceTable = 53001;
-    SourceTableView = WHERE(Posted = CONST(false),
-                            Status = FILTER(Approved),
-                            "Not Paid" = FILTER(false),
-                            "Expense Type" = FILTER('Maintenance Expense' | ' '));
+    SourceTableView = WHERE(Posted = CONST(false), Status = FILTER(Approved)
+                            );
 
     layout
     {

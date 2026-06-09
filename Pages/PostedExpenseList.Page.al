@@ -1,11 +1,11 @@
-page 53207 "Expense List"
+page 53233 "Posted Expense List"
 {
+    Caption = 'Posted Expense List';
     CardPageID = "Expense Card";
-    DeleteAllowed = false;
     Editable = false;
     PageType = List;
     SourceTable = 53001;
-    SourceTableView = WHERE(Posted = CONST(false));
+    SourceTableView = WHERE(Posted = CONST(true), Status = FILTER(Approved));
 
     layout
     {
@@ -31,7 +31,16 @@ page 53207 "Expense List"
                 field("Total Line Amount"; rec."Total Line Amount")
                 {
                 }
+                field("Shortcut Dimension 1 Code"; rec."Shortcut Dimension 1 Code")
+                {
+                }
                 field(Purpose; rec.Purpose)
+                {
+                }
+                field("Bank No."; rec."Bank No.")
+                {
+                }
+                field("Bank Name"; rec."Bank Name")
                 {
                 }
                 field("Shortcut Dimension 2 Code"; rec."Shortcut Dimension 2 Code")
@@ -67,13 +76,15 @@ page 53207 "Expense List"
 
     trigger OnOpenPage()
     begin
-        //UserSetup.GET(USERID);
-        //rec.FilterGroup(10);
-        //rec.SetRange(Requester, UserSetup."User ID");
-        //rec.FilterGroup(0);
+        /*UserSetup.GET(USERID);
+         FILTERGROUP(10);
+         SETRANGE(Requester,UserSetup."User ID");
+         FILTERGROUP(0);*/
+
     end;
 
     var
         UserSetup: Record 91;
+        ExpenseRequestHeader: Record 53001;
 }
 

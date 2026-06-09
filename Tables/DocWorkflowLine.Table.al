@@ -3,7 +3,7 @@ table 53011 "Doc. Workflow Line"
 
     fields
     {
-        field(1; "Sender User ID"; Code[20])
+        field(1; "Sender User ID"; Code[50])
         {
             DataClassification = ToBeClassified;
         }
@@ -12,7 +12,7 @@ table 53011 "Doc. Workflow Line"
             BlankZero = true;
             DataClassification = ToBeClassified;
         }
-        field(3; Approver; Code[20])
+        field(3; Approver; Code[50])
         {
             DataClassification = ToBeClassified;
             TableRelation = "User Setup"."User ID";

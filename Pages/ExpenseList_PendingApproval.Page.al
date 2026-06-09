@@ -1,8 +1,9 @@
-page 53207 "Expense List"
+page 53248 "Expenses Pending Approval"
 {
     CardPageID = "Expense Card";
     DeleteAllowed = false;
     Editable = false;
+    //Entitlements = "Dynamics 365 Business Central Premium";
     PageType = List;
     SourceTable = 53001;
     SourceTableView = WHERE(Posted = CONST(false));
@@ -68,9 +69,9 @@ page 53207 "Expense List"
     trigger OnOpenPage()
     begin
         //UserSetup.GET(USERID);
-        //rec.FilterGroup(10);
-        //rec.SetRange(Requester, UserSetup."User ID");
-        //rec.FilterGroup(0);
+        rec.FilterGroup(10);
+        rec.SetRange(Status, rec.Status::"Pending Approval");
+        rec.FilterGroup(0);
     end;
 
     var
