@@ -1,5 +1,7 @@
 page 53210 "Approved Expense List"
 {
+    ApplicationArea = All;
+    UsageCategory = Lists;
     CardPageID = "Expense Card";
     Editable = false;
     PageType = List;

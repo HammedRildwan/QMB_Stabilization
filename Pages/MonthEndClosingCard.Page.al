@@ -1,5 +1,6 @@
 page 53221 "Month-End Closing Card"
 {
+    ApplicationArea = All;
     Caption = 'Month-End Closing';
     PageType = Document;
     SourceTable = "Month-End Closing Header";

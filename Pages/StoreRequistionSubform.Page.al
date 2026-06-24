@@ -1,5 +1,6 @@
 page 53203 "Store Requistion Subform"
 {
+    ApplicationArea = All;
     AutoSplitKey = true;
     DelayedInsert = true;
     MultipleNewLines = true;

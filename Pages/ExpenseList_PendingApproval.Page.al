@@ -1,5 +1,7 @@
 page 53248 "Expenses Pending Approval"
 {
+    ApplicationArea = All;
+    UsageCategory = Lists;
     CardPageID = "Expense Card";
     DeleteAllowed = false;
     Editable = false;

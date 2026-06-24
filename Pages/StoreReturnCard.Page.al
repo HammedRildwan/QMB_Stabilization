@@ -1,5 +1,6 @@
 page 53205 "Store Return Card"
 {
+    ApplicationArea = All;
     PageType = Card;
     SourceTable = "Store Return Header";
 
@@ -80,6 +81,27 @@ page 53205 "Store Return Card"
 
     actions
     {
+        area(reporting)
+        {
+            action(PrintStoreReturn)
+            {
+                ApplicationArea = All;
+                Caption = 'Print';
+                Image = Print;
+                Promoted = true;
+                PromotedCategory = Report;
+                PromotedOnly = true;
+                ToolTip = 'Print the store return report for the current document.';
+
+                trigger OnAction()
+                var
+                    StoreReturnHeaderPrint: Record "Store Return Header";
+                begin
+                    StoreReturnHeaderPrint.SetRange("No.", Rec."No.");
+                    Report.Run(Report::"Store Return Report", true, false, StoreReturnHeaderPrint);
+                end;
+            }
+        }
         area(processing)
         {
             action(SendApprovalRequest)

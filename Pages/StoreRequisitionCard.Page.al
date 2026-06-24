@@ -1,5 +1,6 @@
 page 53202 "Store Requisition Card"
 {
+    ApplicationArea = All;
     PageType = Card;
     SourceTable = "Store Requisition Header";
 
@@ -152,6 +153,27 @@ page 53202 "Store Requisition Card"
 
     actions
     {
+        area(reporting)
+        {
+            action(PrintStoreRequisition)
+            {
+                ApplicationArea = All;
+                Caption = 'Print';
+                Image = Print;
+                Promoted = true;
+                PromotedCategory = Report;
+                PromotedOnly = true;
+                ToolTip = 'Print the store requisition report for the current document.';
+
+                trigger OnAction()
+                var
+                    StoreRequisitionHeader: Record "Store Requisition Header";
+                begin
+                    StoreRequisitionHeader.SetRange("No.", Rec."No.");
+                    Report.Run(Report::"Store Requisition Report", true, false, StoreRequisitionHeader);
+                end;
+            }
+        }
         area(processing)
         {
             action(SendApprovalRequest)

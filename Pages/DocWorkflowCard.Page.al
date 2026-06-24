@@ -1,5 +1,6 @@
 page 53212 "Doc. Workflow Card"
 {
+    ApplicationArea = All;
     PageType = Card;
     SourceTable = 53010;
 

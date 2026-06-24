@@ -1,5 +1,7 @@
 page 53211 "Doc. Workflow List"
 {
+    ApplicationArea = All;
+    UsageCategory = Administration;
     CardPageID = "Doc. Workflow Card";
     Editable = false;
     PageType = List;

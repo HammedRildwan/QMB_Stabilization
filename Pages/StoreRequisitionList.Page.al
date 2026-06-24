@@ -1,5 +1,7 @@
 page 53201 "Store Requisition List"
 {
+    ApplicationArea = All;
+    UsageCategory = Documents;
     CardPageID = "Store Requisition Card";
     Editable = false;
     PageType = List;

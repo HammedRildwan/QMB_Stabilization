@@ -1,5 +1,6 @@
 page 53208 "Expense Card"
 {
+    ApplicationArea = All;
     DeleteAllowed = false;
     PageType = Card;
     SourceTable = 53001;
@@ -105,6 +106,27 @@ page 53208 "Expense Card"
 
     actions
     {
+        area(reporting)
+        {
+            action(PrintExpenseRequest)
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Print';
+                Image = Print;
+                Promoted = true;
+                PromotedCategory = Report;
+                PromotedOnly = true;
+                ToolTip = 'Print the expense request report for the current document.';
+
+                trigger OnAction()
+                var
+                    ExpenseRequestHeaderPrint: Record "Expense Request Header";
+                begin
+                    ExpenseRequestHeaderPrint.SetRange("No.", rec."No.");
+                    Report.Run(Report::"Expense Request Report", true, false, ExpenseRequestHeaderPrint);
+                end;
+            }
+        }
         area(processing)
         {
             action(SendApprovalRequest)

@@ -1,5 +1,7 @@
 page 53214 "Document Approval Entries"
 {
+    ApplicationArea = All;
+    UsageCategory = History;
     PageType = List;
     SourceTable = "Document Approval Entry";
 

@@ -1,5 +1,7 @@
 page 53204 "Store Return List"
 {
+    ApplicationArea = All;
+    UsageCategory = Documents;
     CardPageID = "Store Return Card";
     Editable = false;
     PageType = List;

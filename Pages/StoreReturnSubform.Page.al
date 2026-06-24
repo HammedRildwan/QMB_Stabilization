@@ -1,5 +1,6 @@
 page 53206 "Store Return Subform"
 {
+    ApplicationArea = All;
     AutoSplitKey = true;
     DelayedInsert = true;
     MultipleNewLines = true;

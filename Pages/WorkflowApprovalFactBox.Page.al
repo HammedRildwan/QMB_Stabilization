@@ -1,5 +1,6 @@
 page 53215 "Workflow Approval FactBox"
 {
+    ApplicationArea = All;
     PageType = CardPart;
     SourceTable = 53012;
 

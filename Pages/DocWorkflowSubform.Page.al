@@ -1,5 +1,6 @@
 page 53213 "Doc. Workflow Subform"
 {
+    ApplicationArea = All;
     PageType = ListPart;
     SourceTable = 53011;
 

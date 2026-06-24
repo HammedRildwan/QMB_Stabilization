@@ -19,6 +19,7 @@ permissionset 53700 "QMB Stab. Objects"
         table "Month-End Checklist Template" = X,
         table "Month-End Closing Header" = X,
         table "Month-End Closing Line" = X,
+        table "Unrecon. Bank Legder Schedule" = X,
         // Table Data
         tabledata "Custom Setup" = RIMD,
         tabledata "Document Approval Entry" = RIMD,
@@ -34,6 +35,7 @@ permissionset 53700 "QMB Stab. Objects"
         tabledata "Month-End Checklist Template" = RIMD,
         tabledata "Month-End Closing Header" = RIMD,
         tabledata "Month-End Closing Line" = RIMD,
+        tabledata "Unrecon. Bank Legder Schedule" = RIMD,
         // Codeunits
         codeunit "Document Approval Workflow" = X,
         codeunit "Month-End Closing Mgt." = X,
@@ -47,6 +49,8 @@ permissionset 53700 "QMB Stab. Objects"
         page "Expense List" = X,
         page "Expense Subform" = X,
         page "Approved Expense List" = X,
+        page "Expenses Pending Approval" = X,
+        page "Posted Expense List" = X,
         page "Store Requisition Card" = X,
         page "Store Requisition List" = X,
         page "Store Requistion Subform" = X,
@@ -67,5 +71,7 @@ permissionset 53700 "QMB Stab. Objects"
         report "Expense Request Report" = X,
         report "Store Requisition Report" = X,
         report "Store Return Report" = X,
-        report "Approval Status Report" = X;
+        report "Approval Status Report" = X,
+        // XmlPorts
+        xmlport "Import Bank Statement" = X;
 }

@@ -1,5 +1,7 @@
 page 53207 "Expense List"
 {
+    ApplicationArea = All;
+    UsageCategory = Documents;
     CardPageID = "Expense Card";
     DeleteAllowed = false;
     Editable = false;

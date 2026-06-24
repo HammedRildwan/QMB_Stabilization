@@ -1,5 +1,6 @@
 page 53209 "Expense Subform"
 {
+    ApplicationArea = All;
     AutoSplitKey = true;
     CardPageID = "Expense Card";
     DelayedInsert = true;
@@ -17,6 +18,14 @@ page 53209 "Expense Subform"
                 {
                     Editable = NOT ApprovedNotEditable;
                 }
+                field("Payee Code"; Rec."Payee Code")
+                {
+                    Editable = NOT ApprovedNotEditable;
+                }
+                field("Payee Name"; Rec."Payee Name")
+                {
+                    Editable = false;
+                }
                 field("Posted Document No."; rec."Approved Document No.")
                 {
                     Editable = NOT ApprovedNotEditable;
@@ -30,14 +39,6 @@ page 53209 "Expense Subform"
                 field("Expense Description"; rec."Expense Description")
                 {
                     Editable = NOT ApprovedNotEditable;
-                }
-                field("Payee Code"; Rec."Payee Code")
-                {
-                    Editable = NOT ApprovedNotEditable;
-                }
-                field("Payee Name"; Rec."Payee Name")
-                {
-                    Editable = false;
                 }
 
                 field("Expense Account No."; rec."Expense Account No.")
