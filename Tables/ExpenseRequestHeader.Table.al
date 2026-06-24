@@ -420,6 +420,12 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") AND (ExpenseRequestLine."Approved Document No." <> '') THEN BEGIN
+                    GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
+                    GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                    GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
@@ -641,6 +647,12 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") AND (ExpenseRequestLine."Approved Document No." <> '') THEN BEGIN
+                    GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
+                    GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                    GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")

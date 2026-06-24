@@ -20,6 +20,23 @@ table 53002 "Expense Request Line"
             Editable = true;
             OptionCaption = ' ,Direct Expense,Vendor Invoice,Maintenance Expenses';
             OptionMembers = " ","Direct Expense","Vendor Invoice","Maintenance Expenses";
+
+            trigger OnValidate()
+            begin
+                IF "Expense Type" <> xRec."Expense Type" THEN BEGIN
+                    "Payee Code" := '';
+                    "Payee Name" := '';
+                    "Approved Document No." := '';
+                    "Expense Account No." := '';
+                    "Account Name" := '';
+                    "Expense Description" := '';
+                    Amount := 0;
+                    "Amount (LCY)" := 0;
+                    "Expense Category" := "Expense Category"::" ";
+                    "Asset No." := '';
+                    "Maintenance Code" := '';
+                END;
+            end;
         }
         field(4; "Expense Account No."; Code[10])
         {
@@ -369,7 +386,7 @@ table 53002 "Expense Request Line"
         field(47; "Approved Document No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = IF ("Expense Type" = CONST("Vendor Invoice")) "Purch. Inv. Header"."No." WHERE("Expense Fully Paid" = CONST(false));
+            TableRelation = IF ("Expense Type" = CONST("Vendor Invoice")) "Purch. Inv. Header"."No." WHERE("Expense Fully Paid" = CONST(false), "Pay-to Vendor No." = FIELD("Payee Code"));
             // ELSE IF ("Expense Type" = CONST("Retirement Reimbursement")) "e-Retirement Header"."Document No" WHERE(Posted = CONST(true), "Additional Pay Amount (LCY)" = FILTER(> 0), "Staff No" = FIELD("Payee Code"));
 
             trigger OnValidate()
