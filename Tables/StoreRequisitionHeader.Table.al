@@ -462,6 +462,7 @@ table 53006 "Store Requisition Header"
         DeprBookCode: Code[10];
         FAMaintDocNo: Code[20];
         MaintLineNo: Integer;
+        MaintAmount: Decimal;
     begin
         FAMaintDocNo := COPYSTR('FAM_' + "No.", 1, MAXSTRLEN(FAMaintDocNo));
 
@@ -489,8 +490,16 @@ table 53006 "Store Requisition Header"
 
                     DeprBookCode := GetAssetDeprBook(StoreRequisitionLine."Fixed Asset No.");
 
-                    ItemLedgEntry2.CALCFIELDS("Cost Amount (Actual)");
-                    IF ItemLedgEntry2."Cost Amount (Actual)" <> 0 THEN BEGIN
+                    // Actual cost may not be finalized yet at posting time (deferred cost adjustment).
+                    // Fall back to the expected cost, then to the requisition line value, so the
+                    // Maintenance Ledger Entry is still created for the fixed asset.
+                    ItemLedgEntry2.CALCFIELDS("Cost Amount (Actual)", "Cost Amount (Expected)");
+                    MaintAmount := ItemLedgEntry2."Cost Amount (Actual)";
+                    IF MaintAmount = 0 THEN
+                        MaintAmount := ItemLedgEntry2."Cost Amount (Expected)";
+                    IF MaintAmount = 0 THEN
+                        MaintAmount := StoreRequisitionLine."Unit Price" * StoreRequisitionLine."Quantity Issued";
+                    IF MaintAmount <> 0 THEN BEGIN
                         MaintLineNo += 10000;
                         GenJnlLine.INIT;
                         GenJnlLine."Line No." := MaintLineNo;
@@ -503,7 +512,7 @@ table 53006 "Store Requisition Header"
                         GenJnlLine.VALIDATE("FA Posting Type", GenJnlLine."FA Posting Type"::Maintenance);
                         GenJnlLine.VALIDATE("Maintenance Code", StoreRequisitionLine."Maintenance Code");
                         GenJnlLine.Description := COPYSTR('Maintenance for ' + StoreRequisitionLine."Fixed Asset No.", 1, MAXSTRLEN(GenJnlLine.Description));
-                        GenJnlLine.VALIDATE(Amount, ABS(ItemLedgEntry2."Cost Amount (Actual)"));
+                        GenJnlLine.VALIDATE(Amount, ABS(MaintAmount));
                         GenJnlLine."Bal. Account Type" := GenJnlLine."Bal. Account Type"::"G/L Account";
                         GenJnlLine.VALIDATE("Bal. Account No.", InvAdjmtAccount);
                         GenJnlLine.VALIDATE("Shortcut Dimension 1 Code", StoreRequisitionLine."Shortcut Dimension 1 Code");
