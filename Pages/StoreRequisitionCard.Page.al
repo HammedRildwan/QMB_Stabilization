@@ -12,6 +12,7 @@ page 53202 "Store Requisition Card"
             {
                 field("No."; Rec."No.")
                 {
+                    Editable = false;
                     ApplicationArea = All;
                 }
                 field("Request Date"; Rec."Request Date")
@@ -74,6 +75,11 @@ page 53202 "Store Requisition Card"
                         end;
 
                     end;
+                }
+                field("Gen. Prod. Posting Group"; Rec."Gen. Prod. Posting Group")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the Gen. Prod. Posting Group used together with the Store/Maintenance Gen. Bus. Posting Group to determine the expense (Inventory Adjmt.) account when posting, overriding the item''s posting group.';
                 }
                 field("Maintenance Type"; Rec."Maintenance Type")
                 {
@@ -301,6 +307,35 @@ page 53202 "Store Requisition Card"
                         Rec.Status := Rec.Status::Rejected;
                         Rec.Modify();
                     end;
+                end;
+            }
+            action(Void)
+            {
+                ApplicationArea = All;
+                Caption = 'Void';
+                Image = Cancel;
+                Enabled = Rec.Status = Rec.Status::Rejected;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                begin
+                    if Rec.Status <> Rec.Status::Rejected then
+                        Error('Only a rejected request can be voided.');
+
+                    // Only the original requester may void the rejected request
+                    if Rec.Requester <> CopyStr(UserId, 1, MaxStrLen(Rec.Requester)) then
+                        Error('Only the requester can void this rejected request.');
+
+                    StoreRequisitionHeader.SetRange("No.", Rec."No.");
+                    if StoreRequisitionHeader.FindFirst() then
+                        RecID := StoreRequisitionHeader.RecordId;
+                    DocumentApprovalWorkflow.VoidApprovalRequest(RecID.TableNo, Rec."No.");
+
+                    Rec.Status := Rec.Status::" ";
+                    Rec.Modify();
+                    Message('The request has been voided. You can now send a fresh approval request.');
                 end;
             }
             action(Post)

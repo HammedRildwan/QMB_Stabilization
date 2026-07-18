@@ -241,6 +241,34 @@ page 53208 "Expense Card"
                     END;
                 end;
             }
+            action(Void)
+            {
+                Caption = 'Void';
+                Image = Cancel;
+                Enabled = Rec.Status = Rec.Status::Rejected;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                begin
+                    IF rec.Status <> rec.Status::Rejected THEN
+                        ERROR('Only a rejected request can be voided.');
+
+                    // Only the original requester may void the rejected request
+                    IF rec.Requester <> COPYSTR(USERID, 1, MAXSTRLEN(rec.Requester)) THEN
+                        ERROR('Only the requester can void this rejected request.');
+
+                    ExpenseRequestHeader.SETRANGE("No.", rec."No.");
+                    IF ExpenseRequestHeader.FINDFIRST THEN
+                        RecID := ExpenseRequestHeader.RECORDID;
+                    DocumentApprovalWorkflow.VoidApprovalRequest(RecID.TABLENO, rec."No.");
+
+                    rec.Status := rec.Status::" ";
+                    rec.MODIFY;
+                    MESSAGE('The request has been voided. You can now send a fresh approval request.');
+                end;
+            }
             action("Test Report")
             {
                 ApplicationArea = Basic, Suite;
@@ -332,14 +360,14 @@ page 53208 "Expense Card"
         }
     }
 
-    trigger OnModifyRecord(): Boolean
+    /* trigger OnModifyRecord(): Boolean
     begin
-        // IF ((Status = Status::Approved) OR (Status = Status::"Pending Approval")) THEN BEGIN// AND ("Trip No" = '') THEN BEGIN
-        //  UserSetup.GET(USERID);
-        //  IF NOT UserSetup."Modify Expense requistion" THEN
-        //    ERROR('You cannot modify this record');
-        // END;
-    end;
+         IF ((Status = Status::Approved) OR (Status = Status::"Pending Approval")) THEN BEGIN// AND ("Trip No" = '') THEN BEGIN
+          UserSetup.GET(USERID);
+          IF NOT UserSetup."Modify Expense requistion" THEN
+            ERROR('You cannot modify this record');
+         END;
+    end; */
 
     trigger OnOpenPage()
     begin

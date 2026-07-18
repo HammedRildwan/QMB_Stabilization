@@ -14,7 +14,7 @@ table 53007 "Store Requisition Line"
         field(3; "Item No."; Code[20])
         {
             DataClassification = ToBeClassified;
-            TableRelation = Item."No." WHERE(Type = CONST(Inventory), "Item Category Code" = CONST('SparePart'));
+            TableRelation = Item."No." WHERE(Type = CONST(Inventory)); //, "Item Category Code" = CONST('SparePart'));
 
             trigger OnValidate()
             var

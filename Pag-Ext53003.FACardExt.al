@@ -4,33 +4,14 @@ pageextension 53030 FACardExt extends "Fixed Asset Card"
     {
         addafter(BookValue)
         {
-            field(MaintenanceExpense; MaintenanceExpenseValue)
+            field(MaintenanceExpense; Rec."Maintenance Expense Value")
             {
                 ApplicationArea = All;
                 Caption = 'Maintenance Expense Value';
-
+                Editable = false;
             }
         }
 
 
     }
-
-    trigger OnAfterGetRecord()
-    begin
-        MaintenanceExpenseValue := GetMaintenanceExpenseValue();
-    end;
-
-    var
-        MaintenanceLE: Record "Maintenance Ledger Entry";
-        MaintenanceExpenseValue: Decimal;
-
-    local procedure GetMaintenanceExpenseValue(): Decimal
-    begin
-        // Implement the logic to calculate the maintenance expense value
-
-
-        exit(0);
-    end;
-
-
 }

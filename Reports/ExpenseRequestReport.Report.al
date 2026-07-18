@@ -40,6 +40,7 @@ report 53500 "Expense Request Report"
             column(LastModifiedBy; "Last Modified By") { }
             column(LastModifiedDateTime; "Last Modified DateTime") { }
             column(CompanyName; CompanyName) { }
+            column(CompanyLogo; CompanyInfo.Picture) { }
             column(ReportTitle; ReportTitleLbl) { }
             column(PrintDate; Format(Today, 0, '<Day,2>/<Month,2>/<Year4>')) { }
 
@@ -80,6 +81,11 @@ report 53500 "Expense Request Report"
                 column(ApprovalDocumentAmount; "Document Amount") { }
                 column(ApprovalStatusChangeDateTime; "Status Change DateTime") { }
             }
+
+            trigger OnPreDataItem()
+            begin
+                if CompanyInfo.Get() then;
+            end;
         }
     }
 
@@ -107,6 +113,7 @@ report 53500 "Expense Request Report"
     }
 
     var
+        CompanyInfo: Record "Company Information";
         ShowDetails: Boolean;
         ReportTitleLbl: Label 'Expense Request Report';
 }

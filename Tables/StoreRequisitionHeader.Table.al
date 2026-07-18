@@ -120,6 +120,11 @@ table 53006 "Store Requisition Header"
             DataClassification = ToBeClassified;
             TableRelation = Vendor;
         }
+        field(21; "Gen. Prod. Posting Group"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            TableRelation = "Gen. Product Posting Group";
+        }
         field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
@@ -225,6 +230,10 @@ table 53006 "Store Requisition Header"
         Text002: Label 'Sorry, you can not change Approved Work Order for a Posted or Approved Store Requisition!';
         Text003: Label 'Maintenance Fault Code %1 on %2';
         Truck: Record 5600;
+        GenPostingSetup: Record 252;
+        FADepreciationBook: Record 5612;
+        FASetup: Record 5603;
+        GenJnlPostLine: Codeunit 12;
 
     local procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     var
@@ -269,6 +278,7 @@ table 53006 "Store Requisition Header"
             IF ItemJournalLine2.FINDSET THEN
                 ItemJournalLine2.DELETEALL;
 
+            TESTFIELD("Gen. Prod. Posting Group");
             StoreRequisitionLine.SETRANGE("Document No.", "No.");
             IF StoreRequisitionLine.FINDSET THEN BEGIN
                 REPEAT
@@ -291,9 +301,12 @@ table 53006 "Store Requisition Header"
                     //      ItemJournalLine.VALIDATE("Shortcut Dimension 4 Code","Asset No.");
                     ItemJournalLine."Location Code" := StoreRequisitionLine."Location Code";
                     IF "Request Type" = "Request Type"::"Internal Consumption" THEN
-                        ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                        ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'STORE');
                     IF "Request Type" = "Request Type"::Maintenance THEN
-                        ItemJournalLine."Gen. Bus. Posting Group" := 'MTCE';
+                        ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'MTCE');
+                    // Override the item's Gen. Prod. Posting Group with the header value so the
+                    // Inventory Adjmt. account for the combination is debited as the expense
+                    ItemJournalLine.VALIDATE("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
 
                     ItemJournalLine.VALIDATE(Quantity, StoreRequisitionLine."Quantity to Issue");
                     //ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
@@ -306,6 +319,9 @@ table 53006 "Store Requisition Header"
                 MODIFY;
 
                 CheckPostedJnl;
+
+                IF "Request Type" = "Request Type"::Maintenance THEN
+                    PostMaintenanceExpense;
 
             END;
 
@@ -322,6 +338,7 @@ table 53006 "Store Requisition Header"
         IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
+        TESTFIELD("Gen. Prod. Posting Group");
         StoreRequisitionLine.SETRANGE("Document No.", "No.");
         IF StoreRequisitionLine.FINDSET THEN BEGIN
             REPEAT
@@ -344,9 +361,12 @@ table 53006 "Store Requisition Header"
                 //      ItemJournalLine.VALIDATE("Shortcut Dimension 4 Code","Asset No.");
                 ItemJournalLine."Location Code" := StoreRequisitionLine."Location Code";
                 IF "Request Type" = "Request Type"::"Internal Consumption" THEN
-                    ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                    ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'STORE');
                 IF "Request Type" = "Request Type"::Maintenance THEN
-                    ItemJournalLine."Gen. Bus. Posting Group" := 'MTCE';
+                    ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'MTCE');
+                // Override the item's Gen. Prod. Posting Group with the header value so the
+                // Inventory Adjmt. account for the combination is debited as the expense
+                ItemJournalLine.VALIDATE("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
 
                 ItemJournalLine.VALIDATE(Quantity, StoreRequisitionLine."Quantity to Issue");
                 //ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
@@ -358,10 +378,10 @@ table 53006 "Store Requisition Header"
         Posted := TRUE;
         "Posted DateTime" := CURRENTDATETIME;
         MODIFY;
-        //Maintenance Ledger
-        // IF "Request Type" = "Request Type"::Maintenance THEN
-        //  InsertMaintJournal;
         CheckPostedJnl;
+
+        IF "Request Type" = "Request Type"::Maintenance THEN
+            PostMaintenanceExpense;
     end;
 
     //[Scope('Internal')]
@@ -374,6 +394,7 @@ table 53006 "Store Requisition Header"
         IF ItemJournalLine2.FINDSET THEN
             ItemJournalLine2.DELETEALL;
 
+        TESTFIELD("Gen. Prod. Posting Group");
         StoreRequisitionLine.SETRANGE("Document No.", "No.");
         IF StoreRequisitionLine.FINDSET THEN BEGIN
             REPEAT
@@ -399,9 +420,12 @@ table 53006 "Store Requisition Header"
 
                 ItemJournalLine."Location Code" := StoreRequisitionLine."Location Code";
                 IF "Request Type" = "Request Type"::"Internal Consumption" THEN
-                    ItemJournalLine."Gen. Bus. Posting Group" := 'STORE';
+                    ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'STORE');
                 IF "Request Type" = "Request Type"::Maintenance THEN
-                    ItemJournalLine."Gen. Bus. Posting Group" := 'MTCE';
+                    ItemJournalLine.VALIDATE("Gen. Bus. Posting Group", 'MTCE');
+                // Override the item's Gen. Prod. Posting Group with the header value so the
+                // Inventory Adjmt. account for the combination is debited as the expense
+                ItemJournalLine.VALIDATE("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");
                 ItemJournalLine.VALIDATE(Quantity, StoreRequisitionLine."Quantity to Issue");
                 ItemJournalLine."Dimension Set ID" := "Dimension Set ID";
                 ItemJournalLine.INSERT;
@@ -424,6 +448,85 @@ table 53006 "Store Requisition Header"
                 StoreReqLine.MODIFY;
             UNTIL StoreReqLine.NEXT = 0;
         END;
+    end;
+
+    // Posts the maintenance cost of issued items to the FA/Maintenance ledger.
+    // Debits the Fixed Asset (FA Posting Type = Maintenance) and credits the Inventory Adjmt.
+    // account that the item issue debited, so the expense is moved to the FA maintenance account
+    // and a Maintenance Ledger Entry is created for the asset.
+    procedure PostMaintenanceExpense()
+    var
+        ItemLedgEntry2: Record 32;
+        GenJnlLine: Record 81;
+        InvAdjmtAccount: Code[20];
+        DeprBookCode: Code[10];
+        FAMaintDocNo: Code[20];
+        MaintLineNo: Integer;
+    begin
+        FAMaintDocNo := COPYSTR('FAM_' + "No.", 1, MAXSTRLEN(FAMaintDocNo));
+
+        // Guard against double posting
+        MaintenanceLedgEntry.RESET;
+        MaintenanceLedgEntry.SETRANGE("Document No.", FAMaintDocNo);
+        IF NOT MaintenanceLedgEntry.ISEMPTY THEN
+            EXIT;
+
+        // Balancing (Inventory Adjmt.) account for the MTCE / header prod. group combination
+        GenPostingSetup.GET('MTCE', "Gen. Prod. Posting Group");
+        GenPostingSetup.TESTFIELD("Inventory Adjmt. Account");
+        InvAdjmtAccount := GenPostingSetup."Inventory Adjmt. Account";
+
+        MaintLineNo := 0;
+        ItemLedgEntry2.SETCURRENTKEY("Document No.");
+        ItemLedgEntry2.SETRANGE("Document No.", "No.");
+        IF ItemLedgEntry2.FINDSET THEN BEGIN
+            REPEAT
+                StoreRequisitionLine.SETRANGE("Document No.", ItemLedgEntry2."Document No.");
+                StoreRequisitionLine.SETRANGE("Line No.", ItemLedgEntry2."Document Line No.");
+                IF StoreRequisitionLine.FINDFIRST THEN BEGIN
+                    StoreRequisitionLine.TESTFIELD("Fixed Asset No.");
+                    StoreRequisitionLine.TESTFIELD("Maintenance Code");
+
+                    DeprBookCode := GetAssetDeprBook(StoreRequisitionLine."Fixed Asset No.");
+
+                    ItemLedgEntry2.CALCFIELDS("Cost Amount (Actual)");
+                    IF ItemLedgEntry2."Cost Amount (Actual)" <> 0 THEN BEGIN
+                        MaintLineNo += 10000;
+                        GenJnlLine.INIT;
+                        GenJnlLine."Line No." := MaintLineNo;
+                        GenJnlLine.VALIDATE("Posting Date", "Request Date");
+                        GenJnlLine."Document Date" := "Request Date";
+                        GenJnlLine."Document No." := FAMaintDocNo;
+                        GenJnlLine."Account Type" := GenJnlLine."Account Type"::"Fixed Asset";
+                        GenJnlLine.VALIDATE("Account No.", StoreRequisitionLine."Fixed Asset No.");
+                        GenJnlLine.VALIDATE("Depreciation Book Code", DeprBookCode);
+                        GenJnlLine.VALIDATE("FA Posting Type", GenJnlLine."FA Posting Type"::Maintenance);
+                        GenJnlLine.VALIDATE("Maintenance Code", StoreRequisitionLine."Maintenance Code");
+                        GenJnlLine.Description := COPYSTR('Maintenance for ' + StoreRequisitionLine."Fixed Asset No.", 1, MAXSTRLEN(GenJnlLine.Description));
+                        GenJnlLine.VALIDATE(Amount, ABS(ItemLedgEntry2."Cost Amount (Actual)"));
+                        GenJnlLine."Bal. Account Type" := GenJnlLine."Bal. Account Type"::"G/L Account";
+                        GenJnlLine.VALIDATE("Bal. Account No.", InvAdjmtAccount);
+                        GenJnlLine.VALIDATE("Shortcut Dimension 1 Code", StoreRequisitionLine."Shortcut Dimension 1 Code");
+                        GenJnlLine.VALIDATE("Shortcut Dimension 2 Code", StoreRequisitionLine."Shortcut Dimension 2 Code");
+                        GenJnlPostLine.RunWithCheck(GenJnlLine);
+                    END;
+                END;
+            UNTIL ItemLedgEntry2.NEXT = 0;
+        END;
+    end;
+
+    local procedure GetAssetDeprBook(FANo: Code[20]): Code[10]
+    begin
+        FASetup.GET();
+        FADepreciationBook.RESET;
+        FADepreciationBook.SETRANGE("FA No.", FANo);
+        FADepreciationBook.SETRANGE("Depreciation Book Code", FASetup."Default Depr. Book");
+        IF FADepreciationBook.FINDFIRST THEN
+            EXIT(FADepreciationBook."Depreciation Book Code");
+        FADepreciationBook.SETRANGE("Depreciation Book Code");
+        IF FADepreciationBook.FINDFIRST THEN
+            EXIT(FADepreciationBook."Depreciation Book Code");
+        EXIT('');
     end;
 
     // [Scope('Internal')]
@@ -456,7 +559,7 @@ table 53006 "Store Requisition Header"
                 MaintenanceLedgEntry."Posting Date" := ItemLedgEntry2."Posting Date";
                 MaintenanceLedgEntry."Document Date" := ItemLedgEntry2."Posting Date";
                 MaintenanceLedgEntry."FA Posting Date" := ItemLedgEntry2."Posting Date";
-                MaintenanceLedgEntry."Depreciation Book Code" := 'GPC';
+                MaintenanceLedgEntry."Depreciation Book Code" := 'QMB';
                 MaintenanceLedgEntry."User ID" := USERID;
                 MaintenanceLedgEntry.Quantity := ItemLedgEntry2.Quantity;
                 MaintenanceLedgEntry.VALIDATE("Global Dimension 1 Code", ItemLedgEntry2."Global Dimension 1 Code");

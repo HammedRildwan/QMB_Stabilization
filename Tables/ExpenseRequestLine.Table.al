@@ -41,7 +41,7 @@ table 53002 "Expense Request Line"
         field(4; "Expense Account No."; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "G/L Account"."No." WHERE("Direct Posting" = CONST(true));
+            TableRelation = "G/L Account"."No."; // WHERE("Direct Posting" = CONST(true));
 
             trigger OnValidate()
             var
@@ -141,6 +141,12 @@ table 53002 "Expense Request Line"
         {
             DataClassification = ToBeClassified;
             TableRelation = Maintenance;
+
+            trigger OnValidate()
+            begin
+                IF ("Maintenance Code" <> '') AND ("Expense Type" = "Expense Type"::"Vendor Invoice") THEN
+                    ERROR('Maintenance Code cannot be set on a Vendor Invoice line. Use a Maintenance Expenses line to book maintenance.');
+            end;
         }
         field(9; "Shortcut Dimension 1 Code"; Code[20])
         {
@@ -221,6 +227,12 @@ table 53002 "Expense Request Line"
             DataClassification = ToBeClassified;
             Editable = true;
             TableRelation = "Fixed Asset"."No.";
+
+            trigger OnValidate()
+            begin
+                IF ("Asset No." <> '') AND ("Expense Type" = "Expense Type"::"Vendor Invoice") THEN
+                    ERROR('Asset No. cannot be set on a Vendor Invoice line. Use a Maintenance Expenses line to book maintenance against an asset.');
+            end;
         }
         field(17; "Currency Code"; Code[10])
         {
@@ -360,9 +372,10 @@ table 53002 "Expense Request Line"
                 Customer: Record Customer;
                 Employee: Record Employee;
                 Vendor: Record Vendor;
+                FixedAsset: Record "Fixed Asset";
 
             begin
-                IF ("Expense Type" = "Expense Type"::"Direct Expense") OR ("Expense Type" = "Expense Type"::"Maintenance Expenses") THEN BEGIN
+                IF ("Expense Type" = "Expense Type"::"Direct Expense") OR ("Expense Type" = "Expense Type"::"Maintenance Expenses") then begin
                     Employee.GET("Payee Code");
                     "Payee Name" := Employee.FullName();
                 END ELSE IF ("Expense Type" = "Expense Type"::"Vendor Invoice") THEN BEGIN
@@ -375,6 +388,7 @@ table 53002 "Expense Request Line"
                         error('Payables account must be setup for the posting group!')
                     else
                         VALIDATE("Expense Account No.", VendorPostingGroup."Payables Account");
+
                 END;
             end;
         }
@@ -461,8 +475,20 @@ table 53002 "Expense Request Line"
         ExpReq.GET("Document No.");
         IF ExpReq.Status = ExpReq.Status::Approved THEN BEGIN
             UserSetup.GET(USERID);
-            //  IF NOT ((UserSetup."Modify Expense requistion") OR (UserSetup."Modify Expense requistion")) THEN
-            //    ERROR('You cannot modify this record');
+            IF NOT UserSetup."Modify Expense requistion" THEN
+                ERROR('You cannot modify this record');
+        END;
+    end;
+
+    trigger OnDelete()
+    begin
+        ExpReq.GET("Document No.");
+        IF ExpReq.Status = ExpReq.Status::Approved THEN begin
+            UserSetup.GET(USERID);
+            IF NOT UserSetup."Modify Expense requistion" THEN
+                ERROR('You cannot delete an approved record');
+
+
         END;
     end;
 

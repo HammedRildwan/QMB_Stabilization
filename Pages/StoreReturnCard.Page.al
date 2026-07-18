@@ -189,6 +189,35 @@ page 53205 "Store Return Card"
                     end;
                 end;
             }
+            action(Void)
+            {
+                ApplicationArea = All;
+                Caption = 'Void';
+                Image = Cancel;
+                Enabled = Rec.Status = Rec.Status::Rejected;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+
+                trigger OnAction()
+                begin
+                    if Rec.Status <> Rec.Status::Rejected then
+                        Error('Only a rejected request can be voided.');
+
+                    // Only the original requester may void the rejected request
+                    if Rec.Requester <> CopyStr(UserId, 1, MaxStrLen(Rec.Requester)) then
+                        Error('Only the requester can void this rejected request.');
+
+                    StoreReturnHeader.SetRange("No.", Rec."No.");
+                    if StoreReturnHeader.FindFirst() then
+                        RecID := StoreReturnHeader.RecordId;
+                    DocumentApprovalWorkflow.VoidApprovalRequest(RecID.TableNo, Rec."No.");
+
+                    Rec.Status := Rec.Status::" ";
+                    Rec.Modify();
+                    Message('The request has been voided. You can now send a fresh approval request.');
+                end;
+            }
             action("Test Report")
             {
                 ApplicationArea = All;

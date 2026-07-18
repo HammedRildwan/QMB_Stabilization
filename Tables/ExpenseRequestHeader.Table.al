@@ -317,7 +317,8 @@ table 53001 "Expense Request Header"
 
     trigger OnDelete()
     begin
-        //ERROR('You can not delete this record!');
+        if status = status::Approved then
+            ERROR('You cannot delete an approved record');
     end;
 
     trigger OnInsert()
@@ -340,7 +341,11 @@ table 53001 "Expense Request Header"
 
     trigger OnModify()
     begin
-        // ERROR('You can not modify this record!');
+        if Status = Status::Approved then begin
+            UserSetup.GET(USERID);
+            IF NOT UserSetup."Modify Expense requistion" THEN
+                ERROR('You cannot modify this record');
+        end;
         "Last Modified DateTime" := CURRENTDATETIME;
         "Last Modified By" := USERID;
     end;
@@ -372,6 +377,7 @@ table 53001 "Expense Request Header"
     var
         GenJournalLine: Record 81;
         GenJournalLine2: Record 81;
+        IsVendorLine: Boolean;
     begin
         //To confirm if the records dont exist
         IF Status <> Status::Approved THEN
@@ -412,7 +418,8 @@ table 53001 "Expense Request Header"
                 GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
                 GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
                 GenJournalLine.VALIDATE("Posting Date", Date);
-                IF "Expense Type" = ("Expense Type"::"Maintenance Expenses") THEN BEGIN
+                IsVendorLine := FALSE;
+                IF ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Maintenance Expenses" THEN BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
                     GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
@@ -420,21 +427,33 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
-                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") AND (ExpenseRequestLine."Approved Document No." <> '') THEN BEGIN
-                    GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") THEN BEGIN
+                    IsVendorLine := TRUE;
+                    // A vendor invoice line must post to the vendor (payables sub-ledger); a payee/vendor is mandatory
+                    ExpenseRequestLine.TESTFIELD("Payee Code");
+                    //GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
-                    GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
-                    GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    // Apply to the invoice only when an approved document has been selected
+                    IF ExpenseRequestLine."Approved Document No." <> '' THEN BEGIN
+                        GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                        GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    END;
+                    // Vendor payment posts as a debit to the vendor, reducing the payable balance
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
                 END;
                 GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
-                IF ExpenseRequestLine."Currency Code" <> '' THEN
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
-                ELSE
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                IF NOT IsVendorLine THEN
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
                 GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
                 GenJournalLine.VALIDATE("Shortcut Dimension 1 Code", "Shortcut Dimension 1 Code");
@@ -462,9 +481,10 @@ table 53001 "Expense Request Header"
     var
         GenJournalLine: Record 81;
         GenJournalLine2: Record 81;
+        IsVendorLine: Boolean;
     begin
-        IF Status <> Status::Approved THEN
-            ERROR(ErrorOnPosting);
+        /*IF Status <> Status::Approved THEN
+             ERROR(ErrorOnPosting); */
 
         TESTFIELD(Payee);
         TESTFIELD("Payment Option");
@@ -497,7 +517,8 @@ table 53001 "Expense Request Header"
                 GenJournalLine."Line No." := ExpenseRequestLine."Line No.";
                 GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
                 GenJournalLine.VALIDATE("Posting Date", Date);
-                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                IsVendorLine := FALSE;
+                IF ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Maintenance Expenses" THEN BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
                     GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
@@ -505,15 +526,33 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") THEN BEGIN
+                    IsVendorLine := TRUE;
+                    // A vendor invoice line must post to the vendor (payables sub-ledger); a payee/vendor is mandatory
+                    ExpenseRequestLine.TESTFIELD("Payee Code");
+                    //GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
+                    // Apply to the invoice only when an approved document has been selected
+                    IF ExpenseRequestLine."Approved Document No." <> '' THEN BEGIN
+                        GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                        GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    END;
+                    // Vendor payment posts as a debit to the vendor, reducing the payable balance
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
                 END;
                 GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
-                IF ExpenseRequestLine."Currency Code" <> '' THEN
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
-                ELSE
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                IF NOT IsVendorLine THEN
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
                 GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
                 GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
@@ -522,8 +561,8 @@ table 53001 "Expense Request Header"
                 GenJournalLine.INSERT;
             UNTIL ExpenseRequestLine.NEXT = 0;
         END;
-        COMMIT;
 
+        COMMIT;
         GenJnlPost.Preview(GenJournalLine);
     end;
 
@@ -532,6 +571,7 @@ table 53001 "Expense Request Header"
     var
         GenJournalLine: Record 81;
         GenJournalLine2: Record 81;
+        IsVendorLine: Boolean;
     begin
         IF Status <> Status::Approved THEN
             ERROR(ErrorOnPosting);
@@ -567,7 +607,8 @@ table 53001 "Expense Request Header"
                 GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
                 GenJournalLine.VALIDATE("Posting Date", Date);
 
-                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                IsVendorLine := FALSE;
+                IF ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Maintenance Expenses" THEN BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
                     GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
@@ -575,16 +616,34 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") THEN BEGIN
+                    IsVendorLine := TRUE;
+                    // A vendor invoice line must post to the vendor (payables sub-ledger); a payee/vendor is mandatory
+                    ExpenseRequestLine.TESTFIELD("Payee Code");
+                    //GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                    GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
+                    GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
+                    // Apply to the invoice only when an approved document has been selected
+                    IF ExpenseRequestLine."Approved Document No." <> '' THEN BEGIN
+                        GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                        GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    END;
+                    // Vendor payment posts as a debit to the vendor, reducing the payable balance
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
                 END;
 
                 GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
-                IF ExpenseRequestLine."Currency Code" <> '' THEN
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
-                ELSE
-                    GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                IF NOT IsVendorLine THEN
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
 
                 GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
                 GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
@@ -594,7 +653,6 @@ table 53001 "Expense Request Header"
                 GenJournalLine.INSERT;
             UNTIL ExpenseRequestLine.NEXT = 0;
         END;
-        COMMIT;
         TestReportPrint.PrintGenJnlLine(GenJournalLine);
     end;
 
@@ -603,6 +661,8 @@ table 53001 "Expense Request Header"
     var
         GenJournalLine: Record 81;
         GenJournalLine2: Record 81;
+        ExpenseRequestHeaderPrint: Record "Expense Request Header";
+        IsVendorLine: Boolean;
     begin
         IF Status <> Status::Approved THEN
             ERROR(ErrorOnPosting);
@@ -639,7 +699,8 @@ table 53001 "Expense Request Header"
                 GenJournalLine."Document No." := ExpenseRequestLine."Document No.";
                 GenJournalLine.VALIDATE("Posting Date", Date);
 
-                IF "Expense Type" = "Expense Type"::"Maintenance Expenses" THEN BEGIN
+                IsVendorLine := FALSE;
+                IF ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Maintenance Expenses" THEN BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"Fixed Asset";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Asset No.");
                     GenJournalLine."FA Posting Type" := GenJournalLine."FA Posting Type"::Maintenance;
@@ -647,24 +708,39 @@ table 53001 "Expense Request Header"
                     LineNo += 10;
                     FAMaintDocNo := 'FAM_' + ExpenseRequestLine."Document No." + '_' + FORMAT(LineNo);
                     GenJournalLine."Document No." := FAMaintDocNo;
-                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") AND (ExpenseRequestLine."Approved Document No." <> '') THEN BEGIN
-                    GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
+                END ELSE IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") THEN BEGIN
+                    IsVendorLine := TRUE;
+                    // A vendor invoice line must post to the vendor (payables sub-ledger); a payee/vendor is mandatory
+                    ExpenseRequestLine.TESTFIELD("Payee Code");
+                    //GenJournalLine."Document Type" := GenJournalLine."Document Type"::Payment;
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::Vendor;
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
-                    GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
-                    GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    // Apply to the invoice only when an approved document has been selected
+                    IF ExpenseRequestLine."Approved Document No." <> '' THEN BEGIN
+                        GenJournalLine.VALIDATE("Applies-to Doc. Type", GenJournalLine."Applies-to Doc. Type"::Invoice);
+                        GenJournalLine.VALIDATE("Applies-to Doc. No.", ExpenseRequestLine."Approved Document No.");
+                    END;
+                    // Vendor payment posts as a debit to the vendor, reducing the payable balance
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 END ELSE BEGIN
                     GenJournalLine."Account Type" := GenJournalLine."Account Type"::"G/L Account";
                     GenJournalLine.VALIDATE("Account No.", ExpenseRequestLine."Expense Account No.")
                 END;
                 GenJournalLine.Description := COPYSTR(ExpenseRequestLine."Expense Description", 1, 50);
-                GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
+                IF NOT IsVendorLine THEN
+                    IF ExpenseRequestLine."Currency Code" <> '' THEN
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine."Amount (LCY)")
+                    ELSE
+                        GenJournalLine.VALIDATE("Debit Amount", ExpenseRequestLine.Amount);
                 GenJournalLine."Bal. Account Type" := GenJournalLine."Bal. Account Type"::"Bank Account";
                 GenJournalLine.VALIDATE("Bal. Account No.", "Bank No.");
                 GenJournalLine."Shortcut Dimension 1 Code" := "Shortcut Dimension 1 Code";
                 GenJournalLine."Shortcut Dimension 2 Code" := "Shortcut Dimension 2 Code";
                 //     GenJournalLine."Shortcut Dimension 4 Code" := ExpenseRequestLine."Asset No.";
-                //GenJournalLine.VALIDATE("Dimension Set ID","Dimension Set ID");
+                GenJournalLine.VALIDATE("Dimension Set ID", ExpenseRequestLine."Dimension Set ID");
                 GenJournalLine.INSERT;
             UNTIL ExpenseRequestLine.NEXT = 0;
         END;
@@ -674,11 +750,14 @@ table 53001 "Expense Request Header"
         IF GLEntry.FINDFIRST THEN
             ERROR('This document has been posted') ELSE BEGIN
 
-            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post+Print", GenJournalLine);
+            CODEUNIT.RUN(CODEUNIT::"Gen. Jnl.-Post", GenJournalLine);
 
         END;
 
         CheckPostedJnl;
+
+        ExpenseRequestHeaderPrint.SETRANGE("No.", "No.");
+        REPORT.RUN(REPORT::"Expense Request Report", TRUE, FALSE, ExpenseRequestHeaderPrint);
     end;
 
     //[Scope('Internal')]
@@ -755,40 +834,40 @@ table 53001 "Expense Request Header"
         MaintenanceLedgEntry: Record 5625;
         MaintenanceLedgEntry2: Record 5625;
     begin
-        /*
-        
+
+
         GLEntry.SETCURRENTKEY("Document No.");
-        GLEntry.SETRANGE("Document No.",('FAM_'+"No."));
+        GLEntry.SETRANGE("Document No.", ('FAM_' + "No."));
         IF GLEntry.FINDFIRST THEN BEGIN
-          REPEAT
-            MaintenanceLedgEntry2.SETRANGE("Entry No.");
-            IF MaintenanceLedgEntry2.FINDLAST THEN
-              LineNo := MaintenanceLedgEntry2."Entry No.";
-              LineNoB += 10000;
-            MaintenanceLedgEntry."Entry No." := LineNo + 1;
-            MaintenanceLedgEntry."Document No." := GLEntry."Document No.";
-            MaintenanceLedgEntry."Posting Date" := GLEntry."Posting Date";
-            MaintenanceLedgEntry."Document Date" := GLEntry."Posting Date";
-            MaintenanceLedgEntry."FA Posting Date" := GLEntry."Posting Date";
-            MaintenanceLedgEntry."Depreciation Book Code" := 'GPC';
-            MaintenanceLedgEntry."User ID" := USERID;
-            MaintenanceLedgEntry.Quantity := GLEntry.Quantity;
-            MaintenanceLedgEntry.VALIDATE("Global Dimension 1 Code",GLEntry."Global Dimension 1 Code");
-            MaintenanceLedgEntry.VALIDATE("Global Dimension 2 Code",GLEntry."Global Dimension 2 Code");
-            MaintenanceLedgEntry.VALIDATE("Dimension Set ID","Dimension Set ID");
-            ExpenseRequestLine.SETRANGE("Document No.","No.");
-            ExpenseRequestLine.SETRANGE("Line No.", LineNoB);
-            IF ExpenseRequestLine.FINDFIRST THEN BEGIN
-              MaintenanceLedgEntry."FA No." := ExpenseRequestLine."Asset No.";
-              MaintenanceLedgEntry."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
-              MaintenanceLedgEntry.Description := ('Maintanence for ' + ExpenseRequestLine."Asset No.");
-            END;
-            MaintenanceLedgEntry."Debit Amount" := ABS(GLEntry.Amount);
-            MaintenanceLedgEntry.Amount := ABS(GLEntry.Amount);
-            MaintenanceLedgEntry.INSERT;
-          UNTIL GLEntry.NEXT = 0;
+            REPEAT
+                MaintenanceLedgEntry2.SETRANGE("Entry No.");
+                IF MaintenanceLedgEntry2.FINDLAST THEN
+                    LineNo := MaintenanceLedgEntry2."Entry No.";
+                LineNoB += 10000;
+                MaintenanceLedgEntry."Entry No." := LineNo + 1;
+                MaintenanceLedgEntry."Document No." := GLEntry."Document No.";
+                MaintenanceLedgEntry."Posting Date" := GLEntry."Posting Date";
+                MaintenanceLedgEntry."Document Date" := GLEntry."Posting Date";
+                MaintenanceLedgEntry."FA Posting Date" := GLEntry."Posting Date";
+                MaintenanceLedgEntry."Depreciation Book Code" := 'GPC';
+                MaintenanceLedgEntry."User ID" := USERID;
+                MaintenanceLedgEntry.Quantity := GLEntry.Quantity;
+                MaintenanceLedgEntry.VALIDATE("Global Dimension 1 Code", GLEntry."Global Dimension 1 Code");
+                MaintenanceLedgEntry.VALIDATE("Global Dimension 2 Code", GLEntry."Global Dimension 2 Code");
+                MaintenanceLedgEntry.VALIDATE("Dimension Set ID", "Dimension Set ID");
+                ExpenseRequestLine.SETRANGE("Document No.", "No.");
+                ExpenseRequestLine.SETRANGE("Line No.", LineNoB);
+                IF ExpenseRequestLine.FINDFIRST THEN BEGIN
+                    MaintenanceLedgEntry."FA No." := ExpenseRequestLine."Asset No.";
+                    MaintenanceLedgEntry."Maintenance Code" := ExpenseRequestLine."Maintenance Code";
+                    MaintenanceLedgEntry.Description := ('Maintanence for ' + ExpenseRequestLine."Asset No.");
+                END;
+                MaintenanceLedgEntry."Debit Amount" := ABS(GLEntry.Amount);
+                MaintenanceLedgEntry.Amount := ABS(GLEntry.Amount);
+                MaintenanceLedgEntry.INSERT;
+            UNTIL GLEntry.NEXT = 0;
         END;
-        */
+
 
     end;
 }

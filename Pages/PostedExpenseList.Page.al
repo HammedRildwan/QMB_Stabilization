@@ -1,7 +1,7 @@
 page 53233 "Posted Expense List"
 {
     ApplicationArea = All;
-    UsageCategory = History;
+    UsageCategory = Documents;
     Caption = 'Posted Expense List';
     CardPageID = "Expense Card";
     Editable = false;

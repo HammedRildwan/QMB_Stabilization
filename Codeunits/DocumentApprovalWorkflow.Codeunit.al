@@ -94,6 +94,16 @@ codeunit 53400 "Document Approval Workflow"
             ERROR(Text002);
     end;
 
+    procedure VoidApprovalRequest(TableID: Integer; DocNo: Code[10])
+    begin
+        //clear all approval history so a fresh request can be sent
+        DocumentApprovalEntry.RESET;
+        DocumentApprovalEntry.SETRANGE("Table No.", TableID);
+        DocumentApprovalEntry.SETRANGE("Document No.", DocNo);
+        IF NOT DocumentApprovalEntry.ISEMPTY THEN
+            DocumentApprovalEntry.DELETEALL;
+    end;
+
     procedure ApproveDocument(TableID: Integer; DocNo: Code[10]; RecID: RecordID)
     var
         Seq: Integer;
