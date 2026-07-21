@@ -1,14 +1,15 @@
-page 53201 "Store Requisition List"
+page 53226 "Posted Store Requisition List"
 {
     ApplicationArea = All;
-    UsageCategory = Documents;
+    UsageCategory = History;
+    Caption = 'Posted Store Requisitions';
     CardPageID = "Store Requisition Card";
     Editable = false;
     PageType = List;
     SourceTable = 53006;
     SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE(Posted = CONST(false));
+                      WHERE(Posted = CONST(true));
 
     layout
     {
@@ -43,6 +44,12 @@ page 53201 "Store Requisition List"
                 field(Status; rec.Status)
                 {
                 }
+                field("Posted DateTime"; rec."Posted DateTime")
+                {
+                }
+                field("Posted By"; rec."Posted By")
+                {
+                }
             }
         }
         area(factboxes)
@@ -60,4 +67,3 @@ page 53201 "Store Requisition List"
     {
     }
 }
-

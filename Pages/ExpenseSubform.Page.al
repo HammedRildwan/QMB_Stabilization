@@ -4,6 +4,8 @@ page 53209 "Expense Subform"
     AutoSplitKey = true;
     CardPageID = "Expense Card";
     DelayedInsert = true;
+    DeleteAllowed = true;
+    InsertAllowed = true;
     MultipleNewLines = true;
     PageType = ListPart;
     SourceTable = 53002;
@@ -126,9 +128,6 @@ page 53209 "Expense Subform"
         }
     }
 
-    actions
-    {
-    }
 
     trigger OnAfterGetRecord()
     begin
@@ -156,7 +155,7 @@ page 53209 "Expense Subform"
 
     end;
 
-    trigger OnModifyRecord(): Boolean
+    /*trigger OnModifyRecord(): Boolean
     begin
         // ExpenseRequestHeader.GET("Document No.");
         // IF ((ExpenseRequestHeader.Status = ExpenseRequestHeader.Status::Approved) OR (ExpenseRequestHeader.Status = ExpenseRequestHeader.Status::"Pending Approval")) AND (ExpenseRequestHeader."Trip No" = '') THEN BEGIN
@@ -170,7 +169,7 @@ page 53209 "Expense Subform"
         //  AmountEditable := FALSE
         // ELSE
         //  AmountEditable := TRUE;
-    end;
+    end; */
 
     var
         EditExpAccNo: Boolean;

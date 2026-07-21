@@ -1,14 +1,15 @@
-page 53201 "Store Requisition List"
+page 53228 "Store Req. Pending Approval"
 {
     ApplicationArea = All;
-    UsageCategory = Documents;
+    UsageCategory = Lists;
+    Caption = 'Store Requisitions Pending Approval';
     CardPageID = "Store Requisition Card";
     Editable = false;
     PageType = List;
     SourceTable = 53006;
     SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE(Posted = CONST(false));
+                      WHERE(Posted = CONST(false), Status = CONST("Pending Approval"));
 
     layout
     {
@@ -60,4 +61,3 @@ page 53201 "Store Requisition List"
     {
     }
 }
-

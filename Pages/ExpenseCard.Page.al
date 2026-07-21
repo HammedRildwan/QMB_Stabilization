@@ -95,6 +95,13 @@ page 53208 "Expense Card"
                 Caption = 'Approvals';
                 SubPageLink = "Document No." = FIELD("No.");
             }
+            part(DocumentAttachmentFactBox; "Doc. Attachment List Factbox")
+            {
+                Caption = 'Attachments';
+                ApplicationArea = All;
+                SubPageLink = "Table ID" = CONST(53001),
+                              "No." = FIELD("No.");
+            }
             systempart(Links; Links)
             {
             }

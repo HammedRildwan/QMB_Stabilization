@@ -126,6 +126,30 @@ page 53218 "QMB Stab. Finance Admin RC"
                     RunObject = page "Store Requisition List";
                     ToolTip = 'View and manage store requisitions.';
                 }
+                action(StoreReqPendingApproval)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Store Requisitions Pending Approval';
+                    Image = Approvals;
+                    RunObject = page "Store Req. Pending Approval";
+                    ToolTip = 'View store requisitions pending approval.';
+                }
+                action(ApprovedStoreRequisitions)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Approved Store Requisitions';
+                    Image = Approve;
+                    RunObject = page "Approved Store Req. List";
+                    ToolTip = 'View approved store requisitions ready to post.';
+                }
+                action(PostedStoreRequisitions)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Posted Store Requisitions';
+                    Image = PostedOrder;
+                    RunObject = page "Posted Store Requisition List";
+                    ToolTip = 'View posted store requisitions.';
+                }
                 action(StoreReturns)
                 {
                     ApplicationArea = All;

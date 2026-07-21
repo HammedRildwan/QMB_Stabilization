@@ -286,6 +286,7 @@ table 53006 "Store Requisition Header"
                     ItemJournalLine."Journal Template Name" := 'ITEM';
                     ItemJournalLine."Journal Batch Name" := 'ISSUE';
                     ItemJournalLine."Line No." := StoreRequisitionLine."Line No.";
+                    ItemJournalLine."Document Line No." := StoreRequisitionLine."Line No.";
                     ItemJournalLine.VALIDATE("Item No.", StoreRequisitionLine."Item No.");
                     ItemJournalLine.VALIDATE("Unit of Measure Code", StoreRequisitionLine."Unit of Measure");
                     IF StoreRequisitionLine."Variant Code" <> '' THEN
@@ -346,6 +347,7 @@ table 53006 "Store Requisition Header"
                 ItemJournalLine."Journal Template Name" := 'ITEM';
                 ItemJournalLine."Journal Batch Name" := 'ISSUE';
                 ItemJournalLine."Line No." := StoreRequisitionLine."Line No.";
+                ItemJournalLine."Document Line No." := StoreRequisitionLine."Line No.";
                 ItemJournalLine.VALIDATE("Item No.", StoreRequisitionLine."Item No.");
                 ItemJournalLine.VALIDATE("Unit of Measure Code", StoreRequisitionLine."Unit of Measure");
                 IF StoreRequisitionLine."Variant Code" <> '' THEN
@@ -456,7 +458,6 @@ table 53006 "Store Requisition Header"
     // and a Maintenance Ledger Entry is created for the asset.
     procedure PostMaintenanceExpense()
     var
-        ItemLedgEntry2: Record 32;
         GenJnlLine: Record 81;
         InvAdjmtAccount: Code[20];
         DeprBookCode: Code[10];
@@ -478,28 +479,17 @@ table 53006 "Store Requisition Header"
         InvAdjmtAccount := GenPostingSetup."Inventory Adjmt. Account";
 
         MaintLineNo := 0;
-        ItemLedgEntry2.SETCURRENTKEY("Document No.");
-        ItemLedgEntry2.SETRANGE("Document No.", "No.");
-        IF ItemLedgEntry2.FINDSET THEN BEGIN
+        // Iterate the requisition lines (the source of the fixed asset / maintenance code),
+        // and post the issued cost of each line against the asset as a maintenance expense.
+        StoreRequisitionLine.RESET;
+        StoreRequisitionLine.SETRANGE("Document No.", "No.");
+        IF StoreRequisitionLine.FINDSET THEN
             REPEAT
-                StoreRequisitionLine.SETRANGE("Document No.", ItemLedgEntry2."Document No.");
-                StoreRequisitionLine.SETRANGE("Line No.", ItemLedgEntry2."Document Line No.");
-                IF StoreRequisitionLine.FINDFIRST THEN BEGIN
-                    StoreRequisitionLine.TESTFIELD("Fixed Asset No.");
-                    StoreRequisitionLine.TESTFIELD("Maintenance Code");
-
-                    DeprBookCode := GetAssetDeprBook(StoreRequisitionLine."Fixed Asset No.");
-
-                    // Actual cost may not be finalized yet at posting time (deferred cost adjustment).
-                    // Fall back to the expected cost, then to the requisition line value, so the
-                    // Maintenance Ledger Entry is still created for the fixed asset.
-                    ItemLedgEntry2.CALCFIELDS("Cost Amount (Actual)", "Cost Amount (Expected)");
-                    MaintAmount := ItemLedgEntry2."Cost Amount (Actual)";
-                    IF MaintAmount = 0 THEN
-                        MaintAmount := ItemLedgEntry2."Cost Amount (Expected)";
-                    IF MaintAmount = 0 THEN
-                        MaintAmount := StoreRequisitionLine."Unit Price" * StoreRequisitionLine."Quantity Issued";
+                IF (StoreRequisitionLine."Fixed Asset No." <> '') AND
+                   (StoreRequisitionLine."Maintenance Code" <> '') THEN BEGIN
+                    MaintAmount := GetLineIssuedCost(StoreRequisitionLine);
                     IF MaintAmount <> 0 THEN BEGIN
+                        DeprBookCode := GetAssetDeprBook(StoreRequisitionLine."Fixed Asset No.");
                         MaintLineNo += 10000;
                         GenJnlLine.INIT;
                         GenJnlLine."Line No." := MaintLineNo;
@@ -520,8 +510,38 @@ table 53006 "Store Requisition Header"
                         GenJnlPostLine.RunWithCheck(GenJnlLine);
                     END;
                 END;
+            UNTIL StoreRequisitionLine.NEXT = 0;
+    end;
+
+    // Returns the posted cost of the items issued for a requisition line.
+    // Prefers the actual cost; falls back to expected cost (deferred cost adjustment)
+    // and finally to the line's unit price * quantity issued.
+    local procedure GetLineIssuedCost(ReqLine: Record 53007): Decimal
+    var
+        ItemLedgEntry2: Record 32;
+        TotalCost: Decimal;
+        LineCost: Decimal;
+    begin
+        ItemLedgEntry2.SETCURRENTKEY("Document No.");
+        ItemLedgEntry2.SETRANGE("Document No.", ReqLine."Document No.");
+        ItemLedgEntry2.SETRANGE("Item No.", ReqLine."Item No.");
+        ItemLedgEntry2.SETRANGE("Document Line No.", ReqLine."Line No.");
+        // Older entries may not carry the document line no.; broaden to the item within the document.
+        IF ItemLedgEntry2.ISEMPTY THEN
+            ItemLedgEntry2.SETRANGE("Document Line No.");
+        IF ItemLedgEntry2.FINDSET THEN
+            REPEAT
+                ItemLedgEntry2.CALCFIELDS("Cost Amount (Actual)", "Cost Amount (Expected)");
+                LineCost := ItemLedgEntry2."Cost Amount (Actual)";
+                IF LineCost = 0 THEN
+                    LineCost := ItemLedgEntry2."Cost Amount (Expected)";
+                TotalCost += LineCost;
             UNTIL ItemLedgEntry2.NEXT = 0;
-        END;
+
+        IF TotalCost = 0 THEN
+            TotalCost := ReqLine."Unit Price" * ReqLine."Quantity Issued";
+
+        EXIT(TotalCost);
     end;
 
     local procedure GetAssetDeprBook(FANo: Code[20]): Code[10]
