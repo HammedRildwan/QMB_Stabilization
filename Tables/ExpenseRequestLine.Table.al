@@ -480,7 +480,7 @@ table 53002 "Expense Request Line"
         END;
     end;
 
-    trigger OnDelete()
+    /*trigger OnDelete()
     begin
         ExpReq.GET("Document No.");
         IF ExpReq.Status = ExpReq.Status::Approved THEN begin
@@ -490,7 +490,7 @@ table 53002 "Expense Request Line"
 
 
         END;
-    end;
+    end; */
 
     var
         GLAccount: Record 15;
