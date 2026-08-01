@@ -7,7 +7,7 @@ page 53207 "Expense List"
     Editable = false;
     PageType = List;
     SourceTable = 53001;
-    SourceTableView = WHERE(Posted = CONST(false));
+    SourceTableView = WHERE(Posted = CONST(false), Status = FILTER(''));
 
     layout
     {

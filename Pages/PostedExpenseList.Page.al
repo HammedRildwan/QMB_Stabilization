@@ -3,7 +3,7 @@ page 53233 "Posted Expense List"
     ApplicationArea = All;
     UsageCategory = Documents;
     Caption = 'Posted Expense List';
-    CardPageID = "Expense Card";
+    CardPageID = "Posted Expense Card";
     Editable = false;
     PageType = List;
     SourceTable = 53001;
@@ -71,19 +71,6 @@ page 53233 "Posted Expense List"
             }
         }
     }
-
-    actions
-    {
-    }
-
-    trigger OnOpenPage()
-    begin
-        /*UserSetup.GET(USERID);
-         FILTERGROUP(10);
-         SETRANGE(Requester,UserSetup."User ID");
-         FILTERGROUP(0);*/
-
-    end;
 
     var
         UserSetup: Record 91;

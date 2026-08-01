@@ -1,10 +1,10 @@
-page 53208 "Expense Card"
+page 53234 "Posted Expense Card"
 {
     ApplicationArea = All;
     DeleteAllowed = false;
     PageType = Card;
     SourceTable = 53001;
-    SourceTableView = WHERE(Posted = CONST(false));
+    SourceTableView = WHERE(Posted = CONST(true));
     Caption = 'Payment Request';
 
     layout
