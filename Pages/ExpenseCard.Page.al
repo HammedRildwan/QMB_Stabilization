@@ -1,7 +1,6 @@
 page 53208 "Expense Card"
 {
     ApplicationArea = All;
-    DeleteAllowed = false;
     PageType = Card;
     SourceTable = 53001;
     SourceTableView = WHERE(Posted = CONST(false));

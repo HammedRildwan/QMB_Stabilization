@@ -32,6 +32,9 @@ table 53002 "Expense Request Line"
                     "Expense Description" := '';
                     Amount := 0;
                     "Amount (LCY)" := 0;
+                    "WHT Amount" := 0;
+                    "WHT Amount (LCY)" := 0;
+                    "Net Amount" := 0;
                     "Expense Category" := "Expense Category"::" ";
                     "Asset No." := '';
                     "Maintenance Code" := '';
@@ -94,7 +97,6 @@ table 53002 "Expense Request Line"
 
             trigger OnValidate()
             var
-                WHTRate: Decimal;
                 ExpReq: Record "Expense Request Header";
                 Currency: Record Currency;
                 CurrExchRate: Record "Currency Exchange Rate";
@@ -115,21 +117,9 @@ table 53002 "Expense Request Line"
 
                     Amount := ROUND(Amount, Currency."Amount Rounding Precision");
                     TESTFIELD(Amount);
-                    WHTRate := 0;
-
-                    IF "WHT Rate" = "WHT Rate"::"10%" THEN
-                        WHTRate := 0.1
-                    ELSE IF "WHT Rate" = "WHT Rate"::"5%" THEN
-                        WHTRate := 0.05
-                    ELSE IF "WHT Rate" = "WHT Rate"::"2%" THEN
-                        WHTRate := 0.02
-                    ELSE IF "WHT Rate" = "WHT Rate"::"15%" THEN
-                        WHTRate := 0.15
-                    ELSE
-                        WHTRate := 0;
-
-                    VALIDATE("WHT Amount", Amount * WHTRate);
                 END;
+
+                UpdateWHTAndNetAmounts();
             end;
         }
         field(7; "Amount (LCY)"; Decimal)
@@ -253,6 +243,7 @@ table 53002 "Expense Request Line"
                     "Currency Factor" := 0;
 
                 VALIDATE(Amount, 0);
+                UpdateWHTAndNetAmounts();
             end;
         }
         field(18; "Currency Factor"; Decimal)
@@ -289,6 +280,8 @@ table 53002 "Expense Request Line"
                         ExpReq.Date, "Currency Code",
                         Amount, "Currency Factor" / 100));
                 END;
+
+                UpdateWHTAndNetAmounts();
             end;
         }
         field(20; Remark; Text[100])
@@ -307,28 +300,9 @@ table 53002 "Expense Request Line"
             OptionMembers = "N/A","2%","5%","10%","15%";
 
             trigger OnValidate()
-            var
-                WHTRate: Decimal;
-                VATRate: Decimal;
-                StampDutyRate: Decimal;
             begin
                 TESTFIELD(Amount);
-                WHTRate := 0;
-                VATRate := 0;
-                StampDutyRate := 0;
-
-                IF "WHT Rate" = "WHT Rate"::"10%" THEN
-                    WHTRate := 0.1
-                ELSE IF "WHT Rate" = "WHT Rate"::"5%" THEN
-                    WHTRate := 0.05
-                ELSE IF "WHT Rate" = "WHT Rate"::"2%" THEN
-                    WHTRate := 0.02
-                ELSE IF "WHT Rate" = "WHT Rate"::"15%" THEN
-                    WHTRate := 0.15
-                ELSE
-                    WHTRate := 0;
-
-                VALIDATE("WHT Amount", Amount * WHTRate);
+                UpdateWHTAndNetAmounts();
                 // UpdateDeductionsValues;
             end;
         }
@@ -433,6 +407,11 @@ table 53002 "Expense Request Line"
                 END;
             end;
         }
+        field(48; "Net Amount"; Decimal)
+        {
+            DataClassification = ToBeClassified;
+            Editable = false;
+        }
         field(480; "Dimension Set ID"; Integer)
         {
             Caption = 'Dimension Set ID';
@@ -505,6 +484,38 @@ table 53002 "Expense Request Line"
         VendorPostingGroup: Record "Vendor Posting Group";
         Employee: Record Employee;
         Vendor: Record Vendor;
+
+    local procedure GetWHTRateDecimal(): Decimal
+    begin
+        if "WHT Rate" = "WHT Rate"::"10%" then
+            exit(0.1);
+        if "WHT Rate" = "WHT Rate"::"5%" then
+            exit(0.05);
+        if "WHT Rate" = "WHT Rate"::"2%" then
+            exit(0.02);
+        if "WHT Rate" = "WHT Rate"::"15%" then
+            exit(0.15);
+
+        exit(0);
+    end;
+
+    local procedure UpdateWHTAndNetAmounts()
+    var
+        WHTRateDecimal: Decimal;
+    begin
+        WHTRateDecimal := GetWHTRateDecimal();
+
+        if "WHT Rate" = "WHT Rate"::"N/A" then begin
+            "WHT Amount" := 0;
+            "WHT Amount (LCY)" := 0;
+            "Net Amount" := "Amount (LCY)";
+            exit;
+        end;
+
+        "WHT Amount" := ROUND(Amount * WHTRateDecimal);
+        "WHT Amount (LCY)" := ROUND("Amount (LCY)" * WHTRateDecimal);
+        "Net Amount" := "Amount (LCY)" - "WHT Amount (LCY)";
+    end;
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
