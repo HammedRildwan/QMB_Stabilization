@@ -157,21 +157,23 @@ pageextension 53002 "Bank Acc. Reconciliation " extends "Bank Acc. Reconciliatio
         }
     }
 
-    trigger OnAfterGetRecord()
-    begin
-        BankAccReconciliationLine.SETFILTER("Bank Account No.", '%1', Rec."Bank Account No.");
-        BankAccReconciliationLine.SETFILTER("Statement No.", '%1', Rec."Statement No.");
-        IF BankAccReconciliationLine.FINDFIRST THEN BEGIN
-            REPEAT
-                IF BankAccReconciliationLine."Applied Amount" > 0 THEN
-                    BankAccReconciliationLine."Applied Debit Amount" := BankAccReconciliationLine."Applied Amount";
-                IF BankAccReconciliationLine."Applied Amount" < 0 THEN
-                    BankAccReconciliationLine."Applied Credit Amount" := BankAccReconciliationLine."Applied Amount";
-                BankAccReconciliationLine.MODIFY;
-            UNTIL BankAccReconciliationLine.NEXT = 0;
-        END;
-        Rec.CALCFIELDS("Total Applied Debit Amount", "Total Applied Credit Amount");
-    end;
+    /*
+        trigger OnAfterGetRecord()
+        begin
+            BankAccReconciliationLine.SETFILTER("Bank Account No.", '%1', Rec."Bank Account No.");
+            BankAccReconciliationLine.SETFILTER("Statement No.", '%1', Rec."Statement No.");
+            IF BankAccReconciliationLine.FINDFIRST THEN BEGIN
+                REPEAT
+                    IF BankAccReconciliationLine."Applied Amount" > 0 THEN
+                        BankAccReconciliationLine."Applied Debit Amount" := BankAccReconciliationLine."Applied Amount";
+                    IF BankAccReconciliationLine."Applied Amount" < 0 THEN
+                        BankAccReconciliationLine."Applied Credit Amount" := BankAccReconciliationLine."Applied Amount";
+                    BankAccReconciliationLine.MODIFY;
+                UNTIL BankAccReconciliationLine.NEXT = 0;
+            END;
+            Rec.CALCFIELDS("Total Applied Debit Amount", "Total Applied Credit Amount");
+        end;
+        */
 
     var
         BankAccReconciliationLine: Record "Bank Acc. Reconciliation Line";

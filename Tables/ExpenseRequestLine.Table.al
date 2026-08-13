@@ -392,15 +392,15 @@ table 53002 "Expense Request Line"
                             IF PurchInvHeader.FINDFIRST THEN BEGIN
                                 IF PurchInvHeader."Expense Fully Paid" THEN
                                     ERROR('Posted invoice %1 has been fully paid and cannot be selected again.', PurchInvHeader."No.");
+                                PurchInvHeader.CALCFIELDS(Amount);
                                 "Expense Description" := COPYSTR(PurchInvHeader."Posting Description", 1, 100);
-                                PurchInvHeader.CALCFIELDS("Amount Including VAT");
                                 VALIDATE("Shortcut Dimension 1 Code", PurchInvHeader."Shortcut Dimension 1 Code");
                                 VALIDATE("Shortcut Dimension 2 Code", PurchInvHeader."Shortcut Dimension 2 Code");
                                 // VALIDATE("Payee Code", PurchInvHeader."Pay-to Vendor No.");
                                 IF PurchInvHeader."Expense Balance Initialized" THEN
                                     Amount := PurchInvHeader."Expense Remaining Balance"
                                 ELSE
-                                    Amount := PurchInvHeader."Amount Including VAT";
+                                    Amount := PurchInvHeader.Amount;
                             END;
                         END;
 

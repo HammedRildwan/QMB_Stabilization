@@ -573,7 +573,7 @@ table 53001 "Expense Request Header"
             IF ExpenseRequestLine.FINDSET THEN BEGIN
                 REPEAT
                     IF NOT ExpenseRequestLine.posted THEN BEGIN
-                        IF "Expense Type" = "Expense Type"::"Vendor Invoice" THEN
+                        IF ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice" THEN
                             UpdateVendorInvoiceRemaining(ExpenseRequestLine);
                         ExpenseRequestLine.posted := TRUE;
                         ExpenseRequestLine.MODIFY;
@@ -617,6 +617,7 @@ table 53001 "Expense Request Header"
                     IF (ExpenseRequestLine."Expense Type" = ExpenseRequestLine."Expense Type"::"Vendor Invoice") THEN BEGIN
                         IsVendorLine := TRUE;
                         ExpenseRequestLine.TESTFIELD("Payee Code");
+                        GenJournalLineLocal."Document Type" := GenJournalLineLocal."Document Type"::Payment;
                         GenJournalLineLocal."Account Type" := GenJournalLineLocal."Account Type"::Vendor;
                         GenJournalLineLocal.VALIDATE("Account No.", ExpenseRequestLine."Payee Code");
                         IF ExpenseRequestLine."Approved Document No." <> '' THEN BEGIN
@@ -713,8 +714,8 @@ table 53001 "Expense Request Header"
             EXIT;
 
         IF NOT PurchInvHeader."Expense Balance Initialized" THEN BEGIN
-            PurchInvHeader.CALCFIELDS("Amount Including VAT");
-            PurchInvHeader."Expense Remaining Balance" := PurchInvHeader."Amount Including VAT";
+            PurchInvHeader.CALCFIELDS(Amount);
+            PurchInvHeader."Expense Remaining Balance" := PurchInvHeader.Amount;
             PurchInvHeader."Expense Balance Initialized" := TRUE;
         END;
 
